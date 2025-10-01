@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+import sys
+import os
+
+if (sys.argv[1] == "shared") :
+    os.system("cp libmlgui.so /usr/local/lib/libmlgui.so")
+    print ("libmlgui.so installed in /usr/local/lib/libmlgui.so.")
+    exit()

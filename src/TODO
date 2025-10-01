@@ -1,0 +1,5 @@
+I've implemented the dialog (and parent system in GTK)
+I need to create it in emscripten too.
+
+When a parent dies, it should remove all its children
+

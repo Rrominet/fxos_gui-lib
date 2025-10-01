@@ -1,0 +1,26 @@
+#pragma once
+#include <gtkmm/drawingarea.h>
+#include <memory>
+#include "./Widget_impl.h"
+#include "Color.h"
+
+namespace ml
+{
+    class Canvas;
+    class Canvas_impl : public Widget_impl
+    {
+        public:
+            Canvas_impl(Canvas* abstract);
+            virtual ~Canvas_impl() = default;
+
+            virtual void _createWidget() override;
+            std::shared_ptr<Gtk::DrawingArea> canvas(){return std::static_pointer_cast<Gtk::DrawingArea>(_gtk);}
+
+            void setDraw(const std::function<void (int , int)>& callback){_draw = callback;}
+
+            void drawFilledRect(int x, int y, int w, int h, const Color<double>& color);
+        private : 
+            Cairo::RefPtr<Cairo::Context> _cr;
+            std::function<void (int , int)> _draw = 0;
+    };
+}
