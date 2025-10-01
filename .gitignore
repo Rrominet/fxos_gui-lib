@@ -1,0 +1,11 @@
+build/.cache
+build/.obj
+build/.gdb_history
+build/index.html
+build/logs
+build/mlgui.js
+build/mlgui.log
+build/mlgui.wasm
+build/mlgui.wasm.map
+build/mlgui_em.css
+build/mlgui_gtk.css

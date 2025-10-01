@@ -59,14 +59,18 @@ if (sys.argv[1] == "css"):
 fm = "/media/romain/Donnees/Programmation/cpp/frameworks"
 libs = "/media/romain/Donnees/Programmation/cpp/libs"
 
+for arg in sys.argv:
+    if "libs=" in arg:
+        libs = arg.split("=")[1]
+    elif "fm=" in arg or "cpp-utils=" in arg:
+        fm = arg.split("=")[1]
+
 cpp.generate("../src")
 
 includes = [
     "../src",
     fm,
     libs + "/json",
-    #not needed anymore
-#libs + "/boost-install/include",
     libs + "/eigen",
     libs + "/fmodstudioapi20000linux/api/core/inc",
         ]
@@ -81,6 +85,7 @@ libs = [
 defs = ["NO_LOG"]
 
 gbl = build.create("mlgui", sys.argv)
+gbl.flags = ["-std=c++17"]
 
 widgets_gen = widgets.get()
 print("Generating the widgets factory constructors...")
@@ -156,7 +161,7 @@ if ("wasm" not in sys.argv):
 
     if not cpp.release : 
         cpp.addToLibs([
-            "../../../frameworks/build/libmlapi.so",
+            fm + "/build/libmlapi.so",
             ])
     elif cpp.release : 
         cpp.addToLibs([
