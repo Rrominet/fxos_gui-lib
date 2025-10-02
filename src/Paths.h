@@ -17,6 +17,9 @@ namespace ml
             // for em : the url root
             std::string root() const {return _impl.root();}
 
+            std::string lib() const {return _impl.lib();}
+            std::string libdata() const {return _impl.lib() + files::sep() + "data";}
+
             // for gtk will return the abosule path of the file on disk
             // for em will return the url of the file like https://your-url/your-file/path (if relative == your/file/path)
             std::string path(const std::string& relative) const {return _impl.path(relative);}

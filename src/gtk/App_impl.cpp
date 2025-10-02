@@ -37,7 +37,16 @@ namespace ml
 
     void App_impl::init()
     {
-        _default_css = "mlgui_gtk.css";
+    }
+
+    std::string App_impl::default_css() const
+    {
+        std::string fullpath = _app->paths().path("mlgui_gtk.css"); 
+        if (files::exists(fullpath))
+            return fullpath;
+        else 
+            return _app->paths().libdata() + files::sep() + "mlgui_gtk.css";
+        return "";
     }
 
     void App_impl::_initQueueDispatcher()
@@ -91,7 +100,7 @@ namespace ml
                 _gtkapp->add_window(*w->gtk());
             }
 
-            this->addCss(_default_css);
+            this->addCss(this->default_css());
             for (auto& css : _css_to_add)
                 this->addCss(css);
             _css_to_add.clear();

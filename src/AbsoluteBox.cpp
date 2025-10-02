@@ -112,7 +112,7 @@ namespace ml
 
     std::shared_ptr<ml::Image> AbsoluteBox::createIcon(const std::string& name)
     {
-        std::string icons_path = "images/icons"; // could be replaced by a prefs property system
+        std::string icons_path = ml::app()->paths().libdata()+ files::sep() + "images/icons"; // could be replaced by a prefs property system
         auto icon = this->createIconFromPath(icons_path + files::sep() + name + ".png");
         return icon;
     }
