@@ -1,20 +1,56 @@
-#!/usr/bin/env bash
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root (use sudo)" >&2
-   exit 1
-fi
+#!/usr/bin/env python3
+import os
+import sys
+import subprocess
 
-cd ..
-git clone https://github.com/Rrominet/cpp-utils
-cd ./cpp-utils
-chmod +x ./build-n-install
-./build-n-install
-cd ../fxos_gui-lib
-mkdir -p ./build
+def run(cmd, check=True, cwd=None):
+    print(f"→ {cmd}")
+    subprocess.run(cmd, shell=True, check=check, cwd=cwd)
 
-apt install -y libgtkmm-4.0-dev pkg-config
-cd ./build
-chmod +x ../make
-chmod +x ../install
-../make gtk shared release libs="../../cpp-utils_dependencies" fm="../../cpp-utils"
-../install shared
+def main():
+    # must be root
+    if os.geteuid() != 0:
+        print("This script must be run as root (use sudo)", file=sys.stderr)
+        sys.exit(1)
+
+    # go up one dir
+    os.chdir("..")
+
+    # clone cpp-utils
+    run("git clone https://github.com/Rrominet/cpp-utils")
+    os.chdir("cpp-utils")
+
+    run("chmod +x ./build-n-install")
+    run("./build-n-install")
+
+    path = "/opt/mlgui/lib/libmlgui.so"
+
+    if os.path.isfile(path):
+        mtime = os.path.getmtime(path)   # last modification time (seconds since epoch)
+        age = time.time() - mtime        # file age in seconds
+
+        if age < 1800:  # 1800 = 30min
+            print("mlapi is already installed and recent (less than 30min). Skipping.")
+            exit(0);
+        else:
+            print("mlapi is already installed but older than 30min. Reinstalling...")
+            os.remove(path)
+    else:
+        print("mlapi is not installed. Installing...")
+
+
+    # fxos_gui-lib
+    os.chdir("../fxos_gui-lib")
+    os.makedirs("build", exist_ok=True)
+
+    # install deps
+    run("apt install -y libgtkmm-4.0-dev pkg-config")
+
+    os.chdir("build")
+    run("chmod +x ../make")
+    run("chmod +x ../install")
+    run('../make gtk shared release libs="../../cpp-utils_dependencies" fm="../../cpp-utils"')
+    run("../install shared")
+
+if __name__ == "__main__":
+    main()
