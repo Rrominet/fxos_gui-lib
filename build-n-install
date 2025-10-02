@@ -2,6 +2,7 @@
 import os
 import sys
 import subprocess
+import shutil
 
 def run(cmd, check=True, cwd=None):
     print(f"→ {cmd}")
@@ -17,6 +18,8 @@ def main():
     os.chdir("..")
 
     # clone cpp-utils
+    if os.path.isdir("cpp-utils"):
+        shutil.rmtree("cpp-utils")
     run("git clone https://github.com/Rrominet/cpp-utils")
     os.chdir("cpp-utils")
 
