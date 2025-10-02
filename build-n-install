@@ -17,4 +17,4 @@ cd ./build
 chmod +x ../make
 chmod +x ../install
 ../make gtk shared release libs="../../cpp-utils_dependencies" fm="../../cpp-utils"
-../install
+../install shared
