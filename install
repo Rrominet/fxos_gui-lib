@@ -12,6 +12,6 @@ if (sys.argv[1] == "shared") :
     os.system("cp libmlgui.so /opt/mlgui/lib/libmlgui.so")
     os.system("cp *.css /opt/mlgui/data/")
     os.system("cp -r images /opt/mlgui/data/")
-    os.system("ln -s /opt/mlgui/lib/libmlgui.so /usr/local/lib/libmlgui.so")
-    print ("libmlgui.so installed in /opt/mlgui/lib/libmlgui.so and smylink to /usr/local/lib/libmlgui.so")
+    os.system("chmod 777 -R /opt/mlgui")
+    print ("libmlgui.so installed in /opt/mlgui/lib/libmlgui.so")
     exit()
