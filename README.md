@@ -3,8 +3,8 @@
 ## Goals and philosophy
 
 This shared library written in c++ has 2 principle goals : 
- - Be portable to any backend (for now is fully ported on `GTK4` (via `gtkmm`) and partially on `emscripten` - but has the achitecture to be ported on any backend)
- - Abstract the concept of inputs as GUI (Entry, Button, Label, ...) in something called `Property` and `Command`
+ - Be portable to any backend (for now is fully ported on `GTK4` (via `gtkmm`) and partially on `emscripten` - but has the achitecture to be ported on anything)
+ - Abstract the concept of inputs as GUI (Entry, Button, Label, ...) into something called `Property` and `Command`
 
 > [!NOTE]
 > For now, it has only been tested on linux but in the future it should work on any unix system and Windows.
@@ -16,7 +16,7 @@ For now you'll see 2 subfolders into `src/`:
  - `src/gtk` (backend implementation based on `gtkmm4`)
  - `src/em` (backend implementation based on `emscripten`)
 
-As of today, the backend port on `gtkmm4` is done.
+As of today, the backend port on `gtkmm4` is done.  
 The backend port on `emscripten` is still in progress.
 
 You can add your own bakend re-implementing all the classes and methods that are present in `src/gtk` folder.
@@ -44,12 +44,12 @@ auto name = input->getValue();
 
 This system has a lot of boilerplate : 
  - If you need to draw the same data at 2 different places, you basicly need to duplicate your code.
- - A lot of data a drawn very similary (often a label and some kind of `entry`), and so this lead to a lot of really similar and repetitive code.
- - And finally this force the developer to think about every details of the GUI (which can be cool if wanted) but often we only want a standard GUI with a visual logic that has already beed done millions of times.
+ - A lot of data a drawn very similary (often a `label` and some kind of `entry`), and so this lead to a lot of really similar and repetitive code.
+ - And finally, this force the developer to think about every details of the GUI (which can be cool if wanted) but often we only want a standard GUI with a visual logic that has already beed done millions of times.
 
 This is where the `Property` system save the day !
 
-The idea is to create a Property that present the value that a user can read and/or modify.
+The idea is to create a `Property` that represents the value that a user can read and/or modify.  
 And this property can be `drawn` any where on your GUI even at multiple places in different forms.
 
 Here how it works in syntax with `fxos_gui-lib` :
@@ -62,10 +62,13 @@ your_container->appendProp(p1);
 
 //and you can even add it in a second container elsewhere in the gui and the property will keep the inputs synced : 
 another_container->appendProp(p1, MULTILINE_ENTRY); //here for example we use a multiline entry to display the prop (before is was a single line one by default)
+
+//and if you want to get the value of the name you would do :
+auto name = p1->value();
 ```
 
-With this system you don't worry about your GUI details anymore, you can focus on the logic of your app.
-That being said, with `fxos_gui-lib`, you also have access to the buildings blocks like Input, Button, etc if you want more fine control.
+With this system you don't worry about your GUI details anymore, you can focus on the logic of your app.  
+That being said, with `fxos_gui-lib`, you also have access to the buildings blocks like `Input`, `Button`, etc if you want more fine control.  
 Using the `Property` system is not mendatory.
 
 #### Commands
@@ -80,7 +83,7 @@ button->addOnClick(your_on_click_function);
 ```
 
 The problem with this is that your action is completely decoupled from the logic of your app.  
-No Undo/Redo logic possible, no Keybind system that can be linked to it and if you want this action to be available in multiple places, you need to duplicate your code.
+No Undo/Redo logic possible, no *Keybind* system that can be linked to it and if you want this action to be available in multiple places, you need to duplicate your code.
 
 With the `Command` system, you can create a command that can be executed from anywhere in your app.
 
@@ -106,8 +109,8 @@ your_menu->addCommand(cmd1.get());
 your_menu->addCommand("my-command-id");
 ```
 
-And of course you can still create a `Button` and use `addEventListner` on it if you want a more fine grained control.
-Like the `Property` system, the `Command` system is not mendatory. (but pretty useful :) )
+And of course you can still create a `Button` and use `addEventListner` on it if you want a more fine grained control.  
+Like the `Property` system, the `Command` system is not mendatory. *(but pretty useful :) )*
 
 > [!NOTE]
 > The `Property` and `Command` system is really close to the philosophy of the *Blender Python API*.
@@ -120,7 +123,7 @@ This shared lib depends on 2 projects :
 
 For the GTK4 backend, it depends obviously on `GTK4` but also on `gtkmm4` (bindings for `GTK4` in `c++`).
 
-But don't worry about any of that, because I've made you a little script that install make all for you !
+But don't worry about any of that, because I've made you a little script that install the dependencies, build the lib and install it all for you !  
 All you have to do in to execute `./build-n-install` as `sudo` and your done.
 
 Alright, here is the full code you need to type from 0 to get this shared lib build and installed on your system : 
@@ -134,21 +137,21 @@ sudo ./build-n-install
 It's that simple.
 
 > [!NOTE]
-> For now, this script only works on `debian` based system because it calls `apt` directly.
+> For now, this script only works on `debian` based system because it calls `apt` directly.  
 > But it will very soon be portable accross all the major distros. Stay tuned for that !
 >  
-> Also, it is planned to add a pre-build binaries system so you don't have to build it yourself.
+> Also, it is planned to add pre-build binaries system so you don't have to build it yourself.
 
 ## Usage
 
 For now, it's really just a lib that is a dependency for all the cpp projects that I'm currently working on that uses a GUI.  
-But in a (really short) future, I will write the documentation so you can use it as a shared lib in your own cpp GUI project. (It's already possible, but without documentation it can be a bit hardcore (a))
+But in a (really short) future, I will write the documentation so you can use it as a shared lib in your own cpp GUI project. *(It's already possible, but without documentation it can be a bit hardcore (a))*
 
 ## TODO
 
 Well, SOOOO MUCH haha !
  - Like test and port it on Windows and IOS.
  - Complete and test the `emscripten` backend. (for a web based GUI rendered with Chrome, Firefox, etc)
- - Make it usable as shared lib in your own cpp projects with a proper documentation on building, linking and using it. 
+ - Make it usable as a shared lib in your own cpp projects with a proper documentation on building, linking and using it. 
  - And there is still a lot *widgets* I wish to implement
  - And certainly a lot of others stuffs, we'll see how it goes haha !

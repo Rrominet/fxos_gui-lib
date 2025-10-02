@@ -8,6 +8,14 @@ namespace ml
         return files::execDir();	
     }
 
+    std::string Paths_impl::lib() const
+    {
+        if (files::exists("/opt/mlgui"))
+            return "/opt/mlgui";
+        else 
+            return this->root();
+    }
+
     std::string Paths_impl::path(const std::string& relative) const
     {
         //global for linux/unix

@@ -42,10 +42,11 @@ namespace ml
 
             Gtk::Application& gtkapp(){return *_gtkapp;}
 
+            std::string default_css() const;
+
         private : 
             Glib::RefPtr<Gtk::Application> _gtkapp;
             App* _app = nullptr;
-            std::string _default_css;
             ml::ResourcesManager _resources;
 
             ml::Vec<std::string> _css_to_add;
