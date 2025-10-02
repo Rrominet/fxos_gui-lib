@@ -9,9 +9,12 @@ git clone https://github.com/Rrominet/cpp-utils
 cd ./cpp-utils
 chmod +x ./build-n-install
 ./build-n-install
-cd ../../fxos_gui-lib
+cd ../fxos_gui-lib
 mkdir -p ./build
 
 apt install -y libgtkmm-4.0-dev pkg-config
 cd ./build
+chmod +x ../make
+chmod +x ../install
 ../make gtk shared release libs="../../cpp-utils_dependencies" fm="../../cpp-utils"
+../install
