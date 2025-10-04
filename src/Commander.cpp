@@ -81,7 +81,8 @@ namespace ml
     {
         if(_commands.size() > 0)
         {
-            _commands[0]->exec();
+            if (!_doNothing)
+                _commands[0]->exec();
             _events.emit("valid", _commands[0]);
         }
 

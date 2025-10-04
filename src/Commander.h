@@ -58,5 +58,12 @@ namespace ml
             void _sortCommands(const std::string& searched);
 
             ml::Events _events;
+
+
+            // if true, the app will not launch any process
+            // could be util, if you just want to react to fxhub event and manage the event withanother app.
+            bool _doNothing = false; //bp cgs
+        public :
+            #include "./Commander_gen.h"
     };
 }
