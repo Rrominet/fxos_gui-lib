@@ -3,6 +3,7 @@
 #include "./Box.h"
 #include "./Scrollable.h"
 #include "./Label.h"
+#include "enums.h"
 #include <memory>
 
 namespace ml
@@ -26,6 +27,7 @@ namespace ml
     {
         _header->addCssClass("tabs-header");
         _header->setOrient(Orient::HORIZONTAL);
+        _header->setHAlign(ml::CENTER);
         _body->addCssClass("tabs-body");
         _body->setVExpand(true);
     }

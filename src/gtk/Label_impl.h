@@ -31,6 +31,7 @@ namespace ml
             EllipsizeMode ellipsizeMode();
 
             void setHtml(const std::string& html);
+            void setWordWrap(bool wrap);
 
         private : 
             EllipsizeMode _ellipsizeMode = ELLIPSIZE_NONE;

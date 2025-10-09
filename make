@@ -5,6 +5,7 @@ from ml.boilerplate import cpp
 from ml import fileTools as ft
 import os
 import sys
+import shutil
 sys.path.append("../")
 from scripts import widgets
 from scripts import widgets_events
@@ -49,6 +50,14 @@ def replaceCss() :
 
     ft.write(finalGtk, gtkdest)
     ft.write(finalEm, emdest)
+
+    if (os.path.exists("../src/mlgui_dark.css")) : 
+        shutil.copyfile("../src/mlgui_dark.css", "./mlgui_dark.css")
+        print ("Dark theme variable copied.")
+
+    if (os.path.exists("../src/mlgui_light.css")) : 
+        shutil.copyfile("../src/mlgui_light.css", "./mlgui_light.css")
+        print ("Light theme variable copied.")
 
     print ("Css replaced.")
 

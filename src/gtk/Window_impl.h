@@ -45,6 +45,7 @@ namespace ml
 
             void addWheelEventListener(const std::function<void(EventInfos&)>& callback);
             void hideOnClose(bool val);
+            bool doHideOnClose() const {return _hideOnClose;}
 
             void addOnClose(const std::function<void()>& callback){_onclose.push_back(callback);}
             void addOnHide(const std::function<void()>& callback){_onhide.push_back(callback);}

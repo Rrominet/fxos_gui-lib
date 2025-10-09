@@ -51,6 +51,8 @@ namespace ml
             void update(){_onUpdate.exec();}
             void valid(){_onValid.exec();}
 
+            virtual bool isEnum() const {return false;}
+
         protected : 
             std::string _name;//bp cgs
             std::string _description;//bp cgs

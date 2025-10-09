@@ -13,6 +13,7 @@
 #include "./Argv.h"
 #include "./GuiCommand.h"
 #include "./Events.h"
+#include "thread.h"
 
 #ifdef __EMSCRIPTEN__
 #include "./em/App_impl.h"
@@ -124,6 +125,45 @@ namespace ml
                     const std::function<void(const std::string&)> onlineout=0,
                     const std::function<void(const std::string&)> onlineerr=0);
 
+            th::ThreadPool& pool(){return _pool;}
+
+            void openFile(const std::string& title="Open File...", 
+                    const std::string& initialDir="",
+                    const std::function<void(const std::string&)>& callback = nullptr)
+            {
+                _impl.openFile(title, initialDir, callback);
+            }
+
+            void openFiles(const std::string& title="Open Files...", 
+                    const std::string& initialDir="",
+                    const std::function<void(const ml::Vec<std::string>&)>& callback = nullptr)
+            {
+                _impl.openFiles(title, initialDir, callback);
+            }
+
+            void openFolder(const std::string& title="Open Folder...",
+                    const std::string& initialDir="",
+                    const std::function<void(const std::string&)>& callback = nullptr)
+            {
+                _impl.openFolder(title, initialDir, callback);
+            }
+
+            void openFolders(const std::string& title="Open Folders...",
+                    const std::string& initialDir="",
+                    const std::function<void(const ml::Vec<std::string>&)>& callback = nullptr)
+            {
+                _impl.openFolders(title, initialDir, callback);
+            }
+
+            void saveFile(const std::string& title="Save File...", 
+                    const std::string& initialDir="",
+                    const std::function<void(const std::string&)>& callback = nullptr)
+            {
+                _impl.saveFile(title, initialDir, callback);
+            }
+
+            bool isDarkTheme() const {return _impl.isDarkTheme();}
+
         protected : 
             bool _setIdCalled = false;
             std::unordered_map<std::string, std::shared_ptr<ml::Window>> _windows;
@@ -146,6 +186,7 @@ namespace ml
             ml::Vec<std::unique_ptr<Process>> _processes;
 
             ml::Events _events; //bp cg
+            th::ThreadPool _pool;
 
         private : 
             void _init();

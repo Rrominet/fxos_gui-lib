@@ -11,7 +11,8 @@ namespace ml
         _button->addCssClass("tab-button");
         _button->setOrient(ml::Orient::HORIZONTAL);
         _label = _button->createLabel(text);
-        _label->setHAlign(ml::LEFT);
+        _label->setHAlign(ml::CENTER);
+        _label->setWordWrap(false);
         _label->addCssClass("tab-button-label");
         _button->setCursor("pointer");
 

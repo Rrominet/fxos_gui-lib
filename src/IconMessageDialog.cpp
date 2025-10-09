@@ -1,5 +1,6 @@
 #include "./IconMessageDialog.h"
 #include "./Image.h"
+#include "./App.h"
 
 namespace ml
 {
@@ -19,7 +20,10 @@ namespace ml
         auto icon = _message_box->createIcon(_iconName);
         icon->setWidth(48);
         if (_iconName == "info" || _iconName == "question")
-            icon->invert();
+        {
+            if (ml::app()->isDarkTheme())
+                icon->invert();
+        }
         _message = _message_box->createLabel();
     }
 }

@@ -2,9 +2,10 @@
 #include <gtkmm/application.h>
 #include <glibmm/dispatcher.h>
 #include "files.2/ResourcesManager.h"
-#include "sigc++/connection.h"
+#include <sigc++/connection.h>
 #include <map>
 #include <mutex>
+#include <gtkmm/filedialog.h>
 
 //if you set the gtkid in the constructor, GTK will force a single instance around your computer behavior.
 //if you let it empty, it will allow multiple instances
@@ -43,6 +44,30 @@ namespace ml
             Gtk::Application& gtkapp(){return *_gtkapp;}
 
             std::string default_css() const;
+            std::string color_variables_css() const;
+
+            // launch a file fialog native to gtk
+            void openFile(const std::string& title="Open File...", 
+                    const std::string& initialDir="",
+                    const std::function<void(const std::string&)>& callback = nullptr);
+
+            void openFiles(const std::string& title="Open Files...", 
+                    const std::string& initialDir="",
+                    const std::function<void(const ml::Vec<std::string>&)>& callback = nullptr);
+
+            void openFolder(const std::string& title="Open Folder...",
+                    const std::string& initialDir="",
+                    const std::function<void(const std::string&)>& callback = nullptr);
+
+            void openFolders(const std::string& title="Open Folders...",
+                    const std::string& initialDir="",
+                    const std::function<void(const ml::Vec<std::string>&)>& callback = nullptr);
+
+            void saveFile(const std::string& title="Save File...", 
+                    const std::string& initialDir="",
+                    const std::function<void(const std::string&)>& callback = nullptr);
+
+            bool isDarkTheme() const;
 
         private : 
             Glib::RefPtr<Gtk::Application> _gtkapp;
@@ -60,5 +85,8 @@ namespace ml
 
             void _initQueueDispatcher();
 
+            std::shared_ptr<Gtk::FileDialog> _filedialog = nullptr;
+
+            void _createFileDialogIfNeeded(const std::string& title, const std::string& initialDir);
     };
 }
