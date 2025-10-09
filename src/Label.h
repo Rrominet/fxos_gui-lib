@@ -35,6 +35,7 @@ namespace ml
             EllipsizeMode ellipsizeMode();
 
             void setHtml(const std::string& html){this->label()->setHtml(html);}
+            void setWordWrap(bool wrap){this->label()->setWordWrap(wrap);}
 
         protected : 
     };

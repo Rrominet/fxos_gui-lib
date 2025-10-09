@@ -95,5 +95,10 @@ namespace ml
     {
         this->label()->set_markup(html);
     }
+
+    void Label_impl::setWordWrap(bool wrap)
+    {
+        this->label()->set_wrap(wrap);
+    }
 }
 

@@ -13,7 +13,10 @@ namespace ml
 
     ComboBox::ComboBox(Box* parent, const std::vector<std::string>& items) : ComposedInput()
     {
-        _btn = std::make_shared<IconButton>(parent, "down-arrow", "", true, true);
+        if (ml::app()->isDarkTheme())
+            _btn = std::make_shared<IconButton>(parent, "down-arrow", "", true, true);
+        else 
+            _btn = std::make_shared<IconButton>(parent, "down-arrow", "", false, true); //ch
         _composed.push_back(_btn.get());
         _menu = ml::app()->menusFactory().create<SearchableMenu>("__combobox_menu_" + std::to_string(combo_box_count));
         combo_box_count++;

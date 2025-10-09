@@ -122,7 +122,7 @@ namespace ml
     
     std::shared_ptr<ml::Image> Box::createIconFromPath(const std::string& filepath)
     {
-        int icons_width = 32;
+        int icons_width = 24;
         auto icon = this->createImage();
         lg("loading image " << filepath);
         icon->load(filepath);
@@ -218,7 +218,10 @@ namespace ml
                 _r = this->appendProp<DoubleProperty>((DoubleProperty*)prop)->box();
                 break;
             case Property::STRING:
-                _r = this->appendProp<StringProperty>((StringProperty*)prop)->box();
+                if (prop->isEnum())
+                    _r = this->appendEnumProp((EnumProperty*)prop)->box();
+                else
+                    _r = this->appendProp<StringProperty>((StringProperty*)prop)->box();
                 break;
             case Property::NONE:
                 this->createLabel("Cannot create a property of type NONE.");

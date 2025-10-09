@@ -31,7 +31,10 @@ namespace ml
         auto f = [this](EventInfos& e)
         {
             _events.emit("ok");
-            this->destroy();
+            if (!this->doHideOnClose())
+                this->destroy();
+            else 
+                this->hide();
         };
         _ok->addEventListener(MOUSE_UP, f);
         this->addEventListener(KEY_DOWN, [this, f](EventInfos&e)

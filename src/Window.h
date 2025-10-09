@@ -105,6 +105,7 @@ namespace ml
             std::shared_ptr<GuiBackendCommand> createBackendCommand(Process* p, const std::string &function, const json& args={}, const std::function<void(const json& response)>& cb=0);
 
             void hideOnClose(bool val=true){_impl->hideOnClose(val);}
+            bool doHideOnClose() const {return _impl->doHideOnClose();}
 
             virtual json serialize() const;
             virtual void deserialize(const json& j);

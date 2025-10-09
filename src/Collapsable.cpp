@@ -2,6 +2,7 @@
 #include "./Box.h"
 #include "./Image.h"
 #include "./Label.h"
+#include "./App.h"
 
 namespace ml
 {
@@ -16,9 +17,11 @@ namespace ml
         _header->setCursor("pointer");
 
         _collapsedIcon = _header->createIcon("collapsed");
-        _collapsedIcon->invert();
+        if (ml::app()->isDarkTheme())
+            _collapsedIcon->invert();
         _uncollapsedIcon = _header->createIcon("uncollapsed");
-        _uncollapsedIcon->invert();
+        if (ml::app()->isDarkTheme())
+            _uncollapsedIcon->invert();
         _label = _header->createLabel(label);
 
         _body = _box->createBox();

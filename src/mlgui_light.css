@@ -1,0 +1,17 @@
+:root {
+    --hover-background-color : #DDDDDD;
+    --active-background-color : #CCCCCC;
+    --slider-background : #256699;
+    --slider-cursor-color: black;
+    --list-background-color: #EEEEEE;
+    --separator-color: #555555;
+    --dialog-cancel-color: #FF4444;
+    --dialog-ok-color: #22AA66;
+    --code-block-background-color: #CCCCCC;
+}
+
+.confirm .dialog-cancel, 
+.confirm .dialog-ok
+{
+    color : white;
+}

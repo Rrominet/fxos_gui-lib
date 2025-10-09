@@ -35,19 +35,20 @@
 {
     padding : 0px;
     margin : 0;
+    background: var(--button-background-color);
 }
 
 .menu-button
 {
     margin : 0;
-    padding : 0.5em 0.7em;
+    padding : 0.3em 0.5em;
     border : none;
     box-shadow : none;
 }
 
 .menu-button:hover
 {
-    background-color : #222222;
+    background-color : var(--hover-background-color);
 }
 
 .menu-button-label
@@ -73,6 +74,7 @@
 .tabs-header
 {
     padding : 0;
+    margin : 0.5em 0;
 }
 
 .tabs-body
@@ -84,26 +86,41 @@
 {
     padding : 0 1em;
     transition : background 0.1s;
+    background: var(--button-background-color);
 }
 
 .tab-button:hover,
 .tab-button.active
 {
-    background : #222222;
+    background : var(--active-background-color);
+}
+
+.tab-button:first-child
+{
+    border-radius : 10px 0px 0px 10px;
+}
+
+.tab-button:last-child
+{
+    border-radius : 0px 10px 10px 0px;
+}
+
+.tabs-header
+{
+    padding : 0 0.5em;
 }
 
 .button.icon
 {
-    background : #303030;
+    background : var(--button-background-color);
     transition : background 0.1s;
-    padding : 0.3em 0.6em;
-    padding-top : 0.2em;
+    padding : 0 0.75em;
     border-radius : 5px;
 }
 
 .button.icon:hover
 {
-    background : #272727;
+    background : var(--hover-background-color);
 }
 
 .button.icon .image
@@ -115,10 +132,11 @@
 {
     filter : invert(1);
 }
+
 .collapsable
 {
     border-radius : 5px;
-    background : #303030;
+    background : var(--list-background-color);
     margin-top : 2px;
 }
 
@@ -130,19 +148,19 @@
 
 .paned
 {
-    background : #292929;
+    background : var(--list-background-color);
 }
 
 .panel
 {
     margin : 0;
     padding:0;
-    background : #333333;
+    background : var(--list-background-color);
 }
 
 .separator
 {
-    background : #555555;
+    background : var(--separator-color);
     padding-top : 1px;
     margin : 0.5em 0;
 }
@@ -150,7 +168,7 @@
 .panel-header
 {
     padding : 3px;
-    background : #323232;
+    background : var(--list-background-color)
 }
 
 .panel-title
@@ -161,7 +179,7 @@
 {
     padding : 0.5em;
     margin : 3px;
-    background : #303030;
+    background : var(--list-background-color);
     border-radius : 5px;
 }
 
@@ -187,7 +205,7 @@
 
 .dialog.message .foot
 {
-    background : #303030;
+    background : var(--list-background-color);
     padding : 0.5em;
 }
 
@@ -203,12 +221,12 @@
 
 button.dialog-cancel
 {
-   background : #700000;
+   background : var(--dialog-cancel-color);
 }
 
 .dialog.confirm button.dialog-ok
 {
-    background : #005030;
+    background : var(--dialog-ok-color);
 }
 .dialog .property-group
 {
@@ -222,15 +240,15 @@ button.dialog-cancel
 .multiline-entry
 {
     padding : 0.7em 1em;
-    border-radius : 4px;
-    box-shadow : 0 0 5px 0 #00000033;
+    border-radius : 5px;
     margin : 1em;
+    border: 1px solid var(--hover-background-color);
 }
 
 .vtable-header-label:hover,
 .vtable-row:hover
 {
-    background : #303030;
+    background : var(--hover-background-color);
 }
 
 .vertical-table-header
@@ -244,19 +262,19 @@ button.dialog-cancel
 .time-slider-in-out .before,
 .time-slider-in-out .after
 {
-    background-color : #222222;
+    background-color : var(--hover-background-color);
 }
 
 .subrange .range,
 .time-slider .before,
 .time-slider-in-out .range
 {
-    background-color : #256699;
+    background-color : var(--slider-background);
 }
 
 .time-slider-in-out .cursor
 {
-    background-color : white;
+    background-color : var(--slider-cursor-color);
 }
 
 .spinButton
@@ -267,7 +285,7 @@ button.dialog-cancel
 .mdview .code-block
 {
     font-family : mono;
-    background : #232323;
+    background : var(--code-block-background-color);
     border-radius : 4px;
     padding : .7em;
     margin-bottom : 5px;
@@ -317,12 +335,12 @@ button.dialog-cancel
 
 .command-button:hover
 {
-    background-color : #262626;
+    background-color : var(--hover-background-color);
 }
 
 .command-button:active
 {
-    background-color : #202020;
+    background-color : var(--active-background-color);
 }
 
 .command-button-label
@@ -345,7 +363,7 @@ button.dialog-cancel
 
 .commander-list
 {
-    background-color : #303030;
+    background-color : var(--list-background-color);
 }
 
 .commander-container

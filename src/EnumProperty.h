@@ -10,6 +10,8 @@ namespace ml
             ml::Vec<std::string>& choices() {return _choices;}
             void setChoices(const std::vector<std::string>& choices) {_choices = choices; this->notify("choices-changed");}
 
+            virtual bool isEnum() const override {return true;}
+
         protected : 
             ml::Vec<std::string> _choices;
     };
