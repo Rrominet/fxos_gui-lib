@@ -36,6 +36,8 @@ namespace ml
         _checker.init("can-construct-widget", "You can't construct a widget with new or make_unique/shared or even on the stack.\nYou need to create it via the createWidget method in Box or Window.");
         _checker.init("can-construct-window", "You can't construct a window with new or make_unique/shared or even on the stack.\nYou need to create it via the windowsFactory.");
         _checker.init("can-set-window", "The setWindow method can't be called by you. Use append, prepend or setChild to trigger it from its logic.");
+
+        _createBasicCommands();
     }
 
     void App::run()
@@ -228,4 +230,32 @@ namespace ml
         p_ptr->start();
         return p_ptr;
     }
+
+    void App::_createBasicCommands()
+    {
+        _createAboutCommand();
+        _createQuitCommand();
+    }
+
+    void App::_createAboutCommand()
+    {
+        auto ab = _cmds.createCommand<GuiCommand>("About", "about");
+        ab->setExec([this](const std::any& args){
+                    if (_about.empty())
+                        return;
+                    auto dlg = this->info(_about);
+                    dlg->setTitle("About");
+                    //TODO : add the possibility to change the icon from the app icon
+                });
+    }
+
+    void App::_createQuitCommand()
+    {
+        auto ab = _cmds.createCommand<GuiCommand>("Quit", "quit");
+        ab->setExec([this](const std::any& args){
+                    this->quit();
+                });
+        ab->setKeybind("ctrl q");
+    }
 }
+

@@ -29,6 +29,8 @@ namespace ml
     class App;
     class GuiCommand;
     class GuiBackendCommand;
+    class Popover;
+    class Commander;
     class Window
     {
         friend class WindowsFactory;
@@ -113,6 +115,12 @@ namespace ml
             void addOnClose(const std::function<void()>& callback){_impl->addOnClose(callback);}
             void addOnHide (const std::function<void()>& callback){_impl->addOnHide(callback);}
 
+            ml::Commander* createCommander();
+            ml::Commander* createCommanderFromAppCmds();
+            ml::Commander* createCommanderFromThisWindowCmds();
+
+            void showCommander();
+
         protected : 
             App* _app;
             ml::Window* _parent = nullptr; //pb s
@@ -137,6 +145,10 @@ namespace ml
             std::string _id; //bp cg
             
             bool _stayHiddenFirstRun = false; //bp cgs
+
+            // to create the commander system automatcly if needed
+            ml::Popover* _commanderPopover = nullptr;
+            ml::Commander* _commander = nullptr;
 
         public : 
 #include "Window_gen.h"

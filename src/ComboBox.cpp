@@ -22,8 +22,7 @@ namespace ml
         combo_box_count++;
         _setEvents();
 
-        for (auto& item : items)
-            this->addItem(item);
+        this->setItems(items);
 
         if (items.size() > 0)
             this->setActiveIndex(0);
@@ -55,6 +54,7 @@ namespace ml
 
     void ComboBox::setItems(const std::vector<std::string>& items)
     {
+        lg("--------ComboBox::setItems-------------  " << items.size());
         this->clear();	
         for (auto& item : items)
             this->addItem(item);
@@ -62,6 +62,7 @@ namespace ml
 
     void ComboBox::addItem(const std::string& item)
     {
+        lg(" -------------CommboBox::addItem-------------  " << item);
         _items.push(item);
         _menu->addButton(item, [this, item]{
                 this->setActiveItem(item);
@@ -76,6 +77,7 @@ namespace ml
 
     void ComboBox::clear()
     {
+        lg(" ---------------  ComboBox::clear ------------- (clearing " << _items.size() << " items)");
         _menu->clear();
         _items.clear();
     }

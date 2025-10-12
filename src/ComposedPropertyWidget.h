@@ -66,7 +66,9 @@ namespace ml
                             {
                                 auto _enum = dynamic_cast<EnumProperty*>(_prop);
                                 auto cb = std::static_pointer_cast<ComboBox>(_input);
+                                lg("ComposedPropertyWidget::createInput : Set items : " << _enum->choices().size());
                                 cb->setItems(_enum->choices());
+                                lg("ComboBox Items: " << cb->items().size());
                             }
                             break;
                         default:

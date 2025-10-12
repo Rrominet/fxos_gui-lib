@@ -163,6 +163,7 @@ namespace ml
             }
 
             bool isDarkTheme() const {return _impl.isDarkTheme();}
+            void setAbout(const std::string& about) {_about = about;}
 
         protected : 
             bool _setIdCalled = false;
@@ -187,6 +188,14 @@ namespace ml
 
             ml::Events _events; //bp cg
             th::ThreadPool _pool;
+
+            std::string _about;
+
+            //about, quit, help (?), bug-report (?) etc.
+            void _createBasicCommands();
+            void _createAboutCommand();
+            void _createQuitCommand();
+            //...
 
         private : 
             void _init();

@@ -236,9 +236,6 @@ namespace ml
     {
         auto _r = this->appendComposedProp(prop, COMBOBOX);
         auto cb = (ComboBox*)_r->input().get();
-        for (const auto& c : prop->choices())
-            cb->addItem(c);
-
         props::connectComboBox(prop, cb);
         return _r;
     }

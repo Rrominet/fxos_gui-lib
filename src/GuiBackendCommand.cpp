@@ -49,8 +49,17 @@ namespace ml
         {
             for (auto& b : _buttons)
                 b->mkLoading();
-            ipc::call(_process, _function, _jsonArgs, _cb);
-            _waiting = true;
+            try
+            {
+                ipc::call(_process, _function, _jsonArgs, _cb);
+                _waiting = true; //changed
+            }
+            catch(const std::exception& e)
+            {
+                for (auto& b : _buttons)
+                    b->stopLoading();
+                ml::app()->error("Error in the process backend (" + _process->cmd_s() + ") :\n" + std::string(e.what()));
+            }
             lg("process backend called : " << _function);
             lg("with these args : " << _jsonArgs.dump(4));
             app()->main()->setInfosFromCommand(this);

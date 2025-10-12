@@ -7,7 +7,7 @@ namespace ml
     void ConfirmDialog::init() 
     {
         IconMessageDialog::init();
-        this->setTitle("Comfirmation");
+        this->setTitle("Confirmation"); //changed
         this->addCssClass("confirm");
     }
 
