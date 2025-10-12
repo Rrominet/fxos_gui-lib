@@ -37,9 +37,7 @@ namespace ml
             prop->addObserver(input, "choices-changed");
             input->addOnUpdate("choices-changed", [input, prop](const std::any& a){
                     input->blockEvents();
-                    input->clear();
-                    for (const auto& c : prop->choices())
-                        input->addItem(c);
+                    input->setItems(prop->choices());
                     input->allowEvents();
             });
         }

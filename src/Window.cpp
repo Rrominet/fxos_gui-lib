@@ -18,6 +18,7 @@
 #include "./Spinner.h"
 
 #include "./GuiBackendCommand.h"
+#include "./Commander.h"
 
 namespace ml
 {
@@ -285,4 +286,53 @@ namespace ml
             this->setTitle(j["title"].get<std::string>());
     }
 
+    ml::Commander* Window::createCommander()
+    {
+        if (_commander) 
+        {
+            ml::app()->error("Can't have more than one commander per window.");
+            return _commander;
+        }
+
+        _commanderPopover = _main->createPopover().get();
+        _commander = _commanderPopover->content()->createComposedWidget<ml::Commander>(&_commanderPopover->content()->content()).get();
+        _commanderPopover->setWidth(500);
+        _commander->events().add("valid", [this]{
+            _commanderPopover->hide();
+        });
+
+        return _commander;
+    }
+
+    ml::Commander* Window::createCommanderFromAppCmds()
+    {
+        this->createCommander();
+        _commander->addAllCommands(ml::app());
+        return _commander;
+    }
+
+    ml::Commander* Window::createCommanderFromThisWindowCmds()
+    {
+        this->createCommander();
+        _commander->addAllCommands(this);
+        return _commander;
+    }
+
+    void Window::showCommander()
+    {
+        if (!_commanderPopover)
+        {
+            ml::app()->error("You need to create a commander before showing it.\n(missing the popover)");
+            return;
+        }
+        if (!_commander)
+        {
+            ml::app()->error("You need to create a commander before showing it.\n(missing the commander)");
+            return;
+        }
+
+        _commanderPopover->show();
+        auto mpos = this->mousePos();
+        _commanderPopover->setPosition(mpos.x(), mpos.y());
+    }
 }

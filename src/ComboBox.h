@@ -23,6 +23,7 @@ namespace ml
             void setActiveIndex(int index);
             int activeIndex() const;
             void clear();
+            ml::Vec<std::string> items() const {return _items;}
 
             virtual void setValue(const std::string& value) override;
             virtual void setValue(double value) override;

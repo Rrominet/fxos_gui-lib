@@ -10,7 +10,7 @@
 
 
 //TODO This should be under a subclass wrapper like other widgets, we should not have this kind of conditionnal include here
-//BUT  Iwould like to do it with my fxplorer, so let's do this for now.
+//BUT I would like to do it with my fxplorer, so let's do this for now.
 #ifdef __EMISCRIPTEN__
 #else 
 #include <gtkmm/filechoosernative.h>
