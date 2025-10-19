@@ -173,9 +173,8 @@ if ("wasm" not in sys.argv):
             fm + "/build/libmlapi.so",
             ])
     elif cpp.release : 
-        cpp.addToLibs([
-            "mlapi"
-            ])
+        #add the version dependencis for it
+        cpp.addProject("/opt/mlapi/lib")
 
     if ("shared" in sys.argv):
         cpp.shared = True
