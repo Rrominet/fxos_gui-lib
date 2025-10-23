@@ -168,6 +168,7 @@ if ("wasm" not in sys.argv):
         "fmodL",
         ])
 
+    #should add a way to add the version of mlapi in dependencies here.
     if not cpp.release : 
         cpp.addToLibs([
             fm + "/build/libmlapi.so",
