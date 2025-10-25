@@ -72,6 +72,10 @@ namespace ml
             // swap the order of 2 children;
             // for now, lg if i and j are out of bounds and does nothing
             void swap(size_t i, size_t j);
+            void moveChildTop(Widget* child);
+            void moveChildBottom(Widget* child);
+
+            bool containsChild(Widget* child);
 
             virtual void init() override;
             virtual void init(ml::Scrollable* scrollable);

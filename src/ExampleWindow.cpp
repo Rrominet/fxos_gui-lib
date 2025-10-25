@@ -42,6 +42,7 @@
 #include "./GuiCommand.h"
 #include "./Commander.h"
 #include "./CommandButton.h"
+#include "./ListWidget.h"
 
 #include <any>
 #include <memory>
@@ -262,6 +263,20 @@ namespace ml
             lg("Data : " << data->data().dump(4));
             lg("--");
         });
+
+        _composedWidgets->createLabel("List Widget :");
+        auto list = (ListWidget*)_composedWidgets->createComposedWidget<ListWidget>(_composedWidgets.get()).get();
+        for (size_t i=0; i<5; i++)
+        {
+
+            //FIXME : I can't do this because of the checker... Should change this.
+            auto w = ml::app()->widgetsFactory().create<Box>();
+            w->createLabel("Label " + std::to_string(i));
+            w->createButton("Click Me " + std::to_string(i));
+            w->createSwitch();
+
+            list->add(w);
+        }
     }
 
     void ExampleWindow::createBasicsProperties()

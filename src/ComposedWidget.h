@@ -18,7 +18,7 @@ namespace ml
             virtual ~ComposedWidget() {}
 
             //this should be implemented by passing the call to the widget that receives the events...
-            virtual void addEventListener(Event event, const std::function<void(EventInfos&)>& callback) = 0;
+            virtual void addEventListener(Event event, const std::function<void(EventInfos&)>& callback);
 
             virtual void blockEvents();
             virtual void unblockEvents();

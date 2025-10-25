@@ -32,4 +32,10 @@ namespace ml
         for (auto w : _composed)
             std::visit([](auto& w){w->unparent();}, w);
     }
+
+    void ComposedWidget::addEventListener(Event event, const std::function<void(EventInfos&)>& callback)
+    {
+        for (auto w : _composed)
+            std::visit([&event, &callback](auto& w){w->addEventListener(event, callback);}, w);
+    }
 }
