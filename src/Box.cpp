@@ -161,6 +161,34 @@ namespace ml
         _children.swap(i, j);
     }
 
+    void Box::moveChildTop(Widget* child)
+    {
+        auto idx = this->childIndex(child);
+        if (idx != 0)
+            this->swap(idx, 0);
+    }
+
+    void Box::moveChildBottom(Widget* child)
+    {
+        auto idx = this->childIndex(child);
+        if (idx != _children.size() - 1)
+            this->swap(idx, _children.size() - 1);
+    }
+
+    bool Box::containsChild(Widget* child)
+    {
+        bool res = false;
+        for (auto &c : _children)
+        {
+            if (c.get() == child)
+            {
+                res = true;
+                break;
+            }
+        }
+        return res;
+    }
+
     int Box::childIndex(ml::Widget* child)
     {
         for (size_t i = 0; i < _children.size(); i++)
