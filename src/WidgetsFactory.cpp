@@ -8,18 +8,6 @@
 
 namespace ml
 {
-    std::shared_ptr<ml::Popover> WidgetsFactory::createPopover()
-    {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::Popover>();
-        widget->_impl = std::make_shared<ml::Popover_impl>(widget.get());
-        widget->_impl->_createWidget();
-        ml::app()->checker().set("can-construct-widget", false);
-        widget->init();
-        widget->setEvents();
-        return widget;
-    }
-
     std::shared_ptr<ml::Image> WidgetsFactory::createImage(bool icon,ml::Box* parent)
     {
         ml::app()->checker().set("can-construct-widget", true);

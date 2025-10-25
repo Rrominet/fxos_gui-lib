@@ -1,4 +1,3 @@
-
 #include "./Switch.h"
 
 namespace ml
@@ -12,5 +11,6 @@ namespace ml
         this->addCssClass("switch");
         this->addCssClass("input");
         this->setHAlign(ml::RIGHT);
+        this->setVAlign(ml::VCENTER);
     }
 }

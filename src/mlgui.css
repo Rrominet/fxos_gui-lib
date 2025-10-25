@@ -370,3 +370,19 @@ button.dialog-cancel
 {
     margin : .5em 0;
 }
+
+.list-item
+{
+    background : var(--list-background-color);
+    margin : 1px 0;
+}
+
+.list-item:first-child
+{
+    border-radius : 5px 5px 0px 0px;
+}
+
+.list-item:last-child
+{
+    border-radius : 0px 0px 5px 5px;
+}

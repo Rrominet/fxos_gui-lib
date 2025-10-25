@@ -25,8 +25,6 @@ namespace ml
                     return w;
                 }
 
-            std::shared_ptr<ml::Popover> createPopover();
-
             std::shared_ptr<ml::Image> createImage(bool icon, ml::Box* parent);
 
             template <typename W=ml::Canvas, typename... Args>
