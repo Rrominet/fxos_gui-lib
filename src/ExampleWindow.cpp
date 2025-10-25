@@ -268,12 +268,11 @@ namespace ml
         auto list = (ListWidget*)_composedWidgets->createComposedWidget<ListWidget>(_composedWidgets.get()).get();
         for (size_t i=0; i<5; i++)
         {
-
-            //FIXME : I can't do this because of the checker... Should change this.
-            auto w = ml::app()->widgetsFactory().create<Box>();
+            auto w = ml::app()->widgetsFactory().createBox();
             w->createLabel("Label " + std::to_string(i));
             w->createButton("Click Me " + std::to_string(i));
             w->createSwitch();
+            w->setOrient(ml::HORIZONTAL);
 
             list->add(w);
         }
