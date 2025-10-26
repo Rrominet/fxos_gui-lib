@@ -10,6 +10,10 @@ namespace ml
         Box* container = nullptr;
         Label* label = nullptr;
         Label* value = nullptr;
+
+        void hide() { container->hide(); }
+        void show() { container->show(); }
+        void toggle() { container->toggle(); }
     };
 
     template<typename C=Box>

@@ -38,4 +38,22 @@ namespace ml
         for (auto w : _composed)
             std::visit([&event, &callback](auto& w){w->addEventListener(event, callback);}, w);
     }
+
+    void ComposedWidget::show()
+    {
+        for (auto w : _composed)
+            std::visit([](auto& w){w->show();}, w);
+    }
+
+    void ComposedWidget::hide()
+    {
+        for (auto w : _composed)
+            std::visit([](auto& w){w->hide();}, w);	
+    }
+
+    void ComposedWidget::toggle()
+    {
+        for (auto w : _composed)
+            std::visit([](auto& w){w->toggle();}, w);	
+    }
 }

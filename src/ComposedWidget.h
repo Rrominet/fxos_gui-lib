@@ -38,6 +38,10 @@ namespace ml
             void unparent();
             bool isComposed()const {return true;}
 
+            void show();
+            void hide();
+            void toggle();
+
         protected : 
             //only the top hierarchy widgets that compose this widget should be added.
             //do not forget to add any of your created widget to this list
