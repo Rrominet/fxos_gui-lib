@@ -24,6 +24,7 @@ namespace ml
             void addCss(std::string filepath);
             void run();
 
+            size_t getNextTimeoutIdx(){return _timeouts.size();}
             size_t setTimeout(const std::function<void()>& callback, int ms, bool interval = false);
             void removeTimeout(size_t id);
             void removeInterval(size_t id){this->removeTimeout(id);}

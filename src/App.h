@@ -90,7 +90,8 @@ namespace ml
             // It use a dispatcher and not the timeout.connect for gtk impl. Usefull if you ned to call this in another loop like a server loop with totally different thread. (the timeout method didn't work...)
             void queue(const std::function<void()>& callback){_impl.queue(callback);}
             // the function will always be executed on the mainthread (particulary important for the gtk impl)
-            size_t setInterval(const std::function<void()>& callback, int ms){return _impl.setTimeout(callback, ms, true);}
+            // nb will be the number of time the callback will be executed (never stop if it's -1)
+            int setInterval(const std::function<void()>& callback, int ms, int nb=-1, const std::function<void()>& onfinished = nullptr);
             void removeInterval(size_t id){_impl.removeTimeout(id);}
             void removeQueued(size_t id){_impl.removeTimeout(id);}
             void removeTimeout(size_t id){_impl.removeTimeout(id);}
@@ -200,6 +201,8 @@ namespace ml
         private : 
             void _init();
             Argv _argv;
+
+            std::unordered_map<int, int> _intervalsNbMap;
 
         public : 
 #include "./App_gen.h"

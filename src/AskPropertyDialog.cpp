@@ -10,10 +10,12 @@ namespace ml
 {
     AskPropertyDialog::AskPropertyDialog(App* app) : ConfirmDialog(app)
     {
+        this->setTitle("Informations Needed");
     }
 
     AskPropertyDialog::AskPropertyDialog(App* app, ml::Window* parent) : ConfirmDialog(app, parent)
     {
+        this->setTitle("Informations Needed");
     }
 
     AskPropertyDialog::~AskPropertyDialog()
