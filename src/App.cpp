@@ -257,5 +257,30 @@ namespace ml
                 });
         ab->setKeybind("ctrl q");
     }
+
+    int App::setInterval(const std::function<void()>& callback, int ms, int nb, const std::function<void()>& onfinished)
+    {
+        if (nb == -1)
+            return _impl.setTimeout(callback, ms, true);
+        if (nb <= 0)
+            return -1;
+        if (nb == 1)
+            return _impl.setTimeout(callback, ms);
+
+        auto id = _impl.getNextTimeoutIdx();
+        auto realcb = [this, id, nb, callback, onfinished]{
+            callback();   
+            _intervalsNbMap[id]--;
+            if (_intervalsNbMap[id] == 0)
+            {
+                this->removeTimeout(id);
+                if (onfinished)
+                    onfinished();
+            }
+        };
+        _impl.setTimeout(realcb, ms, true);
+        _intervalsNbMap[id] = nb;
+        return id;
+    }
 }
 
