@@ -47,7 +47,8 @@ def main():
     os.makedirs("build", exist_ok=True)
 
     # install deps
-    run("apt install -y libgtkmm-4.0-dev pkg-config")
+    from ml import packages
+    packages.install(["libgtkmm-4.0-dev", "pkg-config"])
 
     os.chdir("build")
     run("chmod +x ../make")
