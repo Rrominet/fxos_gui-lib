@@ -2,7 +2,8 @@
 
 #include "./EventInfos.h"
 #include "./EventBlocker.h"
-#include "./str.h"
+#include "str.h"
+#include "mlTime.h"
 
 namespace ml
 {
@@ -77,5 +78,15 @@ namespace ml
             this->triggerEvent(CHANGE, e);
         };
         this->addEventListener(KEY_DOWN, kdwn);
+    }
+
+    void DateTimeEntry::setFromTime(int64_t time)
+    {
+        this->setValue(ml::time::asString(time, "%Y-%m-%d - %H:%M:%S")); 
+    }
+
+    int64_t DateTimeEntry::asTime()
+    {
+        return ml::time::fromString(this->value(), "%Y-%m-%d - %H:%M:%S"); 
     }
 }

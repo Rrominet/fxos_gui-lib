@@ -11,5 +11,8 @@ namespace ml
             virtual void init() override;
 
             void _setEvents();
+
+            void setFromTime(int64_t time);
+            int64_t asTime();
     };
 }

@@ -8,6 +8,7 @@
 #include "enums.h"
 #include "mlTime.h"
 
+#include "./App.h"
 
 //TODO This should be under a subclass wrapper like other widgets, we should not have this kind of conditionnal include here
 //BUT I would like to do it with my fxplorer, so let's do this for now.
@@ -109,13 +110,13 @@ namespace ml
                         this->createDirChooserButton();
                         break;
                     case DrawType::DATE:
-                        _input = this->createDateInput();
+                        _input = _box->createDateEntry();
                         break;
                     case DrawType::TIME:
-                        _input = this->createTimeInput();
+                        _input = _box->createTimeEntry();
                         break;
                     case DrawType::DATE_TIME:
-                        _input = this->createDateTimeInput();
+                        _input = _box->createDateTimeEntry();
                         break;
                     default:
                         _input = _box->createEntry();
@@ -143,39 +144,6 @@ namespace ml
                 _input->setValue(_prop->value());
             }
 
-            std::shared_ptr<Input> createDateInput()
-            {
-                auto input = _box->createEntry();
-//                 input->addEventListener(CHANGE, [input](EventInfos& e){
-//                         ml::Entry* entry = (ml::Entry*)input.get();
-//                       entry->setValue(ml::time::dateCleaned(entry->value())) ;
-//                 });
-                input->addCssClass("date");
-                return input;
-            }
-
-            std::shared_ptr<Input> createTimeInput()
-            {
-                auto input = _box->createEntry();
-//                 input->addEventListener(CHANGE, [input](EventInfos& e){
-//                         ml::Entry* entry = (ml::Entry*)input.get();
-//                       entry->setValue(ml::time::timeCleaned(entry->value())) ;
-//                 });
-                input->addCssClass("time");
-                return input;
-            }
-
-            std::shared_ptr<Input> createDateTimeInput()
-            {
-                auto input = _box->createEntry();
-//                 input->addEventListener(CHANGE, [input](EventInfos& e){
-//                         ml::Entry* entry = (ml::Entry*)input.get();
-//                       entry->setValue(ml::time::dateTimeCleaned(entry->value())) ;
-//                 });
-                input->addCssClass("date-time");
-                return input;
-            }
-
             void createButton(const std::string& text, const std::function<void(EventInfos& e)>& callback)
             {
                 _change_action = _box->createButton(text);
@@ -188,42 +156,24 @@ namespace ml
 
             void createFileChooserButton()
             {
-                // TODO temp, should work for emiscripten too.
-#ifdef __EMSCRIPTEN__
-                return;
-#endif
                 auto prop = _prop;
                 auto cb = [prop](EventInfos& e) {
-                    auto fd = Gtk::FileChooserNative::create("Select a file", Gtk::FileChooser::Action::OPEN, "Select", "Cancel");
-                    fd->show();
-                    
-                    auto set_file = [fd, prop](int res){
-                        if (res == Gtk::ResponseType::ACCEPT)
-                            prop->set(fd->get_files2()[0]->get_path());
+                    auto on_open = [prop](const std::string& path){
+                        prop->set(path);
                     };
-
-                    fd->signal_response().connect(set_file);
+                    ml::app()->openFile("Select a file", "", on_open);
                 };
                 this->createButton("...", cb);
             }
 
             void createDirChooserButton()
             {
-                // TODO temp, should work for emiscripten too.
-#ifdef __EMSCRIPTEN__
-                return;
-#endif
                 auto prop = _prop;
                 auto cb = [prop](EventInfos& e) {
-                    auto fd = Gtk::FileChooserNative::create("Select a Directory", Gtk::FileChooser::Action::SELECT_FOLDER, "Select", "Cancel");
-                    fd->show();
-                    
-                    auto set_file = [fd, prop](int res){
-                        if (res == Gtk::ResponseType::ACCEPT)
-                            prop->set(fd->get_files2()[0]->get_path());
+                    auto on_open = [prop](const std::string& path){
+                        prop->set(path);
                     };
-
-                    fd->signal_response().connect(set_file);
+                    ml::app()->openFolder("Select a Folder.", "", on_open);
                 };
                 this->createButton("...", cb);
             }
