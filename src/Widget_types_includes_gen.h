@@ -17,6 +17,9 @@
 #include "./Scrollable.h"
 #include "./Popover.h"
 #include "./AbsoluteBox.h"
+#include "./DateEntry.h"
+#include "./TimeEntry.h"
+#include "./DateTimeEntry.h"
 #ifdef __EMSCRIPTEN__
 #include "./em/Button_impl.h"
 #include "./em/ToggleButton_impl.h"

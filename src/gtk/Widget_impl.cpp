@@ -6,6 +6,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/layoutmanager.h>
 #include "../Window.h"
+#include "gtkmm/eventcontroller.h"
 
 namespace ml
 {
@@ -221,6 +222,7 @@ namespace ml
         if (!_controller_key)
         {
             _controller_key = Gtk::EventControllerKey::create();
+            _controller_key->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
             _gtk->add_controller(_controller_key);
         }
     }

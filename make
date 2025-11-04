@@ -118,6 +118,7 @@ print ("generating the widget events vectors and binding with impl...")
 events = widgets_events.get()
 gbl.write("../src/Widget_events_gen.h", events[0])
 gbl.write("../src/Widget_events_impl_gen.h", events[1])
+gbl.write("../src/Widget_events_trigger_impl_gen.h", events[2])
 print ("Widget events generated.")
 
 print ("generating props subclasses...")

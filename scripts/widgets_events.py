@@ -34,6 +34,18 @@ def widget_h(event) :
     s = s.replace("*event*", event)
     return s
 
+def widget_events_trigger(event): 
+    eventl = event.lower()
+    s = """case(*EVENT*) :
+    for (const auto& f : _*event*)
+        f(infos);
+    break;
+"""
+
+    s = s.replace("*EVENT*", event)
+    s = s.replace("*event*", eventl)
+    return s
+
 def widget_cpp(event) : 
     event_l = event.lower()
     s = """
@@ -63,9 +75,11 @@ def widget_cpp(event) :
 def get() : 
     all_h = ""
     all_cpp = ""
+    trigger_cpp = ""
 
     for event in events : 
         all_h += widget_h(event)
         all_cpp += widget_cpp(event)
+        trigger_cpp += widget_events_trigger(event)
 
-    return all_h, all_cpp
+    return all_h, all_cpp, trigger_cpp

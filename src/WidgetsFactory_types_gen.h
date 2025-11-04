@@ -120,3 +120,24 @@ std::shared_ptr<ml::MultilineEntry> createMultilineEntry(ml::Scrollable* parent,
 std::shared_ptr<ml::MultilineEntry> createMultilineEntry(ml::AbsoluteBox* parent, const std::string& text = "");
 std::shared_ptr<ml::MultilineEntry> createMultilineEntry(ml::Popover* parent, const std::string& text = "");
 
+
+std::shared_ptr<ml::DateEntry> createDateEntry();
+std::shared_ptr<ml::DateEntry> createDateEntry(ml::Box* parent, const std::string& text = "");
+std::shared_ptr<ml::DateEntry> createDateEntry(ml::Scrollable* parent, const std::string& text = "");
+std::shared_ptr<ml::DateEntry> createDateEntry(ml::AbsoluteBox* parent, const std::string& text = "");
+std::shared_ptr<ml::DateEntry> createDateEntry(ml::Popover* parent, const std::string& text = "");
+
+
+std::shared_ptr<ml::TimeEntry> createTimeEntry();
+std::shared_ptr<ml::TimeEntry> createTimeEntry(ml::Box* parent, const std::string& text = "");
+std::shared_ptr<ml::TimeEntry> createTimeEntry(ml::Scrollable* parent, const std::string& text = "");
+std::shared_ptr<ml::TimeEntry> createTimeEntry(ml::AbsoluteBox* parent, const std::string& text = "");
+std::shared_ptr<ml::TimeEntry> createTimeEntry(ml::Popover* parent, const std::string& text = "");
+
+
+std::shared_ptr<ml::DateTimeEntry> createDateTimeEntry();
+std::shared_ptr<ml::DateTimeEntry> createDateTimeEntry(ml::Box* parent, const std::string& text = "");
+std::shared_ptr<ml::DateTimeEntry> createDateTimeEntry(ml::Scrollable* parent, const std::string& text = "");
+std::shared_ptr<ml::DateTimeEntry> createDateTimeEntry(ml::AbsoluteBox* parent, const std::string& text = "");
+std::shared_ptr<ml::DateTimeEntry> createDateTimeEntry(ml::Popover* parent, const std::string& text = "");
+

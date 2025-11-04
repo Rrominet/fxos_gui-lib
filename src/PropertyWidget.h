@@ -6,7 +6,7 @@
 #include "./props_utils.h"
 #include "Switch.h"
 #include "enums.h"
-#include "gtkmm/dialog.h"
+#include "mlTime.h"
 
 
 //TODO This should be under a subclass wrapper like other widgets, we should not have this kind of conditionnal include here
@@ -14,6 +14,7 @@
 #ifdef __EMISCRIPTEN__
 #else 
 #include <gtkmm/filechoosernative.h>
+#include <gtkmm/dialog.h>
 #endif
 
 namespace ml
@@ -107,6 +108,15 @@ namespace ml
                         _input->addCssClass("dir-path");
                         this->createDirChooserButton();
                         break;
+                    case DrawType::DATE:
+                        _input = this->createDateInput();
+                        break;
+                    case DrawType::TIME:
+                        _input = this->createTimeInput();
+                        break;
+                    case DrawType::DATE_TIME:
+                        _input = this->createDateTimeInput();
+                        break;
                     default:
                         _input = _box->createEntry();
                         break;
@@ -131,6 +141,39 @@ namespace ml
                 }
                 _input->setHExpand(true);
                 _input->setValue(_prop->value());
+            }
+
+            std::shared_ptr<Input> createDateInput()
+            {
+                auto input = _box->createEntry();
+//                 input->addEventListener(CHANGE, [input](EventInfos& e){
+//                         ml::Entry* entry = (ml::Entry*)input.get();
+//                       entry->setValue(ml::time::dateCleaned(entry->value())) ;
+//                 });
+                input->addCssClass("date");
+                return input;
+            }
+
+            std::shared_ptr<Input> createTimeInput()
+            {
+                auto input = _box->createEntry();
+//                 input->addEventListener(CHANGE, [input](EventInfos& e){
+//                         ml::Entry* entry = (ml::Entry*)input.get();
+//                       entry->setValue(ml::time::timeCleaned(entry->value())) ;
+//                 });
+                input->addCssClass("time");
+                return input;
+            }
+
+            std::shared_ptr<Input> createDateTimeInput()
+            {
+                auto input = _box->createEntry();
+//                 input->addEventListener(CHANGE, [input](EventInfos& e){
+//                         ml::Entry* entry = (ml::Entry*)input.get();
+//                       entry->setValue(ml::time::dateTimeCleaned(entry->value())) ;
+//                 });
+                input->addCssClass("date-time");
+                return input;
             }
 
             void createButton(const std::string& text, const std::function<void(EventInfos& e)>& callback)

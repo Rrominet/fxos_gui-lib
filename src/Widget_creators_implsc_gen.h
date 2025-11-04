@@ -13,3 +13,6 @@ std::shared_ptr<ml::Label> Scrollable::createLabel(const std::string& text){retu
 std::shared_ptr<ml::Spinner> Scrollable::createSpinner(const std::string& text){return ml::app()->widgetsFactory().createSpinner(this, text);}
 std::shared_ptr<ml::Image> Scrollable::createImage(const std::string& text){return ml::app()->widgetsFactory().createImage(this, text);}
 std::shared_ptr<ml::MultilineEntry> Scrollable::createMultilineEntry(const std::string& text){return ml::app()->widgetsFactory().createMultilineEntry(this, text);}
+std::shared_ptr<ml::DateEntry> Scrollable::createDateEntry(const std::string& text){return ml::app()->widgetsFactory().createDateEntry(this, text);}
+std::shared_ptr<ml::TimeEntry> Scrollable::createTimeEntry(const std::string& text){return ml::app()->widgetsFactory().createTimeEntry(this, text);}
+std::shared_ptr<ml::DateTimeEntry> Scrollable::createDateTimeEntry(const std::string& text){return ml::app()->widgetsFactory().createDateTimeEntry(this, text);}

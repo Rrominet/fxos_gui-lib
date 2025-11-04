@@ -178,6 +178,9 @@ namespace ml
         image->load("images/code.webp");
 
         _basicsWidgets->createMultilineEntry("This is some multiline text\nYep.");
+        _basicsWidgets->createDateEntry("0000-01-01");
+        _basicsWidgets->createTimeEntry("00:00:00");
+        _basicsWidgets->createDateTimeEntry("0000-01-01 - 00:00:00");
 
         auto abox = _basicsWidgets->createAbsoluteBox();
         auto l1 = abox->createLabel("This is a label 1");
@@ -287,6 +290,9 @@ namespace ml
         auto prop3 =ml::app()->props().create<FloatProperty>("Float number", 1.2, 0, 10, "this is a float number");
         auto prop4 =ml::app()->props().create<DoubleProperty>("Double number", 1.3445, 0, 10, "this is a double number (float on 64 bits)");
         auto prop5 =ml::app()->props().create<StringProperty>("Your name", "Romain", "This is a string property");
+        auto prop7 =ml::app()->props().create<StringProperty>("Date", "2025-01-01", "This is a date string property");
+        auto prop8 =ml::app()->props().create<StringProperty>("Time", "00:00:00", "This is a Time string property");
+        auto prop9 =ml::app()->props().create<StringProperty>("Date Time", "2025-01-01 - 00:00:00", "This is a date time string property");
 
         basics->body()->appendProp(prop1, LABEL);
         basics->body()->appendProp(prop1, CHECKBOX);
@@ -313,6 +319,10 @@ namespace ml
         basics->body()->appendProp(prop5, LABEL);
         basics->body()->appendProp(prop5);
         basics->body()->appendProp(prop5, MULTILINE_ENTRY);
+
+        basics->body()->appendProp(prop7, DATE);
+        basics->body()->appendProp(prop8, TIME);
+        basics->body()->appendProp(prop9, DATE_TIME);
 
         auto composed = (Collapsable*)_basicsProperty->createComposedWidget<Collapsable>(_basicsProperty.get(), "Composed").get();
 

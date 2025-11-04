@@ -13,6 +13,7 @@
 #include <cassert>
 #include <memory>
 #include "./enums.h"
+#include "./EventInfos.h"
 #include "vec.h"
 #include "observers/Observer.h"
 #ifdef __EMSCRIPTEN__
@@ -86,6 +87,10 @@ namespace ml
             std::string help(){return _impl->help();}
 
             void addEventListener(Event event, const std::function<void(EventInfos&)>& callback);
+
+            //manually trigger an event - useful if you override an event listener that modify the default behavior of the widget
+            //it will often be used in couple with blockEvents() and allowEvents()
+            void triggerEvent(Event event, EventInfos& infos);
 
             // you can set any menu id that has been registered with : 
             // ml::app()->menusFactory()->create(...);
