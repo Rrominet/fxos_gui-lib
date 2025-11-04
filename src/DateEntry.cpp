@@ -4,9 +4,10 @@
 
 #include "./App.h"
 #include "./App.hpp"
-#include "./str.h"
+#include "str.h"
 #include "./EventInfos.h"
 #include "./EventBlocker.h"
+#include "mlTime.h"
 
 namespace ml
 {
@@ -58,6 +59,16 @@ namespace ml
             this->triggerEvent(CHANGE, e);
         };
         this->addEventListener(KEY_DOWN, kdwn);
+    }
+
+    void DateEntry::setFromTime(int64_t time)
+    {
+        this->setValue(ml::time::asString(time, "%Y-%m-%d")); 
+    }
+
+    int64_t DateEntry::asTime()
+    {
+        return ml::time::fromString(this->value(), "%Y-%m-%d");        
     }
 
 }

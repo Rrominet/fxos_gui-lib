@@ -293,6 +293,8 @@ namespace ml
         auto prop7 =ml::app()->props().create<StringProperty>("Date", "2025-01-01", "This is a date string property");
         auto prop8 =ml::app()->props().create<StringProperty>("Time", "00:00:00", "This is a Time string property");
         auto prop9 =ml::app()->props().create<StringProperty>("Date Time", "2025-01-01 - 00:00:00", "This is a date time string property");
+        auto prop10 =ml::app()->props().create<StringProperty>("File path", "/", "This is a filepath property");
+        auto prop11 =ml::app()->props().create<StringProperty>("Dir path", "/", "This is a folder path property");
 
         basics->body()->appendProp(prop1, LABEL);
         basics->body()->appendProp(prop1, CHECKBOX);
@@ -323,6 +325,9 @@ namespace ml
         basics->body()->appendProp(prop7, DATE);
         basics->body()->appendProp(prop8, TIME);
         basics->body()->appendProp(prop9, DATE_TIME);
+
+        basics->body()->appendProp(prop10, FILE_PATH);
+        basics->body()->appendProp(prop11, DIR_PATH);
 
         auto composed = (Collapsable*)_basicsProperty->createComposedWidget<Collapsable>(_basicsProperty.get(), "Composed").get();
 
