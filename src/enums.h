@@ -67,6 +67,9 @@ namespace ml
         COMBOBOX,
         FILE_PATH,
         DIR_PATH,
+        DATE,
+        TIME,
+        DATE_TIME,
     };
 
     enum ImageState

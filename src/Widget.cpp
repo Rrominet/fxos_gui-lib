@@ -55,6 +55,14 @@ namespace ml
         }
     }
 
+    void Widget::triggerEvent(Event event, EventInfos& infos)
+    {
+        switch(event)        
+        {
+#include "./Widget_events_trigger_impl_gen.h"
+        }
+    }
+
     void Widget::setContextMenu(const std::string& menuId)
     {
         auto f = [menuId, this](EventInfos &)

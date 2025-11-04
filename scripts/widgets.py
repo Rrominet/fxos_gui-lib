@@ -14,6 +14,15 @@ widgets = (
         "MultilineEntry",
         )
 
+
+#widgets with no gtk/em implementation but simply a child classs of a Widget
+#The first is the name of the widget, the second is the name of the parent -- needed for the implementation type
+widgets_children = (
+        ("DateEntry", "Entry"),
+        ("TimeEntry", "Entry"),
+        ("DateTimeEntry", "Entry"),
+        )
+
 containers = (
         "Box",
         "Scrollable",
@@ -138,7 +147,7 @@ std::shared_ptr<ml::*type*> create*type*(ml::Popover* parent, const std::string&
     {
         ml::app()->checker().set("can-construct-widget", true);
         auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
+        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
         widget->_impl->_createWidget();
         widget->_impl->_createBasicEvents();
         ml::app()->checker().set("can-construct-widget", false);
@@ -151,7 +160,7 @@ std::shared_ptr<ml::*type*> create*type*(ml::Popover* parent, const std::string&
     {
         ml::app()->checker().set("can-construct-widget", true);
         auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
+        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
         widget->_impl->_createWidget();
         widget->_impl->_createBasicEvents();
         ml::app()->checker().set("can-construct-widget", false);
@@ -168,7 +177,7 @@ std::shared_ptr<ml::*type*> create*type*(ml::Popover* parent, const std::string&
     {
         ml::app()->checker().set("can-construct-widget", true);
         auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
+        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
         widget->_impl->_createWidget();
         widget->_impl->_createBasicEvents();
         ml::app()->checker().set("can-construct-widget", false);
@@ -185,7 +194,7 @@ std::shared_ptr<ml::*type*> create*type*(ml::Popover* parent, const std::string&
     {
         ml::app()->checker().set("can-construct-widget", true);
         auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
+        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
         widget->_impl->_createWidget();
         widget->_impl->_createBasicEvents();
         ml::app()->checker().set("can-construct-widget", false);
@@ -202,7 +211,7 @@ std::shared_ptr<ml::*type*> create*type*(ml::Popover* parent, const std::string&
     {
         ml::app()->checker().set("can-construct-widget", true);
         auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
+        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
         widget->_impl->_createWidget();
         widget->_impl->_createBasicEvents();
         ml::app()->checker().set("can-construct-widget", false);
@@ -215,7 +224,18 @@ std::shared_ptr<ml::*type*> create*type*(ml::Popover* parent, const std::string&
         return widget;
     }
 """
-    return (factoryH.replace("*type*", cType), factoryCpp.replace("*type*", cType))
+    if (type(cType) == str) :
+        factoryH = factoryH.replace("*type*", cType)
+        factoryCpp = factoryCpp.replace("*type*", cType)
+        factoryH = factoryH.replace("*itype*", cType)
+        factoryCpp = factoryCpp.replace("*itype*", cType)
+    elif (type(cType) == tuple) : 
+        factoryH = factoryH.replace("*type*", cType[0])
+        factoryCpp = factoryCpp.replace("*type*", cType[0])
+        factoryH = factoryH.replace("*itype*", cType[1])
+        factoryCpp = factoryCpp.replace("*itype*", cType[1])
+
+    return (factoryH, factoryCpp)
 
 def popoverWidgetsImplCode() : 
     line = """std::shared_ptr<ml::*type*> ml::Popover::create*type*(const std::string& text){return _content->create*type*(text);}"""
@@ -255,6 +275,10 @@ def get() :
         gtk_includes += "#include \"./gtk/" + i + "_impl.h\"\n"
         em_includes += "#include \"./em/" + i + "_impl.h\"\n"
 
+    for i in widgets_children: 
+        classes += "class " + i[0] + ";\n"
+        includes += "#include \"./" + i[0] + ".h\"\n"
+
     includes += "#ifdef __EMSCRIPTEN__\n" + em_includes + "#else\n" + gtk_includes + "#endif\n"
 
     for i in containers:
@@ -264,13 +288,21 @@ def get() :
         containersCreators += "std::shared_ptr<ml::*type*> create*type*();\n".replace("*type*", i)
         containersCreators_cpp += "std::shared_ptr<ml::*type*> Box::create*type*(){return ml::app()->widgetsFactory().create*type*(this);}\n".replace("*type*", i)
 
-    for i in widgets:
+    for i in widgets :
         widgets_classes += "class " + i + ";\n"
         (h, cpp) = widgetCode(i)
         widgetsFactoryH += h + "\n"
         widgetsFactoryCpp += cpp + "\n"
         widgetsCreators += "std::shared_ptr<ml::*type*> create*type*(const std::string& text=\"\");\n".replace("*type*", i)
         widgetsCreators_cpp += "std::shared_ptr<ml::*type*> Box::create*type*(const std::string& text){return ml::app()->widgetsFactory().create*type*(this, text);}\n".replace("*type*", i)
+
+    for i in widgets_children :
+        widgets_classes += "class " + i[0] + ";\n"
+        (h, cpp) = widgetCode(i)
+        widgetsFactoryH += h + "\n"
+        widgetsFactoryCpp += cpp + "\n"
+        widgetsCreators += "std::shared_ptr<ml::*type*> create*type*(const std::string& text=\"\");\n".replace("*type*", i[0])
+        widgetsCreators_cpp += "std::shared_ptr<ml::*type*> Box::create*type*(const std::string& text){return ml::app()->widgetsFactory().create*type*(this, text);}\n".replace("*type*", i[0])
 
     _r = {
             "containersFactoryH" : containersFactoryH,

@@ -1419,3 +1419,249 @@
         return widget;
     }
 
+
+    std::shared_ptr<ml::DateEntry> WidgetsFactory::createDateEntry()
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->init();
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::DateEntry> WidgetsFactory::createDateEntry(ml::Box* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::DateEntry> WidgetsFactory::createDateEntry(ml::AbsoluteBox* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::DateEntry> WidgetsFactory::createDateEntry(ml::Scrollable* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::DateEntry> WidgetsFactory::createDateEntry(ml::Popover* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->content()->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+
+    std::shared_ptr<ml::TimeEntry> WidgetsFactory::createTimeEntry()
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::TimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->init();
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::TimeEntry> WidgetsFactory::createTimeEntry(ml::Box* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::TimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::TimeEntry> WidgetsFactory::createTimeEntry(ml::AbsoluteBox* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::TimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::TimeEntry> WidgetsFactory::createTimeEntry(ml::Scrollable* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::TimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::TimeEntry> WidgetsFactory::createTimeEntry(ml::Popover* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::TimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->content()->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+
+    std::shared_ptr<ml::DateTimeEntry> WidgetsFactory::createDateTimeEntry()
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateTimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->init();
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::DateTimeEntry> WidgetsFactory::createDateTimeEntry(ml::Box* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateTimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::DateTimeEntry> WidgetsFactory::createDateTimeEntry(ml::AbsoluteBox* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateTimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::DateTimeEntry> WidgetsFactory::createDateTimeEntry(ml::Scrollable* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateTimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::DateTimeEntry> WidgetsFactory::createDateTimeEntry(ml::Popover* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::DateTimeEntry>();
+        widget->_impl = std::make_shared<ml::Entry_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->content()->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
