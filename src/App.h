@@ -11,7 +11,7 @@
 #include "commands/CommandsManager.h"
 #include "./PanelsManager.h"
 #include "./Argv.h"
-#include "./GuiCommand.h"
+#include "./AsyncGuiCommand.h"
 #include "./Events.h"
 #include "thread.h"
 
@@ -89,6 +89,18 @@ namespace ml
             // the function will always be executed on the mainthread (particulary important for the gtk impl)
             // It use a dispatcher and not the timeout.connect for gtk impl. Usefull if you ned to call this in another loop like a server loop with totally different thread. (the timeout method didn't work...)
             void queue(const std::function<void()>& callback){_impl.queue(callback);}
+
+            // the onfinished will be exec on the GUI thread, NOT THE torun function, so NO GUI stuff in it (or call them by ml::app()->queue())
+            void execAsync(const std::function<void()>& torun, const std::function<void()>& onfinished = nullptr);
+
+            //same as the upper one but you can pass data from the torun function to the onfinished via a std::any object.
+            //be carefull here, don't pass ptr or reference that has been created in the torun function, the obect will die before onfinished.
+            //so copy it or create it before, ore use a shared_ptr
+            void execAsync(const std::function<std::any()>& torun, const std::function<void(const std::any&)>& onfinished = nullptr);
+
+            void execAsync(const std::string& runningInfos, const std::function<void()>& torun, const std::string& finishedInfos="", const std::function<void()>& onfinished = nullptr);
+            void execAsync(const std::string& runningInfos, const std::function<std::any()>& torun, const std::string& finishedInfos="", const std::function<void(const std::any&)>& onfinished = nullptr);
+
             // the function will always be executed on the mainthread (particulary important for the gtk impl)
             // nb will be the number of time the callback will be executed (never stop if it's -1)
             int setInterval(const std::function<void()>& callback, int ms, int nb=-1, const std::function<void()>& onfinished = nullptr);
@@ -126,6 +138,7 @@ namespace ml
                     const std::function<void(const std::string&)> onlineout=0,
                     const std::function<void(const std::string&)> onlineerr=0);
 
+            //FIXME : this should actually be wraped because ThreadPool won't work in emscripten
             th::ThreadPool& pool(){return _pool;}
 
             void openFile(const std::string& title="Open File...", 
@@ -188,6 +201,8 @@ namespace ml
             ml::Vec<std::unique_ptr<Process>> _processes;
 
             ml::Events _events; //bp cg
+
+            //FIXME : this should actually be wraped because ThreadPool won't work in emscripten
             th::ThreadPool _pool;
 
             std::string _about;

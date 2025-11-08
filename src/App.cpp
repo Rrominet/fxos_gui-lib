@@ -105,6 +105,67 @@ namespace ml
         return this->message<ConfirmDialog>(message, parent, id);
     }
 
+    void App::execAsync(const std::function<void()>& torun, const std::function<void()>& onfinished)
+    {
+         this->main()->setWorking(true);
+         auto job = [this, torun, onfinished]
+         {
+             torun();   
+             auto _onfinished = [onfinished, this]{
+                 if (onfinished)
+                     onfinished(); 
+                 this->main()->setWorking(false);
+             };
+             this->queue(_onfinished);
+         };
+        _pool.run(job);
+    }
+
+    //same as the upper one but you can pass data from the torun function to the onfinished via a std::any object.
+    //be carefull here, don't pass ptr or reference that has been created in the torun function, the obect will die before onfinished.
+    //so copy it or create it before, ore use a shared_ptr
+    void App::execAsync(const std::function<std::any()>& torun, const std::function<void(const std::any&)>& onfinished)
+    {
+         this->main()->setWorking(true);
+         auto job = [this, torun, onfinished]
+         {
+             std::any res = torun();   
+             auto _onfinished = [onfinished, res, this]{
+                 if (onfinished)
+                     onfinished(res); 
+                 this->main()->setWorking(false);
+             };
+             this->queue(_onfinished);
+         };
+        _pool.run(job);
+    }
+
+    void App::execAsync(const std::string& runningInfos, const std::function<void()>& torun, const std::string& finishedInfos, const std::function<void()>& onfinished)
+    {
+        this->main()->setInfos(runningInfos);
+        auto _onfinished = [this, onfinished, finishedInfos]
+        {
+            if(onfinished)
+                onfinished();
+            this->main()->setInfos(finishedInfos);
+        };
+
+        this->execAsync(torun, _onfinished);
+    }
+
+    void App::execAsync(const std::string& runningInfos, const std::function<std::any()>& torun, const std::string& finishedInfos, const std::function<void(const std::any&)>& onfinished)
+    {
+         this->main()->setWorking(true);
+         this->main()->setInfos(runningInfos);
+         auto job = [this, torun, onfinished, finishedInfos]
+         {
+             std::any res = torun();   
+             auto _onfinished = [onfinished, res, this, finishedInfos]{onfinished(res); this->main()->setWorking(false); this->main()->setInfos(finishedInfos);};
+             this->queue(_onfinished);
+         };
+        _pool.run(job);
+    }
+
     std::shared_ptr<AskPropertyDialog> App::ask(ml::Property* prop, const std::string& message, ml::Window* parent )
     {
         auto dg = this->message<AskPropertyDialog>(message, parent);

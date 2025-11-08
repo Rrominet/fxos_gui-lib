@@ -26,6 +26,8 @@ namespace ml
             virtual json serialize() const override;
             virtual void deserialize(const json& j) override;
 
+            virtual bool async()const {return false;}
+
         protected : 
             std::function<void(const std::any&)> _before; //bp cgs
             std::function<void(const std::any&)> _after; //bp cgs

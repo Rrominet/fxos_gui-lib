@@ -82,6 +82,9 @@ namespace ml
 
             std::shared_ptr<ml::Button> appendCommand(Command* cmd);
             std::shared_ptr<ml::Button> appendCommand(const std::string& id);
+            std::shared_ptr<ml::Button> addCommand(Command* cmd){return this->appendCommand(cmd);}
+            std::shared_ptr<ml::Button> addCommand(const std::string& id){return this->appendCommand(id);}
+
             std::shared_ptr<ml::Image> createIconFromName(const std::string& name){return this->createIcon(name);}
             // it's an allias for createIconFromName
             std::shared_ptr<ml::Image> createIcon(const std::string& name);
