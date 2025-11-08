@@ -61,7 +61,9 @@ namespace ml
         {
             cmd->exec();
         };
-        return this->addButton(cmd->name(), _onclick, keybinds::label(cmd->keybind()));
+        auto btn = this->addButton(cmd->name(), _onclick, keybinds::label(cmd->keybind()));
+        btn->button()->setHelp(cmd->help());
+        return btn;
     }
 
     void Menu::addSeparator()

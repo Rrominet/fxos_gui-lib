@@ -651,13 +651,21 @@ namespace ml
 
         longsync->setExec(longsyncf);
 
+        auto longasync = _app->cmds().createCommand<AsyncGuiCommand>("Wait 5 seconds Async", "longasync");
+        auto longasyncf = [](const std::any& args)
+        {
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+        };
+
+        longasync->setExec(longasyncf);
+
         auto confirm = _app->cmds().createCommand<GuiCommand>("Ask confirmation before", "confirm");
         auto confirmf = [](const std::any& args)
         {
             std::this_thread::sleep_for(std::chrono::seconds(2));
         };
 
-        confirm->setConfirm(true);  // changed
+        confirm->setConfirm(true);
         confirm->setExec(confirmf);
 
         for (auto& c : _app->cmds().commands())

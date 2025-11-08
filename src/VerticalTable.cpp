@@ -94,11 +94,24 @@ namespace ml
             _headerLabelDragged = label; 
         });
 
-        label->addEventListener(LEFT_UP, [this](auto& e){
+        label->addEventListener(LEFT_UP, [this, label](auto& e){
             _headerLabelDragged = nullptr; 
+            if (!_headerRow->window()->state().ctrl)
+                _events.emit("header-clicked", label);
         });
 
-        auto mmove = [this](auto& e){
+        label->addEventListener(RIGHT_UP, [this, label](auto& e){
+            _events.emit("header-right-clicked", label);
+        });
+
+        label->addEventListener(MIDDLE_UP, [this, label](auto& e){
+            _events.emit("header-middle-clicked", label);
+        });
+
+        auto mmove = [this](auto& e)
+        {
+            if(!_headerRow->window()->state().ctrl)
+                return;
             if (!_headerLabelDragged)    
                 return;
             _headerLabelDragged->setWidth(e.x);

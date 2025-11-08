@@ -9,6 +9,7 @@
 #include "./ComboBox.h"
 #include "./enums.h"
 #include "./props_utils.h"
+#include "AsyncGuiCommand.h"
 #include <memory>
 
 namespace ml
