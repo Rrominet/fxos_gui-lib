@@ -25,6 +25,8 @@ namespace ml
             virtual json serialize() const override;
             virtual void deserialize(const json& j) override;
 
+            void onError(const std::string& error);
+
         protected : 
             Process* _process = nullptr;
             std::string _function;

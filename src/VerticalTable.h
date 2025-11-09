@@ -10,6 +10,7 @@ using json = nlohmann::json;
 
 // Events you can subscribe to : 
 //  - row-clicked exec when the user click on a row with the arg as a pair{idx, row}, idx is the index of the row and the row is the pointer itself.
+//  - header-clicked exec when the user click on a header with the arg as the Label* itself
 
 namespace ml
 {

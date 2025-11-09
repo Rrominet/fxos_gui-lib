@@ -30,6 +30,27 @@ namespace ml
 
         _userCb = cb;
 
+        _process->addOnProcessError([this]{
+                auto f = [this]{
+                    this->onError("Process Error : " + _process->error() + "Debug informations :\n" + _process->output());
+                };
+                ml::app()->queue(f);
+                });
+
+        _process->addOnEnd([this]{
+                    auto f = [this]{
+                        this->onError("Process ended, should not happen.\nProcess Error : " + _process->error() + "Debug informations :\n" + _process->output());
+                    };
+                    ml::app()->queue(f);
+                });
+
+        _process->addOnTerminate([this]{
+                    auto f = [this]{
+                        this->onError("Process terminated, should not happen.\nProcess Error : " + _process->error() + "Debug informations :\n" + _process->output());
+                    };
+                    ml::app()->queue(f);
+                });
+
         _cb = [this, cb](const json& res)
         {
             auto mth = [this, res]
@@ -56,9 +77,7 @@ namespace ml
             }
             catch(const std::exception& e)
             {
-                for (auto& b : _buttons)
-                    b->stopLoading();
-                ml::app()->error("Error in the process backend (" + _process->cmd_s() + ") :\n" + std::string(e.what()));
+                this->onError(_S(e.what()));
             }
             lg("process backend called : " << _function);
             lg("with these args : " << _jsonArgs.dump(4));
@@ -66,6 +85,15 @@ namespace ml
         };
 
         GuiCommand::setExec(exec);
+    }
+
+    void GuiBackendCommand::onError(const std::string& error)
+    {
+        for (auto& b : _buttons)
+            b->stopLoading();
+        app()->main()->setWorking(false);
+        app()->main()->setInfos("");
+        ml::app()->error("Error in the process backend (" + _process->cmd_s() + ") :\n" + error);
     }
 
     void GuiBackendCommand::setExec(const std::function<void(const std::any&)>& f)

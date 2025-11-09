@@ -190,7 +190,7 @@ namespace ml
 
     void VerticalTable::_onDataChanged()
     {
-        _lastAddedIndex = -1; //changed
+        _lastAddedIndex = -1;
         for (auto& r : _rows)
         {
             if (!r->row)
@@ -356,8 +356,19 @@ namespace ml
     {
         lg("VerticalTable::_onDataRemoved(" << index << ")");
         auto size = _rows.size();
-        if (_model->data().size() < size)
+        auto msize = _model->data().size();
+        if (msize < size)
+        {
+            auto diff = size - msize;
+            for (unsigned int i = 0; i < diff; i++)
+            {
+                auto& r = _rows[size - i - 1];
+                if (r->row)
+                    r->row->hide();
+            }
+
             size = _model->data().size();
+        }
 
         if (index == size)
         {
