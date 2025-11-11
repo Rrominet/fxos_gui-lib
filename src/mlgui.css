@@ -386,3 +386,8 @@ button.dialog-cancel
 {
     border-radius : 0px 0px 5px 5px;
 }
+
+.selected
+{
+    background-color : var(--selected-color);
+}

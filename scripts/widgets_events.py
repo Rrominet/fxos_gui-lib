@@ -58,6 +58,13 @@ def widget_cpp(event) :
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _*event_l*)
                     f(e);
             };

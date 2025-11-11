@@ -1,5 +1,6 @@
 #include "./GuiBackendCommand.h"
 #include "GuiCommand.h"
+#include "files.2/files.h"
 #include "ipc.h"
 #include "App.h"
 #include "mlprocess.h"
@@ -37,19 +38,23 @@ namespace ml
                 ml::app()->queue(f);
                 });
 
-        _process->addOnEnd([this]{
-                    auto f = [this]{
-                        this->onError("Process ended, should not happen.\nProcess Error : " + _process->error() + "Debug informations :\n" + _process->output());
-                    };
-                    ml::app()->queue(f);
-                });
+#ifdef mydebug
+        auto outdebug = [this](const std::string& s)
+        {
+            files::append(files::execDir() + files::sep() + _id + "-pc_out", s + "\n");
+        };
+
+        auto errdebug = [this](const std::string& s)
+        {
+            files::append(files::execDir() + files::sep() + _id + "-pc_err", s + "\n");
+        };
+        _process->addOnOutput(outdebug);
+        _process->addOnError(errdebug);
 
         _process->addOnTerminate([this]{
-                    auto f = [this]{
-                        this->onError("Process terminated, should not happen.\nProcess Error : " + _process->error() + "Debug informations :\n" + _process->output());
-                    };
-                    ml::app()->queue(f);
+                    files::write(files::execDir() + files::sep() + _id + "-pc_terminate", "Process " + _id + " terminated. This shoudn't hapenning.");
                 });
+#endif
 
         _cb = [this, cb](const json& res)
         {
