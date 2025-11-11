@@ -3,7 +3,7 @@
 #include "./VerticalTableModel.h"
 
 #include "./Box.hpp"
-#include "enums.h"
+#include "./enums.h"
 
 namespace ml
 {
@@ -17,9 +17,24 @@ namespace ml
         _headerRow->setOrient(Orient::HORIZONTAL);
         _headerRow->addCssClass("vertical-table-header");
 
-        _databox = _tablebox->createScrollable();
+        _datascroll = _tablebox->createScrollable();
+        _datascroll->setOrient(Orient::VERTICAL);
+        _datascroll->addCssClass("vertical-table-body");
+
+        _headEmpty = _datascroll->createBox();
+        _headEmpty->setOrient(Orient::VERTICAL);
+        _headEmpty->addCssClass("vertical-empty-head");
+        _headEmpty->setHExpand();
+
+        _databox = _datascroll->createBox();
         _databox->setOrient(Orient::VERTICAL);
-        _databox->addCssClass("vertical-table-body");
+        _databox->addCssClass("vertical-table-content");
+        _databox->setHExpand();
+
+        _footEmpty = _datascroll->createBox();
+        _footEmpty->setOrient(Orient::VERTICAL);
+        _footEmpty->addCssClass("vertical-empty-foot");
+        _footEmpty->setHExpand();
 
         _composed.push_back(_tablebox.get());
         _rows.resize(this->max_row_size());
@@ -62,7 +77,7 @@ namespace ml
 
     void VerticalTable::_setEvents()
     {
-        _databox->addOnYScroll([this](double amount){
+        _datascroll->addOnYScroll([this](double amount){
                 _onScroll(amount);
         });
     }
@@ -156,13 +171,11 @@ namespace ml
         }
     }
 
-
     void VerticalTable::_onAttributesAdded(const std::pair<std::string,Property::PropertyType>& attribute)
     {
         lg("VerticalTable::_onAttributesAdded");
         _createHeaderLabel(attribute.first);
     }
-
 
     void VerticalTable::_onAttributesRemoved(const std::string& name)
     {
@@ -177,7 +190,6 @@ namespace ml
             }
         }
     }
-
 
     void VerticalTable::_onAttributesRemovedIdx(unsigned int index)
     {
@@ -200,6 +212,9 @@ namespace ml
 
         for (auto& json : _model->data())
             _onDataAdded(json);
+
+        _headEmpty->setHeight(0);
+        _footEmpty->setHeight(_model->size()*_rowHeight + _tablebox->height() - _databox->height());
     }
 
     void VerticalTable::_onDataAdded(const json& data)
@@ -279,7 +294,6 @@ namespace ml
 
     void VerticalTable::setRowData(size_t index, const json& data)
     {
-        lg("VerticalTable::setRowData " << index << " : " << data.dump(4));
         if (index >= _rows.size())
         {
             lg("setRowData : index >= _rows.size() " << index << " >= " << _rows.size());
@@ -316,25 +330,20 @@ namespace ml
                 continue;
             }
 
-            lg("data[" << k << "] : " << data[k]);
             if (t == Property::PropertyType::STRING)
             {
-                lg("data[" << k << "] type : string");
                 label->setValue(data[k].get<std::string>());
             }
             else if (t == Property::PropertyType::INT)
             {
-                lg("data[" << k << "] type : int");
                 label->setValue(std::to_string(data[k].get<int>()));
             }
             else if (t == Property::PropertyType::DOUBLE)
             {
-                lg("data[" << k << "] type : double");
                 label->setValue(std::to_string(data[k].get<double>()));
             }
             else if (t == Property::PropertyType::BOOL)
             {
-                lg("data[" << k << "] type : bool");
                 label->setValue(std::to_string(data[k].get<bool>()));
             }
         }
@@ -350,6 +359,28 @@ namespace ml
             this->setRowData(i, _model->data()[i + _start]);
 
         //TODO create the last row if max_row_size() was not trigger in the model. (_lastAddedIndex)
+    }
+
+    int VerticalTable::_guiIdx(size_t dataIdx)
+    {
+        int gui_idx = dataIdx - _start;
+        if (gui_idx < 0)
+            return - 1;
+        if (gui_idx >= _rows.size())
+            return -1;
+        return gui_idx;
+    }
+
+    ml::Ret<VerticalRow*> VerticalTable::_row(size_t dataIdx)
+    {
+        int gui = _guiIdx(dataIdx)        ;
+        if (gui < 0)
+            return ml::ret::fail<VerticalRow*>(std::to_string(dataIdx) + " is not drawn in the table.");
+
+        if (gui >= _rows.size())
+            return ml::ret::fail<VerticalRow*>("The gui_idx returned ie bigger than the number or rows, this should not happen : gui_idx : " + std::to_string(gui));
+
+        return ml::ret::success(_rows[gui].get());
     }
 
     void VerticalTable::_onDataRemoved(unsigned int index)
@@ -395,23 +426,16 @@ namespace ml
         lg("scroll : " << amount);
         lg("one row height : " << this->oneRowHeight());
         lg("all rows height : " << this->allRowsHeight());
-        lg("max scroll value : " << this->maxScrollValue());
 
-        if (_needToLoadDown())
-        {
-            lg("we're at the end of the scroll but not of the data : need to load more data from the model.");
-            lg("Need to load " << _numberOfDataToLoadToEnd() << " data from the model.");
-            _shift(_numberOfDataToLoadToEnd());
+        auto headheight = amount;
+        auto footheight = _model->size()*_rowHeight - amount + _tablebox->height() - _databox->height();
+        if (footheight<=0)
             return;
-        }
+        _headEmpty->setHeight(amount);
+        _footEmpty->setHeight(footheight);
 
-        else if (_needToLoadUp())
-        {
-            lg("we're at the top of the scroll but not of the data : need to load more data from the model.");
-            lg("Need to load " << _numberOfDataToLoadToStart() << " data from the model top.");
-            _shift(-_numberOfDataToLoadToStart());
-            return;
-        }
+        auto first = amount/this->oneRowHeight();
+        _setFirst(first);
     }
 
     double VerticalTable::oneRowHeight() const
@@ -423,14 +447,7 @@ namespace ml
 
     double VerticalTable::allRowsHeight() const
     {
-        if (_lastAddedIndex == -1)
-            return 0;
-        return _lastAddedIndex * this->oneRowHeight();
-    }
-
-    double VerticalTable::maxScrollValue() const
-    {
-        return this->allRowsHeight() - _databox->height() + this->oneRowHeight();
+        return _databox->height();
     }
 
     double VerticalTable::rowTop(size_t index) const
@@ -450,43 +467,6 @@ namespace ml
         return -1;
     }
 
-    bool VerticalTable::_needToLoadDown() const
-    {
-        if (_databox->scrollY() <= this->maxScrollValue() - _databox->height())
-            return false;
-        if (_model->size() <= this->max_row_size())
-            return false;
-        if (_end >= _model->size() -1)
-            return false;
-
-        return true;
-    }
-
-    bool VerticalTable::_needToLoadUp() const
-    {
-        if (_databox->scrollY() >= 0 + _databox->height())
-            return false;
-        if (_start == 0)
-            return false;
-        return true;
-    }
-
-    int VerticalTable::_numberOfDataToLoadToEnd() const
-    {
-        int _r = (_databox->height() / this->oneRowHeight()) * 2;
-        if (_end + _r > _model->size())
-            _r = _model->size() - _end; 
-        return _r;
-    }
-
-    int VerticalTable::_numberOfDataToLoadToStart() const
-    {
-        int _r = (_databox->height() / this->oneRowHeight()) * 2;
-        if (_start - _r < 0)
-            _r = _start;
-        return _r;
-    }
-
     void VerticalTable::_shift(int offset) 
     {
         _start += offset;
@@ -502,13 +482,33 @@ namespace ml
             _rows[i]->model_index = i + _start;
             this->setRowData(i, _model->data()[i + _start]);
         }
+    }
 
-        _databox->scrollUp(offset * this->oneRowHeight());
+    void VerticalTable::_setFirst(int dataIndex)
+    {
+        _start = dataIndex;
+        _end = _start + _databox->height()/this->oneRowHeight();
+        if (_end >= _model->size())
+            _end = _model->size() - 1;
+
+        for (unsigned int i = 0; i < _rows.size(); i++)
+        {
+            if (i + _start >= _model->size())
+                return;
+
+            _rows[i]->model_index = i + _start;
+            this->setRowData(i, _model->data()[i + _start]);
+        }
     }
 
     void VerticalTable::_onDataModified(unsigned int index, const json& data)
     {
         lg("_onDataModified : " << index << " : " << data.dump(4));
         this->setRowData(index, data);
+    }
+
+    int VerticalTable::max_row_size() const
+    {
+        return 50;
     }
 }

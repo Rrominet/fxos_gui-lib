@@ -8,6 +8,7 @@
     --dialog-cancel-color: #FF4444;
     --dialog-ok-color: #22AA66;
     --code-block-background-color: #CCCCCC;
+    --selected-color: #2299dd;
 }
 
 .confirm .dialog-cancel, 

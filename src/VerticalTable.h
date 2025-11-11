@@ -39,13 +39,12 @@ namespace ml
             virtual ~VerticalTable();
 
             virtual void addEventListener(Event event, const std::function<void(EventInfos&)>& callback) override;
-            void linkToModel(std::shared_ptr<VerticalTableModel> model);
+            virtual void linkToModel(std::shared_ptr<VerticalTableModel> model);
             void removeModel();
 
             std::shared_ptr<VerticalTableModel> model() const { return _model; }
             double oneRowHeight() const;
             double allRowsHeight() const;
-            double maxScrollValue() const;
             double rowTop(size_t index) const;
             double rowTop(Box* row) const;
 
@@ -58,7 +57,10 @@ namespace ml
             std::shared_ptr<VerticalTableModel> _model = nullptr;
             std::shared_ptr<Box> _tablebox;
             std::shared_ptr<Box> _headerRow;
-            std::shared_ptr<Scrollable> _databox;
+            std::shared_ptr<Scrollable> _datascroll;
+            std::shared_ptr<Box> _headEmpty;
+            std::shared_ptr<Box> _databox;
+            std::shared_ptr<Box> _footEmpty;
 
             ml::Vec<Label*> _headerLabels;
             ml::Vec<std::unique_ptr<VerticalRow>> _rows;
@@ -84,24 +86,24 @@ namespace ml
             void _setEvents();
             void _onScroll(double amount);
 
-            bool _needToLoadDown() const;
-            bool _needToLoadUp() const;
-
             //shift the the data represented from the model
             //if the offset is 5, the first row will be the 6th in the model
             //the offset is additional. (that mean if you call _shift multiple time with the same value, you will repeat the action (3x5, will give the first element to be the 16th not the 6th))
             void _shift(int offset);
 
-            // this is calculated from the scrollable visible height (2 x the scrollable height)
-            int _numberOfDataToLoadToEnd() const;
-            int _numberOfDataToLoadToStart() const;
+            //set the data index data to the top row
+            void _setFirst(int dataIndex);
 
             Label* _createHeaderLabel(const std::string& txt);
             void _setHeaderLabelEvents(Label* label);
             Ret<size_t> _headerLabelIndex(Label* label);
 
             Events _events; //bp cg
-            const int max_row_size() const{return 200;}
+            int max_row_size() const;
+
+            // returnr -1 if not in the gui (before or after the scroll)
+            int _guiIdx(size_t dataIdx);
+            ml::Ret<VerticalRow*> _row(size_t dataIdx);
 
         public : 
 #include "./VerticalTable_gen.h"

@@ -10,6 +10,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _click)
                     f(e);
             };
@@ -28,6 +35,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _double_click)
                     f(e);
             };
@@ -46,6 +60,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _mouse_enter)
                     f(e);
             };
@@ -64,6 +85,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _mouse_leave)
                     f(e);
             };
@@ -82,6 +110,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _mouse_move)
                     f(e);
             };
@@ -100,6 +135,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _mouse_up)
                     f(e);
             };
@@ -118,6 +160,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _mouse_down)
                     f(e);
             };
@@ -136,6 +185,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _left_up)
                     f(e);
             };
@@ -154,6 +210,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _left_down)
                     f(e);
             };
@@ -172,6 +235,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _right_up)
                     f(e);
             };
@@ -190,6 +260,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _right_down)
                     f(e);
             };
@@ -208,6 +285,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _middle_up)
                     f(e);
             };
@@ -226,6 +310,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _middle_down)
                     f(e);
             };
@@ -244,6 +335,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _key_down)
                     f(e);
             };
@@ -262,6 +360,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _key_up)
                     f(e);
             };
@@ -280,6 +385,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _wheel)
                     f(e);
             };
@@ -298,6 +410,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _focus)
                     f(e);
             };
@@ -316,6 +435,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _unfocus)
                     f(e);
             };
@@ -334,6 +460,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _change)
                     f(e);
             };
@@ -352,6 +485,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _valid)
                     f(e);
             };
@@ -370,6 +510,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _shown)
                     f(e);
             };
@@ -388,6 +535,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _hidden)
                     f(e);
             };
@@ -406,6 +560,13 @@
             {
                 if (!_allowEvents)
                     return;
+                if (this->window())
+                {
+                    e.ctrl = this->window()->state().ctrl;
+                    e.shift = this->window()->state().shift;
+                    e.alt = this->window()->state().alt;
+                    e.super = this->window()->state().meta;
+                }
                 for (auto& f : _resize)
                     f(e);
             };
