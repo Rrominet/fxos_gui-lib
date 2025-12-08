@@ -169,22 +169,24 @@ if ("wasm" not in sys.argv):
         "fmodL",
         ])
 
-    #should add a way to add the version of mlapi in dependencies here.
-    if not cpp.release : 
-        cpp.addToLibs([
-            fm + "/build/libmlapi.so",
-            ])
-    elif cpp.release : 
-        #add the version dependencis for it
-        cpp.addProject("/opt/mlapi/lib")
+#should add a way to add the version of mlapi in dependencies here.
+if not cpp.release : 
+    cpp.addToLibs([
+        fm + "/build/libmlapi.so",
+        ])
+    #cpp.flags += ["-fsanitize=thread"]
 
-    if ("shared" in sys.argv):
-        cpp.shared = True
+elif cpp.release : 
+    #add the version dependencis for it
+    cpp.addProject("/opt/mlapi/lib")
 
-    if("clean" in sys.argv or "clear" in sys.argv):
-        cpp.clean()
-        exit()
-    else:
-        cpp.build()
+if ("shared" in sys.argv):
+    cpp.shared = True
+
+if("clean" in sys.argv or "clear" in sys.argv):
+    cpp.clean()
+    exit()
+else:
+    cpp.build()
 
 replaceCss()

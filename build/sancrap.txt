@@ -1,0 +1,25 @@
+# Anything involving GLib
+race:libglib-2.0.so
+
+# Anything involving Pango
+race:libpango-1.0.so
+race:fontconfig
+
+race:libgio
+race:glib-2.0.so
+
+race:glib
+race:gio
+race:gobject
+race:pango
+race:fontconfig
+race:freetype
+race:harfbuzz
+race:pango
+race:cairo
+race:g_queue
+race:hb_
+race:fc_
+race:libgallium
+race:libxml
+race:librsvg
