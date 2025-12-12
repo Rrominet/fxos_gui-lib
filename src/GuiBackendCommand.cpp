@@ -5,11 +5,37 @@
 #include "App.h"
 #include "mlprocess.h"
 #include "./Button.h"
+#include <mutex>
 
 namespace ml
 {
     GuiBackendCommand::GuiBackendCommand() : GuiCommand()
     {
+        this->init();
+    }
+    
+    void GuiBackendCommand::init()
+    {
+        _cb = [this](const json& res)
+        {
+            auto mth = [this, res]
+            {
+                if (res.contains("success") && !res["success"])
+                {
+                    if (_useDefaultErrorWindow)
+                        this->onError(res["error"]);
+                }
+                else 
+                    this->execCallbacks(res);
+
+                _waiting = false;
+                app()->main()->setInfosFromCommand(this);
+                for (auto& b : _buttons)
+                    b->stopLoading();
+            };
+            app()->queue(mth);
+            lg("process backend response received : " << res.dump(4));
+        };
     }
 
     bool GuiBackendCommand::check()
@@ -23,53 +49,14 @@ namespace ml
         return Command::check();
     }
 
-    void GuiBackendCommand::setProcessCommand(Process* process, const std::string &function, const json& args, const std::function<void(const json& response)>& cb)
+    void GuiBackendCommand::setProcessCommand(Process* process, const std::string &function, const json& args, const std::function<void(const json& response)>& cb, bool onetime)
     {
         _process = process;
         _jsonArgs = args;
         _function = function;
 
-        _userCb = cb;
-
-        _process->addOnProcessError([this]{
-                auto f = [this]{
-                    this->onError("Process Error : " + _process->error() + "Debug informations :\n" + _process->output());
-                };
-                ml::app()->queue(f);
-                });
-
-#ifdef mydebug
-        auto outdebug = [this](const std::string& s)
-        {
-            files::append(files::execDir() + files::sep() + _id + "-pc_out", s + "\n");
-        };
-
-        auto errdebug = [this](const std::string& s)
-        {
-            files::append(files::execDir() + files::sep() + _id + "-pc_err", s + "\n");
-        };
-        _process->addOnOutput(outdebug);
-        _process->addOnError(errdebug);
-
-        _process->addOnTerminate([this]{
-                    files::write(files::execDir() + files::sep() + _id + "-pc_terminate", "Process " + _id + " terminated. This shoudn't hapenning.");
-                });
-#endif
-
-        _cb = [this, cb](const json& res)
-        {
-            auto mth = [this, res]
-            {
-                if (_userCb)
-                    _userCb(res);
-                _waiting = false;
-                app()->main()->setInfosFromCommand(this);
-                for (auto& b : _buttons)
-                    b->stopLoading();
-            };
-            app()->queue(mth);
-            lg("process backend response received : " << res.dump(4));
-        };
+        if (cb)
+            this->addCallback(cb, onetime);
 
         auto exec = [this](const std::any&)
         {
@@ -90,6 +77,28 @@ namespace ml
         };
 
         GuiCommand::setExec(exec);
+    }
+
+    void GuiBackendCommand::addCallback(const std::function<void(const json& response)>& cb, bool onetime)
+    {
+        std::lock_guard l(_callbacks);
+        _callbacks.data().push_back({cb, onetime});
+    }
+
+    void GuiBackendCommand::execCallbacks(const json& response)
+    {
+        ml::Vec<GuiCallback> callbacks;
+        {
+            std::lock_guard l(_callbacks);
+            for (auto& cb : _callbacks.data())
+            {
+                if (!cb.cb)
+                    continue;
+                cb.cb(response);
+                if (cb.onetime)
+                   cb.cb = 0;
+            }
+        }
     }
 
     void GuiBackendCommand::onError(const std::string& error)

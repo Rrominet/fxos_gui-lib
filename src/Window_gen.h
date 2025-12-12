@@ -1,9 +1,5 @@
 //This is a generated file, don't change it manually, it will be override when rebuild.
 
-std::shared_ptr<Window_impl> impl(){return _impl;}
-const std::shared_ptr<Window_impl> impl() const {return _impl;}
-
-
 std::shared_ptr<Box> content(){return _content;}
 
 

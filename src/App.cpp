@@ -195,17 +195,17 @@ namespace ml
             w.second->setCursor(name);	
     }
 
-    std::shared_ptr<GuiBackendCommand> App::createBackendCommand(Process* p, const std::string &function, const json& args, const std::function<void(const json& response)>& cb)
+    std::shared_ptr<GuiBackendCommand> App::createBackendCommand(Process* p, const std::string &function, const json& args, const std::function<void(const json& response)>& cb, bool onetime)
     {
         auto cmd = _cmds.createCommand<GuiBackendCommand>(function);
-        cmd->setProcessCommand(p, function, args, cb);
+        cmd->setProcessCommand(p, function, args, cb, onetime);
         return cmd;
     }
 
-    std::shared_ptr<GuiBackendCommand> App::createBackendCommand(Process* p, const std::string& name, const std::string& id, const std::string &function, const json& args, const std::function<void(const json& response)>& cb)
+    std::shared_ptr<GuiBackendCommand> App::createBackendCommand(Process* p, const std::string& name, const std::string& id, const std::string &function, const json& args, const std::function<void(const json& response)>& cb, bool onetime)
     {
         auto cmd = _cmds.createCommand<GuiBackendCommand>(name, id);
-        cmd->setProcessCommand(p, function, args, cb);
+        cmd->setProcessCommand(p, function, args, cb, onetime);
         return cmd;
     }
 

@@ -42,30 +42,30 @@ namespace ml
             virtual ~Window();
 
 #ifdef __EMSCRIPTEN__
-            std::shared_ptr<emval> dom(){return _impl->window();}
+            std::shared_ptr<emval> dom(){return this->impl()->window();}
 #else
-            std::shared_ptr<Gtk::Window> gtk(){return _impl->window();}
+            std::shared_ptr<Gtk::Window> gtk(){return this->impl()->window();}
 #endif
 
             App* app();
-            void show(){_impl->show(); _visible = true;}
+            void show(){this->impl()->show(); _visible = true;}
 
             virtual void init();
             virtual void setBasicEvents(); // called in init()
             void createBaseUi();
-            unsigned int width(){return _impl->width();}
-            unsigned int height(){return _impl->height();}
-            unsigned int w(){return _impl->width();}
-            unsigned int h(){return _impl->height();}
+            unsigned int width(){return this->impl()->width();}
+            unsigned int height(){return this->impl()->height();}
+            unsigned int w(){return this->impl()->width();}
+            unsigned int h(){return this->impl()->height();}
 
-            void setSize(unsigned int w, unsigned int h){_impl->setSize(w, h);}
-            void setWidth(unsigned int w){_impl->setWidth(w);}
-            void setHeight(unsigned int h){_impl->setHeight(h);}
+            void setSize(unsigned int w, unsigned int h){this->impl()->setSize(w, h);}
+            void setWidth(unsigned int w){this->impl()->setWidth(w);}
+            void setHeight(unsigned int h){this->impl()->setHeight(h);}
 
             void fitToContent(){this->setSize(-1, -1);}
 
-            void setTitle(const std::string& title){_impl->setTitle(title);}
-            std::string title() const {return _impl->title();}
+            void setTitle(const std::string& title){this->impl()->setTitle(title);}
+            std::string title() const {return this->impl()->title();}
 
             // remove the window from the app windows list
             void destroy();
@@ -77,20 +77,20 @@ namespace ml
             ml::Window* parent(){assert(_parent); return _parent;}
             void unparent(){_parent = nullptr;}
 
-            void focus(){_impl->focus();}
-            void unfocus(){_impl->unfocus();}
+            void focus(){this->impl()->focus();}
+            void unfocus(){this->impl()->unfocus();}
 
             void setChild(std::shared_ptr<ml::Widget> child);
 
             void addEventListener(Event event, const std::function<void const(EventInfos&)>& callback);
-            void addWheelEventListener(const std::function<void(EventInfos&)>& callback){_impl->addWheelEventListener(callback);}
+            void addWheelEventListener(const std::function<void(EventInfos&)>& callback){this->impl()->addWheelEventListener(callback);}
             void setMain(bool main);
 
-            void addCssClass(const std::string& cls){_impl->addCssClass(cls);}
-            void removeCssClass(const std::string& cls){_impl->removeCssClass(cls);}
+            void addCssClass(const std::string& cls){this->impl()->addCssClass(cls);}
+            void removeCssClass(const std::string& cls){this->impl()->removeCssClass(cls);}
 
             void showMenu(const std::string& id);
-            math::vec2d mousePos(){return _impl->mousePos();}
+            math::vec2d mousePos(){return this->impl()->mousePos();}
 
             void setCursor(const std::string& cursor){_content->setCursor(cursor);}
 
@@ -106,27 +106,30 @@ namespace ml
             // the callback will always be executed on the mainthread
             std::shared_ptr<GuiBackendCommand> createBackendCommand(Process* p, const std::string &function, const json& args={}, const std::function<void(const json& response)>& cb=0);
 
-            void hideOnClose(bool val=true){_impl->hideOnClose(val);}
-            bool doHideOnClose() const {return _impl->doHideOnClose();}
+            void hideOnClose(bool val=true){this->impl()->hideOnClose(val);}
+            bool doHideOnClose() const {return this->impl()->doHideOnClose();}
 
             virtual json serialize() const;
             virtual void deserialize(const json& j);
 
-            void addOnClose(const std::function<void()>& callback){_impl->addOnClose(callback);}
-            void addOnHide (const std::function<void()>& callback){_impl->addOnHide(callback);}
+            void addOnClose(const std::function<void()>& callback){this->impl()->addOnClose(callback);}
+            void addOnHide (const std::function<void()>& callback){this->impl()->addOnHide(callback);}
+            void addOnShow (const std::function<void()>& callback){this->impl()->addOnHide(callback);}
 
             ml::Commander* createCommander();
             ml::Commander* createCommanderFromAppCmds();
             ml::Commander* createCommanderFromThisWindowCmds();
 
             void showCommander();
+            Window_impl* impl(){assert(_impl); return _impl.get();}
+            Window_impl* impl() const {assert(_impl); return _impl.get();}
 
         protected : 
             App* _app;
             ml::Window* _parent = nullptr; //pb s
 
             // this changed
-            std::shared_ptr<Window_impl> _impl; //bp cg
+            std::shared_ptr<Window_impl> _impl;
 
             std::shared_ptr<Box> _content; //bp g
             std::shared_ptr<Box> _head; //bp g

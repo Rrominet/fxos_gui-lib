@@ -169,14 +169,14 @@ namespace ml
 
     void Window::destroy()
     {
-        _impl->remove();
+        this->impl()->remove();
         ml::app()->removeWindow(this);
     }
 
     void Window::hide()
     {
         this->unfocus();
-        _impl->hide();
+        this->impl()->hide();
         _visible = false;
     }
     void Window::toggle()
@@ -192,7 +192,7 @@ namespace ml
         ml::app()->checker().set("can-set-window", true);
         child->setWindow(this);
         ml::app()->checker().set("can-set-window", false);
-        _impl->setChild(child);
+        this->impl()->setChild(child);
     }
 
     void Window::addEventListener(Event event, const std::function<void const(EventInfos&)>& callback)
@@ -210,7 +210,7 @@ namespace ml
             this->addCssClass("main");
         else 
             this->removeCssClass("main");
-        _impl->setMain(main);
+        this->impl()->setMain(main);
     }
 
     void Window::showMenu(const std::string& id)
