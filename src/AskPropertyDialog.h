@@ -24,6 +24,8 @@ namespace ml
 
             Property* prop()const {return _prop;}
 
+            virtual void init() override;
+
         protected : 
             bool _setCalled = false;
             bool _ownProp = true;

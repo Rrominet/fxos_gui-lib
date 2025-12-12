@@ -10,7 +10,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -35,7 +35,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -60,7 +60,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -85,7 +85,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -110,7 +110,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -135,7 +135,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -160,7 +160,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -185,7 +185,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -210,7 +210,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -235,7 +235,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -260,7 +260,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -285,7 +285,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -310,7 +310,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -335,7 +335,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -360,7 +360,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -385,7 +385,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -410,7 +410,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -435,7 +435,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -460,7 +460,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -485,7 +485,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -510,7 +510,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -535,7 +535,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
@@ -560,7 +560,7 @@
             {
                 if (!_allowEvents)
                     return;
-                if (this->window())
+                if (this->hasWindow())
                 {
                     e.ctrl = this->window()->state().ctrl;
                     e.shift = this->window()->state().shift;
