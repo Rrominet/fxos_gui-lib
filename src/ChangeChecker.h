@@ -11,12 +11,14 @@ namespace ml
             ChangeChecker(size_t intervalPeriod = 5000);
             virtual ~ChangeChecker() = default;
 
-            void setOnchagne(const std::function<void()>& f);
+            void setOnchange(const std::function<void()>& f); //changed
             bool changed() const;
             bool stop();
             bool start();
 
             void setGetDataFunction(const std::function<nlohmann::json()>& f){_getCurrent = f;}
+
+            bool started() const {return _intervalid != -1;}
 
         private : 
             std::function<void()> _onchange = 0;
