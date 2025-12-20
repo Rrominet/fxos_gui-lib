@@ -17,7 +17,8 @@ namespace ml
         };
     }
 
-    void ChangeChecker::setOnchagne(const std::function<void()>& f)
+    //changed
+    void ChangeChecker::setOnchange(const std::function<void()>& f)
     {
         _onchange = f;
     }
@@ -32,7 +33,7 @@ namespace ml
 
     bool ChangeChecker::changed() const
     {
-        return ml::json::compare(_prev, _current); 
+        return !ml::json::compare(_prev, _current); 
     }
 
     bool ChangeChecker::stop()
