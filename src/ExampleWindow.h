@@ -19,6 +19,7 @@ namespace ml
 
             void createBasicsWidgets();
             void createComposedWidgets();
+            void createFixed();
             void createBasicsProperties();
             void createPropertyGroups();
             void createContainers();
@@ -30,6 +31,7 @@ namespace ml
         protected : 
             std::shared_ptr<Box> _basicsWidgets = nullptr;
             std::shared_ptr<Box> _composedWidgets = nullptr;
+            std::shared_ptr<Box> _fixed = nullptr;
             std::shared_ptr<Box> _basicsProperty = nullptr;
             std::shared_ptr<Box> _propertyGroup = nullptr;
             std::shared_ptr<Box> _containers = nullptr;

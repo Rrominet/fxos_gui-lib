@@ -4,3 +4,4 @@ std::shared_ptr<ml::Box> createBox();
 std::shared_ptr<ml::Scrollable> createScrollable();
 std::shared_ptr<ml::Popover> createPopover();
 std::shared_ptr<ml::AbsoluteBox> createAbsoluteBox();
+std::shared_ptr<ml::Fixed> createFixed();

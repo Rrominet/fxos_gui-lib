@@ -4,3 +4,4 @@ std::shared_ptr<ml::Box> AbsoluteBox::createBox(){return ml::app()->widgetsFacto
 std::shared_ptr<ml::Scrollable> AbsoluteBox::createScrollable(){return ml::app()->widgetsFactory().createScrollable(this);}
 std::shared_ptr<ml::Popover> AbsoluteBox::createPopover(){return ml::app()->widgetsFactory().createPopover(this);}
 std::shared_ptr<ml::AbsoluteBox> AbsoluteBox::createAbsoluteBox(){return ml::app()->widgetsFactory().createAbsoluteBox(this);}
+std::shared_ptr<ml::Fixed> AbsoluteBox::createFixed(){return ml::app()->widgetsFactory().createFixed(this);}

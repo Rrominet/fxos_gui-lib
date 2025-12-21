@@ -30,6 +30,7 @@ namespace ml
             virtual void init() override;
 
             std::shared_ptr<ml::*elmt*_impl> *elmt_min*(){return std::static_pointer_cast<*elmt*_impl>(_impl);}
+            std::shared_ptr<ml::*elmt*_impl> *elmt_min*()const {return std::static_pointer_cast<*elmt*_impl>(_impl);}
     };
 }
 """
@@ -67,6 +68,7 @@ namespace ml
 
             virtual void _createWidget() override;
             std::shared_ptr<Gtk::*elmt*> *elmt_min*(){return std::static_pointer_cast<Gtk::*elmt*>(_gtk);}
+            std::shared_ptr<Gtk::*elmt*> *elmt_min*() const{return std::static_pointer_cast<Gtk::*elmt*>(_gtk);}
     };
 }
 """

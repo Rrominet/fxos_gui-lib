@@ -17,3 +17,4 @@ std::shared_ptr<ml::Box> ml::Popover::createBox(){return _content->createBox();}
 std::shared_ptr<ml::Scrollable> ml::Popover::createScrollable(){return _content->createScrollable();}
 std::shared_ptr<ml::Popover> ml::Popover::createPopover(){return _content->createPopover();}
 std::shared_ptr<ml::AbsoluteBox> ml::Popover::createAbsoluteBox(){return _content->createAbsoluteBox();}
+std::shared_ptr<ml::Fixed> ml::Popover::createFixed(){return _content->createFixed();}

@@ -149,7 +149,6 @@ namespace ml
         _composedChildren.clear();
     }
 
-
 #include "./Widget_creators_implab_gen.h"
 #include "./Container_creators_implab_gen.h"
 }

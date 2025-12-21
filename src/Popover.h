@@ -14,6 +14,8 @@ namespace ml
     class Box;
     class Scrollable;
     class AbsoluteBox;
+    class Fixed;
+    
 #include "./Widget_types_widgets_classes_gen.h"
 
     class Popover : public Widget

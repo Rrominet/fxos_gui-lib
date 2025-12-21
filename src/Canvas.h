@@ -1,4 +1,3 @@
-
 #pragma once
 #include "./Widget.h"
 #include "TextMetrics.h"
