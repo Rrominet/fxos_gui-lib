@@ -67,6 +67,17 @@ namespace ml
             // remove all children in it (deleting their memory)
             void clear();
 
+            void setBackground(std::shared_ptr<ml::Widget> c){this->absolute_box()->setBackground(c);}
+            void removeBackground(){this->absolute_box()->removeBackground();}
+            void sendToFront(std::shared_ptr<ml::Widget> c){this->absolute_box()->sendToFront(c.get());}
+            void sendToBack(std::shared_ptr<ml::Widget> c){this->absolute_box()->sendToBack(c.get());}
+            void moveDepth(std::shared_ptr<ml::Widget> c,unsigned int x){this->absolute_box()->moveDepth(c.get(),x);}
+
+            void setBackground(ml::Widget* c){this->absolute_box()->setBackground(c);}
+            void sendToFront(ml::Widget* c){this->absolute_box()->sendToFront(c);}
+            void sendToBack(ml::Widget* c){this->absolute_box()->sendToBack(c);}
+            void moveDepth(ml::Widget* c,unsigned int x){this->absolute_box()->moveDepth(c,x);}
+
         protected : 
             ml::Vec<std::shared_ptr<ml::Widget>> _children; //bp cg
             ml::Vec<std::shared_ptr<ml::ComposedWidget>> _composedChildren; //bp cg

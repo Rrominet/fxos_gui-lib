@@ -45,6 +45,11 @@ namespace ml
         this->overlay()->set_child(*c->gtk());
     }
 
+    void AbsoluteBox_impl::setBackground(ml::Widget* c)
+    {
+        this->overlay()->set_child(*c->gtk());
+    }
+
     void AbsoluteBox_impl::removeBackground()
     {
         this->overlay()->unset_child();
