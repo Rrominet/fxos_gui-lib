@@ -110,6 +110,8 @@ gbl.write("../src/Widget_creators_implsc_gen.h", widgets_gen["widgetsCreators_cp
 gbl.write("../src/Container_creators_implsc_gen.h", widgets_gen["containersCreators_cpp"].replace("Box::", "Scrollable::"))
 gbl.write("../src/Widget_creators_implab_gen.h", widgets_gen["widgetsCreators_cpp"].replace("Box::", "AbsoluteBox::"))
 gbl.write("../src/Container_creators_implab_gen.h", widgets_gen["containersCreators_cpp"].replace("Box::", "AbsoluteBox::"))
+gbl.write("../src/Widget_creators_impl_fixed_gen.h", widgets_gen["widgetsCreators_cpp"].replace("Box::", "Fixed::"))
+gbl.write("../src/Container_creators_impl_fixed_gen.h", widgets_gen["containersCreators_cpp"].replace("Box::", "Fixed::"))
 gbl.write("../src/Widget_types_widgets_classes_gen.h", widgets_gen["widgets_classes"])
 gbl.write("../src/creators_implpopover_gen.h", widgets_gen["popover_widgets_impl"])
 print("Widgets factory constructors generated.")

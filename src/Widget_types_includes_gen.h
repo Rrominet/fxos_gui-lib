@@ -17,6 +17,7 @@
 #include "./Scrollable.h"
 #include "./Popover.h"
 #include "./AbsoluteBox.h"
+#include "./Fixed.h"
 #include "./DateEntry.h"
 #include "./TimeEntry.h"
 #include "./DateTimeEntry.h"
@@ -38,6 +39,7 @@
 #include "./em/Scrollable_impl.h"
 #include "./em/Popover_impl.h"
 #include "./em/AbsoluteBox_impl.h"
+#include "./em/Fixed_impl.h"
 #else
 #include "./gtk/Button_impl.h"
 #include "./gtk/ToggleButton_impl.h"
@@ -56,4 +58,5 @@
 #include "./gtk/Scrollable_impl.h"
 #include "./gtk/Popover_impl.h"
 #include "./gtk/AbsoluteBox_impl.h"
+#include "./gtk/Fixed_impl.h"
 #endif

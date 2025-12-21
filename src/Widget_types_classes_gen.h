@@ -17,6 +17,7 @@ class Box;
 class Scrollable;
 class Popover;
 class AbsoluteBox;
+class Fixed;
 class DateEntry;
 class TimeEntry;
 class DateTimeEntry;

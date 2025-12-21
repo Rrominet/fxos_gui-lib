@@ -32,6 +32,7 @@ namespace ml
     class ComposedWidget;
     class Popover;
     class AbsoluteBox;
+    class Fixed;
 #include "./Widget_types_widgets_classes_gen.h"
 
     class Box : public Widget

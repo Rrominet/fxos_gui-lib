@@ -38,6 +38,7 @@
 #include "./TimeSliderInOut.h"
 #include "./MdView.h"
 #include "./Canvas.h"
+#include "./Fixed.h"
 
 #include "./GuiCommand.h"
 #include "./Commander.h"
@@ -57,6 +58,7 @@ namespace ml
         _tabs = std::make_unique<Tabs>(_main.get());
         _basicsWidgets = _tabs->createTab("Basics Widgets")->body();
         _composedWidgets = _tabs->createTab("Composed Widgets")->body();
+        _fixed = _tabs->createTab("Fixed")->body();
         _basicsProperty = _tabs->createTab("Properties")->body();
         _propertyGroup = _tabs->createTab("Properties Groups")->body();
         _containers = _tabs->createTab("Containers")->body();
@@ -68,6 +70,7 @@ namespace ml
         this->createCommands();
         this->createBasicsWidgets();
         this->createComposedWidgets();
+        this->createFixed();
         this->createBasicsProperties();
         this->createPropertyGroups();
         this->createContainers();
@@ -279,6 +282,26 @@ namespace ml
 
             list->add(w);
         }
+    }
+
+    void ExampleWindow::createFixed()
+    {
+        auto fixed = _fixed->createFixed();
+        auto lbl = fixed->createLabel("Label Example");
+        fixed->moveChild(lbl, 100, 20);
+
+        auto btn = fixed->createButton("Button Example");
+        fixed->moveChild(btn, 120, 100);
+
+        auto spin = fixed->createSpinner();
+        fixed->moveChild(btn, 220, 200);
+
+        auto box = fixed->createBox();
+        box->createLabel("Label in box");
+        box->createButton("Button in box");
+        box->createSwitch();
+        box->setOrient(ml::VERTICAL);
+        fixed->moveChild(box, 300, 300);
     }
 
     void ExampleWindow::createBasicsProperties()

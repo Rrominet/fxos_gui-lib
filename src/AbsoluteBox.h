@@ -20,8 +20,13 @@ namespace ml
     class Popover;
     class Canvas;
     class Box;
+    class Fixed;
 #include "./Widget_types_widgets_classes_gen.h"
 
+    //the name here is a bit missleading.
+    //It's in fact an overlay (Gtk::Overlay) not a Fixed (Gtk::Fixed) like "Absolute" could suggest
+    //The Absolute is for the Box position itself not its children
+    //If you want to have a fixed/absolute position for your children, use Fixed
     class AbsoluteBox : public Widget
     {
         public:
