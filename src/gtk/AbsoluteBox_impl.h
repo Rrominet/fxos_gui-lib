@@ -32,6 +32,7 @@ namespace ml
             void remove(ml::Widget* c);
 
             void setBackground(std::shared_ptr<ml::Widget> c);
+            void setBackground(ml::Widget* c);
             void removeBackground();
 
             void sendToFront(ml::Widget* c);
