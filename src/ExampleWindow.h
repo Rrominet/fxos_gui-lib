@@ -27,6 +27,7 @@ namespace ml
             void createCommands();
             void createCursors();
             void createExampleMenu();
+            void createHtmlExample();
 
         protected : 
             std::shared_ptr<Box> _basicsWidgets = nullptr;
@@ -38,6 +39,7 @@ namespace ml
             std::shared_ptr<Box> _dialogs = nullptr;
             std::shared_ptr<Box> _commands = nullptr;
             std::shared_ptr<Box> _cursors = nullptr;
+            std::shared_ptr<Box> _browser = nullptr;
 
             std::unique_ptr<Tabs> _tabs;
     };

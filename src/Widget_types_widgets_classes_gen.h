@@ -13,6 +13,7 @@ class Label;
 class Spinner;
 class Image;
 class MultilineEntry;
+class WebView;
 class DateEntry;
 class TimeEntry;
 class DateTimeEntry;

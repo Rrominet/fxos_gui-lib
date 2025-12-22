@@ -12,6 +12,7 @@ widgets = (
         "Spinner",
         "Image",
         "MultilineEntry",
+        "WebView",
         )
 
 

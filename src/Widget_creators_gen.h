@@ -13,6 +13,7 @@ std::shared_ptr<ml::Label> createLabel(const std::string& text="");
 std::shared_ptr<ml::Spinner> createSpinner(const std::string& text="");
 std::shared_ptr<ml::Image> createImage(const std::string& text="");
 std::shared_ptr<ml::MultilineEntry> createMultilineEntry(const std::string& text="");
+std::shared_ptr<ml::WebView> createWebView(const std::string& text="");
 std::shared_ptr<ml::DateEntry> createDateEntry(const std::string& text="");
 std::shared_ptr<ml::TimeEntry> createTimeEntry(const std::string& text="");
 std::shared_ptr<ml::DateTimeEntry> createDateTimeEntry(const std::string& text="");
