@@ -13,6 +13,7 @@ std::shared_ptr<ml::Label> AbsoluteBox::createLabel(const std::string& text){ret
 std::shared_ptr<ml::Spinner> AbsoluteBox::createSpinner(const std::string& text){return ml::app()->widgetsFactory().createSpinner(this, text);}
 std::shared_ptr<ml::Image> AbsoluteBox::createImage(const std::string& text){return ml::app()->widgetsFactory().createImage(this, text);}
 std::shared_ptr<ml::MultilineEntry> AbsoluteBox::createMultilineEntry(const std::string& text){return ml::app()->widgetsFactory().createMultilineEntry(this, text);}
+std::shared_ptr<ml::WebView> AbsoluteBox::createWebView(const std::string& text){return ml::app()->widgetsFactory().createWebView(this, text);}
 std::shared_ptr<ml::DateEntry> AbsoluteBox::createDateEntry(const std::string& text){return ml::app()->widgetsFactory().createDateEntry(this, text);}
 std::shared_ptr<ml::TimeEntry> AbsoluteBox::createTimeEntry(const std::string& text){return ml::app()->widgetsFactory().createTimeEntry(this, text);}
 std::shared_ptr<ml::DateTimeEntry> AbsoluteBox::createDateTimeEntry(const std::string& text){return ml::app()->widgetsFactory().createDateTimeEntry(this, text);}

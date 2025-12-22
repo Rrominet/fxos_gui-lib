@@ -119,6 +119,12 @@ std::shared_ptr<ml::MultilineEntry> createMultilineEntry(ml::Scrollable * parent
 std::shared_ptr<ml::MultilineEntry> createMultilineEntry(ml::Popover * parent, const std::string& text = "");
 std::shared_ptr<ml::MultilineEntry> createMultilineEntry(ml::AbsoluteBox * parent, const std::string& text = "");
 std::shared_ptr<ml::MultilineEntry> createMultilineEntry(ml::Fixed * parent, const std::string& text = "");
+std::shared_ptr<ml::WebView> createWebView();
+std::shared_ptr<ml::WebView> createWebView(ml::Box * parent, const std::string& text = "");
+std::shared_ptr<ml::WebView> createWebView(ml::Scrollable * parent, const std::string& text = "");
+std::shared_ptr<ml::WebView> createWebView(ml::Popover * parent, const std::string& text = "");
+std::shared_ptr<ml::WebView> createWebView(ml::AbsoluteBox * parent, const std::string& text = "");
+std::shared_ptr<ml::WebView> createWebView(ml::Fixed * parent, const std::string& text = "");
 std::shared_ptr<ml::DateEntry> createDateEntry();
 std::shared_ptr<ml::DateEntry> createDateEntry(ml::Box * parent, const std::string& text = "");
 std::shared_ptr<ml::DateEntry> createDateEntry(ml::Scrollable * parent, const std::string& text = "");

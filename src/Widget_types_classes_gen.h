@@ -13,6 +13,7 @@ class Label;
 class Spinner;
 class Image;
 class MultilineEntry;
+class WebView;
 class Box;
 class Scrollable;
 class Popover;

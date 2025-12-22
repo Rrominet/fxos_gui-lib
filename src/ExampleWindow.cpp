@@ -44,6 +44,7 @@
 #include "./Commander.h"
 #include "./CommandButton.h"
 #include "./ListWidget.h"
+#include "./WebView.h"
 
 #include <any>
 #include <memory>
@@ -65,6 +66,7 @@ namespace ml
         _dialogs = _tabs->createTab("Dialogs")->body();
         _commands = _tabs->createTab("Commands")->body();
         _cursors = _tabs->createTab("Cursors")->body();
+        _browser = _tabs->createTab("HTML Browser")->body();
         _tabs->show(0);
 
         this->createCommands();
@@ -77,6 +79,7 @@ namespace ml
         this->createDialogs();
         this->createCursors();
         this->createExampleMenu();
+        this->createHtmlExample();
     }
 
     void ExampleWindow::createBasicsWidgets()
@@ -537,6 +540,12 @@ namespace ml
         _menuBar->addMenu("view");
         _menuBar->addMenu("tools");
         _menuBar->addMenu("windows");
+    }
+
+    void ExampleWindow::createHtmlExample()
+    {
+        auto wv = _browser->createWebView();
+        wv->setURI("https://motion-live.com");
     }
 
     void ExampleWindow::createCursors()

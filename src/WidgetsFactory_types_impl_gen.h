@@ -1804,6 +1804,105 @@
     }
 
 
+    std::shared_ptr<ml::WebView> WidgetsFactory::createWebView()
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::WebView>();
+        widget->_impl = std::make_shared<ml::WebView_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->init();
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::WebView> WidgetsFactory::createWebView(ml::Box* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::WebView>();
+        widget->_impl = std::make_shared<ml::WebView_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::WebView> WidgetsFactory::createWebView(ml::Fixed* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::WebView>();
+        widget->_impl = std::make_shared<ml::WebView_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::WebView> WidgetsFactory::createWebView(ml::AbsoluteBox* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::WebView>();
+        widget->_impl = std::make_shared<ml::WebView_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::WebView> WidgetsFactory::createWebView(ml::Scrollable* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::WebView>();
+        widget->_impl = std::make_shared<ml::WebView_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+    std::shared_ptr<ml::WebView> WidgetsFactory::createWebView(ml::Popover* parent,const std::string& text)
+    {
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::WebView>();
+        widget->_impl = std::make_shared<ml::WebView_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+        widget->setParent(parent);
+        parent->content()->append(widget);
+        widget->init();
+        if (!text.empty())
+            widget->setText(text);
+        widget->setEvents();
+        return widget;
+    }
+
+
     std::shared_ptr<ml::DateEntry> WidgetsFactory::createDateEntry()
     {
         ml::app()->checker().set("can-construct-widget", true);

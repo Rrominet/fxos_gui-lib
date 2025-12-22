@@ -13,6 +13,7 @@ std::shared_ptr<ml::Label> ml::Popover::createLabel(const std::string& text){ret
 std::shared_ptr<ml::Spinner> ml::Popover::createSpinner(const std::string& text){return _content->createSpinner(text);}
 std::shared_ptr<ml::Image> ml::Popover::createImage(const std::string& text){return _content->createImage(text);}
 std::shared_ptr<ml::MultilineEntry> ml::Popover::createMultilineEntry(const std::string& text){return _content->createMultilineEntry(text);}
+std::shared_ptr<ml::WebView> ml::Popover::createWebView(const std::string& text){return _content->createWebView(text);}
 std::shared_ptr<ml::Box> ml::Popover::createBox(){return _content->createBox();}
 std::shared_ptr<ml::Scrollable> ml::Popover::createScrollable(){return _content->createScrollable();}
 std::shared_ptr<ml::Popover> ml::Popover::createPopover(){return _content->createPopover();}
