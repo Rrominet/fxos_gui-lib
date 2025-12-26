@@ -21,6 +21,10 @@ namespace ml
                 }
                 return nullptr;
             }
+
+            void addOnUpdate(const std::function<void()> f);
+            void addOnValid(const std::function<void()> f);
+
         public : 
 #include "./PropertyGroup_gen.h"
     };
