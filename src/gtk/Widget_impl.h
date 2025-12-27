@@ -7,6 +7,7 @@
 #include <gtkmm/eventcontrollerscroll.h>
 #include <gtkmm/gestureclick.h>
 #include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/cssprovider.h>
 #include <memory>
 #include "../enums.h"
 
@@ -26,6 +27,8 @@ namespace ml
             void addCssClass(const std::string& cls){_gtk->add_css_class(cls);}
             void removeCssClass(const std::string& cls){_gtk->remove_css_class(cls);}
             bool hadCssClass(const std::string& cls){return _gtk->has_css_class(cls);}
+
+            void addCss(const std::string& css);
 
             virtual void show(){_gtk->show();}
             virtual void hide(){_gtk->hide();}
@@ -84,6 +87,7 @@ namespace ml
             Widget* _abstract = nullptr;
             std::shared_ptr<Gtk::Widget> _gtk;
             sigc::connection _handler;
+            Glib::RefPtr<Gtk::CssProvider> _cssProvider = nullptr;
             
             bool _hovered = false;
             double _oldWidth = 0, _oldHeight = 0;

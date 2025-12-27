@@ -5,7 +5,7 @@
 #include "./Box.hpp"
 namespace ml
 {
-    void Property::set(const std::any& value, Observer* observer)
+    void Property::set(const std::any& value, Observer* observer , bool preventUpdate )
     {
         lg("Property::set(" << props::valueAsString(value) << ")");
         if (this->type() == STRING)
@@ -43,9 +43,12 @@ namespace ml
                 _value = std::any(std::any_cast<double>(value));
         }
 
-        lg("Property notify");
-        this->notify("value", value, observer);
-        lg("Property notify done");
+        if (!preventUpdate)
+        {
+            lg("Property notify");
+            this->notify("value", value, observer);
+            lg("Property notify done");
+        }
     }
 
     void Property::hide()

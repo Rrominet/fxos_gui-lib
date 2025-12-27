@@ -45,6 +45,8 @@
 #include "./CommandButton.h"
 #include "./ListWidget.h"
 #include "./WebView.h"
+#include "./ColorPicker.h"
+#include "./ColorButton.h"
 
 #include <any>
 #include <memory>
@@ -234,6 +236,7 @@ namespace ml
         auto collapsable = (Collapsable*)_composedWidgets->createComposedWidget<Collapsable>(_composedWidgets.get(), "Collapsable").get();
         collapsable->body()->createLabel("I'm in the collapsable !");
         collapsable->body()->createButton("Me tooo");
+        collapsable->body()->createComposedWidget<ColorButton>(collapsable->body().get());
 
         auto commander = (Commander*)_composedWidgets->createComposedWidget<Commander>(_composedWidgets.get()).get();
         commander->addAllCommands(ml::app());

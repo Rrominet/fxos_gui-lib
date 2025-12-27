@@ -44,6 +44,7 @@ namespace ml
             void addCssClass(const std::string& cls){_impl->addCssClass(cls);}
             void removeCssClass(const std::string& cls){_impl->removeCssClass(cls);}
             bool hadCssClass(const std::string& cls){return _impl->hadCssClass(cls);}
+            void addCss(const std::string& css){_impl->addCss(css);}
 
             virtual void show(){_impl->show();}
             virtual void hide(){_impl->hide();}

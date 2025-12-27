@@ -536,4 +536,14 @@ namespace ml
     {
         _gtk->set_margin_bottom(margin);
     }
+
+    void Widget_impl::addCss(const std::string& css)
+    {
+        if (!_cssProvider)        
+        {
+            _cssProvider = Gtk::CssProvider::create();
+            _gtk->get_style_context()->add_provider(_cssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+        }
+        _cssProvider->load_from_string(css);
+    }
 }

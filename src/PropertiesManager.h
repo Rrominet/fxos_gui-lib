@@ -40,6 +40,10 @@ namespace ml
                     case Property::STRING : 
                         prop = std::make_unique<StringProperty>(std::forward<Args>(args)...);
                         break;
+                    case Property::IMG: 
+                        //tmp
+                        prop = std::make_unique<StringProperty>(std::forward<Args>(args)...);
+                        break;
                     case Property::NONE : 
                         assert(false && "PropertiesManager::createFromType called with the type NONE");
                         break;
