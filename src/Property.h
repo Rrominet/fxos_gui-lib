@@ -5,6 +5,8 @@
 #include "vec.h"
 #include "observers/Observed.h"
 
+//TODO : add the Color Property
+
 namespace ml
 {
     class Box;
@@ -28,7 +30,7 @@ namespace ml
             
             virtual PropertyType type() const { return NONE;}
 
-            void set(const std::any& value, Observer* observer = nullptr);
+            void set(const std::any& value, Observer* observer = nullptr, bool preventUpdate = false);
             virtual double min(){return 0;}
             virtual double max(){return 0;}
 

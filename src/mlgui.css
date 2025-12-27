@@ -391,3 +391,13 @@ button.dialog-cancel
 {
     background-color : var(--selected-color);
 }
+.color-box
+{
+    margin : 1em;
+    border-radius : 10px;
+}
+
+.color-button
+{
+    border-radius : 3px;
+}
