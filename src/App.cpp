@@ -209,6 +209,20 @@ namespace ml
         return cmd;
     }
 
+    std::shared_ptr<GuiBackendCommand> App::createBackendCommand(Process* p, const std::string &function, const std::function<json()>& getjsonArgs, const std::function<void(const json& response)>& cb, bool onetime)
+    {
+        auto cmd = _cmds.createCommand<GuiBackendCommand>(function);
+        cmd->setProcessCommand(p, function, getjsonArgs, cb, onetime);
+        return cmd;
+    }
+
+    std::shared_ptr<GuiBackendCommand> App::createBackendCommand(Process* p, const std::string& name, const std::string& id, const std::string &function, const std::function<json()>& getjsonArgs, const std::function<void(const json& response)>& cb, bool onetime)
+    {
+        auto cmd = _cmds.createCommand<GuiBackendCommand>(name, id);
+        cmd->setProcessCommand(p, function, getjsonArgs, cb, onetime);
+        return cmd;
+    }
+
     Window* App::windowFromId(const std::string& id) const
     {
         if (_windows.find(id) == _windows.end())	

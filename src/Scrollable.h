@@ -39,8 +39,8 @@ namespace ml
                 std::shared_ptr<ComposedPropertyWidget<Prop>> appendComposedProp(Prop* prop, DrawType type = AUTO);
 
             void setChild(ml::Widget& child);
-            std::shared_ptr<ml::Button> appendCommand(Command* cmd){return _box.appendCommand(cmd);}
-            std::shared_ptr<ml::Button> appendCommand(const std::string& id){return _box.appendCommand(id);}
+            std::shared_ptr<ml::Button> appendCommand(Command* cmd, const std::string& overrideButtonText=""){return _box.appendCommand(cmd, overrideButtonText);}
+            std::shared_ptr<ml::Button> appendCommand(const std::string& id, const std::string& overrideButtonText=""){return _box.appendCommand(id, overrideButtonText);}
 
             Box& content(){return _box;}
 

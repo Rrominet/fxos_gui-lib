@@ -24,6 +24,7 @@ namespace ml
             std::string text();
 
             virtual void setHAlign(HAlignment align) override;
+            void setTextJustify(HAlignment align);
             void setWrap(bool wrap=true);
             void setSelectable(bool sel=true);
 

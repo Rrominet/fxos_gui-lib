@@ -81,10 +81,10 @@ namespace ml
             virtual void init() override;
             virtual void init(ml::Scrollable* scrollable);
 
-            std::shared_ptr<ml::Button> appendCommand(Command* cmd);
-            std::shared_ptr<ml::Button> appendCommand(const std::string& id);
-            std::shared_ptr<ml::Button> addCommand(Command* cmd){return this->appendCommand(cmd);}
-            std::shared_ptr<ml::Button> addCommand(const std::string& id){return this->appendCommand(id);}
+            std::shared_ptr<ml::Button> appendCommand(Command* cmd, const std::string& overrideButtonText="");
+            std::shared_ptr<ml::Button> appendCommand(const std::string& id, const std::string& overrideButtonText="");
+            std::shared_ptr<ml::Button> addCommand(Command* cmd, const std::string& overrideButtonText=""){return this->appendCommand(cmd, overrideButtonText);}
+            std::shared_ptr<ml::Button> addCommand(const std::string& id, const std::string& overrideButtonText=""){return this->appendCommand(id, overrideButtonText);}
 
             std::shared_ptr<ml::Image> createIconFromName(const std::string& name){return this->createIcon(name);}
             // it's an allias for createIconFromName

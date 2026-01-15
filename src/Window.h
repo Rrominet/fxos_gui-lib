@@ -6,6 +6,7 @@
 
 #include "./WindowsFactory.h"
 #include <memory>
+#include <unordered_map>
 #ifdef __EMSCRIPTEN__
 #include "./em/Window_impl.h"
 #else
@@ -31,6 +32,7 @@ namespace ml
     class GuiBackendCommand;
     class Popover;
     class Commander;
+
     class Window
     {
         friend class WindowsFactory;
@@ -124,6 +126,12 @@ namespace ml
             Window_impl* impl(){assert(_impl); return _impl.get();}
             Window_impl* impl() const {assert(_impl); return _impl.get();}
 
+            void addKeybind(const std::string& keybind, const std::function<bool()>& callback);
+
+            //return true if removed (aka found)
+            bool removeKeybind(const std::string& keybind);
+            void clearKeybinds();
+
         protected : 
             App* _app;
             ml::Window* _parent = nullptr; //pb s
@@ -152,6 +160,10 @@ namespace ml
             // to create the commander system automatcly if needed
             ml::Popover* _commanderPopover = nullptr;
             ml::Commander* _commander = nullptr;
+
+            // the function return true if it consider the keybind "treated"
+            // behind the scene, it will cut the event propagation if return true.
+            std::unordered_map<std::string, std::function<bool()>> _windowKeyBinds;
 
         public : 
 #include "Window_gen.h"

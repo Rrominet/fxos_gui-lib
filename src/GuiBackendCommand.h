@@ -25,6 +25,7 @@ namespace ml
 
             // need to be setted before calling exec (often when clicking on a button.)
             void setProcessCommand(Process* process, const std::string &function, const json& args, const std::function<void(const json& response)>& cb=0, bool onetime=false);
+            void setProcessCommand(Process* process, const std::string &function, const std::function<json()>& getjsonArgs, const std::function<void(const json& response)>& cb=0, bool onetime=false);
             void addCallback(const std::function<void(const json& response)>& cb, bool onetime = false);
 
             //need to be executed on the mainthread !
@@ -44,6 +45,7 @@ namespace ml
             std::string _function;
             json _jsonArgs; //bp cgs
             std::function<void(const json& response)> _cb;
+            std::function<json()> _getjsonArgs;
 
             th::Safe<ml::Vec<GuiCallback>> _callbacks;
 

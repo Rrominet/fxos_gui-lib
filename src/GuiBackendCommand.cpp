@@ -79,6 +79,36 @@ namespace ml
         GuiCommand::setExec(exec);
     }
 
+    void GuiBackendCommand::setProcessCommand(Process* process, const std::string &function, const std::function<json()>& getjsonArgs, const std::function<void(const json& response)>& cb, bool onetime)
+    {
+        _process = process;
+        _function = function;
+
+        if (cb)
+            this->addCallback(cb, onetime);
+
+        auto exec = [this, getjsonArgs](const std::any&)
+        {
+            _jsonArgs = getjsonArgs();
+            for (auto& b : _buttons)
+                b->mkLoading();
+            try
+            {
+                ipc::call(_process, _function, _jsonArgs, _cb);
+                _waiting = true; //changed
+            }
+            catch(const std::exception& e)
+            {
+                this->onError(_S(e.what()));
+            }
+            lg("process backend called : " << _function);
+            lg("with these args : " << _jsonArgs.dump(4));
+            app()->main()->setInfosFromCommand(this);
+        };
+
+        GuiCommand::setExec(exec);
+    }
+
     void GuiBackendCommand::addCallback(const std::function<void(const json& response)>& cb, bool onetime)
     {
         std::lock_guard l(_callbacks);

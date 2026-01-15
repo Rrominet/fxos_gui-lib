@@ -115,6 +115,9 @@ namespace ml
             std::shared_ptr<GuiBackendCommand> createBackendCommand(Process* p, const std::string &function, const json& args={}, const std::function<void(const json& response)>& cb=0, bool onetime=false);
             std::shared_ptr<GuiBackendCommand> createBackendCommand(Process* p, const std::string& name, const std::string& id, const std::string &function, const json& args={}, const std::function<void(const json& response)>& cb=0, bool onetime=false);
 
+            std::shared_ptr<GuiBackendCommand> createBackendCommand(Process* p, const std::string &function, const std::function<json()>& getjsonArgs, const std::function<void(const json& response)>& cb=0, bool onetime=false);
+            std::shared_ptr<GuiBackendCommand> createBackendCommand(Process* p, const std::string& name, const std::string& id, const std::string &function, const std::function<json()>& getjsonArgs, const std::function<void(const json& response)>& cb=0, bool onetime=false);
+
             //this will show the window if it exists, will create it if not
             //winptr will be populate with the window if its nullptr
             template<typename W=Window>
