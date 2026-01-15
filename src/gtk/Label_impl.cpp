@@ -1,6 +1,7 @@
 #include "./Label_impl.h"
 #include "../Label.h"
 #include "enums.h"
+#include "gtkmm/enums.h"
 #include "pangomm/layout.h"
 
 namespace ml
@@ -31,17 +32,21 @@ namespace ml
     {
         Widget_impl::setHAlign(align);	
         if (align == ml::LEFT)
-        {
             this->label()->set_xalign(0);
-        }
         else if (align == ml::CENTER)
-        {
             this->label()->set_xalign(0.5);
-        }
         else if (align == ml::RIGHT)
-        {
             this->label()->set_xalign(1);
-        }
+    }
+
+    void Label_impl::setTextJustify(HAlignment align)
+    {
+        if (align == ml::LEFT)
+            this->label()->set_justify(Gtk::Justification::LEFT);
+        else if (align == ml::CENTER)
+            this->label()->set_justify(Gtk::Justification::CENTER);
+        else if (align == ml::RIGHT)
+            this->label()->set_justify(Gtk::Justification::RIGHT);
     }
 
     void Label_impl::setWrap(bool wrap)

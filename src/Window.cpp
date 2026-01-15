@@ -125,7 +125,19 @@ namespace ml
                 }
             }
 
-            for (const auto& cmd :_cmds.commands())  
+            for (const auto& kb : _windowKeyBinds)
+            {
+                if (keybinds::match(kb.first, event))
+                {
+                    if (kb.second())
+                    {
+                        event.preventDefault = true;
+                        return;
+                    }
+                }
+            }
+
+            for (const auto& cmd : _cmds.commands())  
             {
                 if (keybinds::match(cmd.second->keybind(), event))
                 {
@@ -334,5 +346,25 @@ namespace ml
         _commanderPopover->show();
         auto mpos = this->mousePos();
         _commanderPopover->setPosition(mpos.x(), mpos.y());
+    }
+
+    void Window::addKeybind(const std::string& keybind, const std::function<bool()>& callback)
+    {
+        _windowKeyBinds[keybind] = callback;
+    }
+
+    bool Window::removeKeybind(const std::string& keybind)
+    {
+        if (_windowKeyBinds.find(keybind) != _windowKeyBinds.end())
+        {
+            _windowKeyBinds.erase(keybind);
+            return true;
+        }
+        return false;
+    }
+
+    void Window::clearKeybinds()
+    {
+        _windowKeyBinds.clear();
     }
 }

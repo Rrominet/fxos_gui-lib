@@ -98,9 +98,11 @@ namespace ml
         }
     }
 
-    std::shared_ptr<ml::Button> Box::appendCommand(Command* cmd)
+    std::shared_ptr<ml::Button> Box::appendCommand(Command* cmd, const std::string& overrideButtonText)
     {
         auto btn = this->createButton(cmd->name());
+        if (!overrideButtonText.empty())
+            btn->setText(overrideButtonText);
         btn->setHelp(cmd->help());
         btn->addEventListener(Event::LEFT_UP, [cmd](const EventInfos&){cmd->exec();});
         GuiCommand* gui_cmd = dynamic_cast<GuiCommand*>(cmd);
@@ -109,9 +111,9 @@ namespace ml
         return btn;
     }
 
-    std::shared_ptr<ml::Button> Box::appendCommand(const std::string& id)
+    std::shared_ptr<ml::Button> Box::appendCommand(const std::string& id, const std::string& overrideButtonText)
     {
-        return this->appendCommand(ml::app()->cmds().command(id).get());
+        return this->appendCommand(ml::app()->cmds().command(id).get(), overrideButtonText);
     }
 
     std::shared_ptr<ml::Image> Box::createIcon(const std::string& name)

@@ -26,6 +26,8 @@ namespace ml
             std::shared_ptr<Gtk::Widget> widget(){return _gtk;}
             void addCssClass(const std::string& cls){_gtk->add_css_class(cls);}
             void removeCssClass(const std::string& cls){_gtk->remove_css_class(cls);}
+            void clearCssClasses(){_gtk->set_css_classes({});}
+            void setCssClasses(const std::vector<std::string>& classes);
             bool hadCssClass(const std::string& cls){return _gtk->has_css_class(cls);}
 
             void addCss(const std::string& css);
@@ -37,7 +39,7 @@ namespace ml
             void remove();
 
             // this function should be called just after the constructor.
-            // it create the widget itself (should be overriden in shild class)
+            // it create the widget itself (should be overriden in child class)
             virtual void _createWidget(){}
 
             // this is executes after the widget is parented.

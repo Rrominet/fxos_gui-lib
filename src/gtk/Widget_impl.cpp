@@ -546,4 +546,13 @@ namespace ml
         }
         _cssProvider->load_from_string(css);
     }
+
+    void Widget_impl::setCssClasses(const std::vector<std::string>& classes)
+    {
+        std::vector<Glib::ustring> vec;        
+        vec.reserve(classes.size());
+        for (int i=0; i<classes.size(); i++)
+            vec.push_back(classes[i]);
+        _gtk->set_css_classes(vec);
+    }
 }
