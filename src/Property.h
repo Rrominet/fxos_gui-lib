@@ -4,6 +4,7 @@
 #include <functional>
 #include "vec.h"
 #include "observers/Observed.h"
+#include <unordered_map>
 
 //TODO : add the Color Property
 
@@ -36,6 +37,11 @@ namespace ml
 
             virtual double step(){return 1;}
             std::any asAny()const {return _value;}
+            int asInt() const {return std::any_cast<int>(_value);};
+            float asFloat() const {return std::any_cast<float>(_value);};
+            double asDouble() const {return std::any_cast<double>(_value);};
+            bool asBool() const {return std::any_cast<bool>(_value);};
+            std::string asString() const {return std::any_cast<std::string>(_value);};
 
             virtual void addOnUpdate(const std::function<void()> f){_onUpdate.push(f);}
 
@@ -55,6 +61,13 @@ namespace ml
 
             virtual bool isEnum() const {return false;}
 
+            bool hasAttribute(const std::string& name){return _attrs.find(name) != _attrs.end();}
+            std::any& attribute(const std::string& name){return _attrs.at(name);}
+            const std::any& attribute(const std::string& name)const {return _attrs.at(name);}
+            void addAttribute(const std::string& name, const std::any& value){_attrs[name] = value;}
+            void setAttribute(const std::string& name, const std::any& value){_attrs[name] = value;}
+            void removeAttribute(const std::string& name){if(_attrs.find(name) != _attrs.end()) _attrs.erase(name);};
+
         protected : 
             std::string _name;//bp cgs
             std::string _description;//bp cgs
@@ -65,6 +78,9 @@ namespace ml
             ml::Vec<std::function<void()>> _onValid; //bp cg
             
             ml::Vec<std::shared_ptr<Box>> _widgetsConnected; //bp cg
+
+            //can be used to store basically anything you want.
+            std::unordered_map<std::string, std::any> _attrs; //bp cg
 
         public : 
 #include "./Property_gen.h"

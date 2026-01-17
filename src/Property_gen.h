@@ -20,3 +20,7 @@ ml::Vec<std::shared_ptr<Box>>& widgetsConnected(){return _widgetsConnected;}
 const ml::Vec<std::shared_ptr<Box>>& widgetsConnected() const {return _widgetsConnected;}
 
 
+std::unordered_map<std::string,std::any>& attrs(){return _attrs;}
+const std::unordered_map<std::string,std::any>& attrs() const {return _attrs;}
+
+
