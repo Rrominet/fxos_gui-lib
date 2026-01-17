@@ -32,4 +32,10 @@ namespace ml
             }
         }
     }
+
+    void PropertiesManager::clear()
+    {
+        _props.clear(); 
+        _groups.clear();
+    }
 }

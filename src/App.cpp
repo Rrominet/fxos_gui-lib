@@ -173,6 +173,18 @@ namespace ml
         dg->drawProp();
         return dg;
     }
+
+    std::shared_ptr<AskPropertyDialog> App::ask(ml::Property* prop, std::function<void()> onvalid, std::function<void()> oncancel,const std::string& message, ml::Window* parent)
+    {
+        auto dg = this->message<AskPropertyDialog>(message, parent);
+        dg->set(prop);
+        dg->drawProp();
+
+        dg->events().add("ok", onvalid);
+        if (oncancel)
+            dg->events().add("cancel", oncancel);
+        return dg;
+    }
     std::shared_ptr<AskPropertyDialog> App::ask(Property::PropertyType type, const std::string& propname, const std::string& message, ml::Window* parent )
     {
         auto dg = this->message<AskPropertyDialog>(message, parent);

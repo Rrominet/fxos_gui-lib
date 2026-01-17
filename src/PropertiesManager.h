@@ -57,6 +57,7 @@ namespace ml
             // always delete prop like this, never with delete;
             void destroy(Property* prop);
             void destroy(PropertyGroup* prop);
+            void clear();
 
         protected :
             ml::Vec<std::unique_ptr<ml::Property>> _props; //bp cg

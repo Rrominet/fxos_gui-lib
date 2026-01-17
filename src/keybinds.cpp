@@ -39,8 +39,6 @@ namespace ml
             key = str::replace(key, "super", "");
             key = str::replace(key, " ", "");
 
-            lg(e.key);
-
             if (str::lower(key) == "enter" || str::lower(key) == "ret" || str::lower(key) == "return")
                 key = "Return";
 

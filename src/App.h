@@ -76,6 +76,7 @@ namespace ml
 
             // used to ask about an existing prop
             std::shared_ptr<AskPropertyDialog> ask(ml::Property* prop, const std::string& message="", ml::Window* parent = nullptr);
+            std::shared_ptr<AskPropertyDialog> ask(ml::Property* prop, std::function<void()> onvalid, std::function<void()> oncancel=0 ,const std::string& message="", ml::Window* parent = nullptr);
             std::shared_ptr<AskPropertyDialog> ask(Property::PropertyType type, const std::string& propname="Value", const std::string& message="", ml::Window* parent = nullptr);
 
             std::shared_ptr<AskPropertyGroupDialog> ask(ml::PropertyGroup* prop, const std::string& message="", ml::Window* parent = nullptr);
@@ -181,6 +182,9 @@ namespace ml
 
             bool isDarkTheme() const {return _impl.isDarkTheme();}
             void setAbout(const std::string& about) {_about = about;}
+
+            ml::MenusFactory& menus() {return _menusFactory;}
+            const ml::MenusFactory& menus() const {return _menusFactory;}
 
         protected : 
             bool _setIdCalled = false;
