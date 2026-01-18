@@ -271,6 +271,12 @@ namespace ml
         return _r;
     }
 
+    std::shared_ptr<ComposedPropertyWidget<ColorProperty>> Box::appendColorProp(ColorProperty* prop, DrawType type)
+    {
+        auto _r = this->appendComposedProp(prop, type);
+        return _r;
+    }
+
     std::shared_ptr<ml::Image> Box::createImage(bool icon)
     {
         return ml::app()->widgetsFactory().createImage(icon, this);

@@ -70,6 +70,8 @@ namespace ml
         DATE,
         TIME,
         DATE_TIME,
+        COLOR_BUTTON,
+        COLOR_PICKER,
     };
 
     enum ImageState

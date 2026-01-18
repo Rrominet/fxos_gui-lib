@@ -6,7 +6,7 @@
 namespace ml
 {
     class Popover;
-    class ColorButton : public ml::ComposedWidget
+    class ColorButton : public ml::ComposedInput
     {
         public:
             ColorButton(ml::Box* parent);
@@ -18,6 +18,14 @@ namespace ml
             Color<double>& color(){return _colorPicker->color();}
             Events& events(){return _colorPicker->events();}
 
+            virtual std::any valueAsAny() override;
+            virtual void setValue(const std::string& value) override;
+            virtual void setValue(double value) override;
+            virtual void setValue(const Color<double>& value) override;
+            virtual void setValue(const json& value) override;
+            
+
+            virtual void addEventListener(Event event, const std::function<void(EventInfos&)>& callback) override;
         private : 
             ml::Box* _clickable;
             ml::Popover* _popover;

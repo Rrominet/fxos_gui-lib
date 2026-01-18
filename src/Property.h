@@ -60,6 +60,7 @@ namespace ml
             void valid(){_onValid.exec();}
 
             virtual bool isEnum() const {return false;}
+            virtual bool isColor() const {return false;}
 
             bool hasAttribute(const std::string& name){return _attrs.find(name) != _attrs.end();}
             std::any& attribute(const std::string& name){return _attrs.at(name);}
@@ -91,3 +92,4 @@ namespace ml
 
 // this should only be included here, and the Property.h included anywhere its needed.
 #include "./EnumProperty.h" 
+#include "./ColorProperty.h" 

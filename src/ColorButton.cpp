@@ -35,4 +35,37 @@ namespace ml
         });
         _clickable->addCss(_colorPicker->css());
     }
+
+    std::any ColorButton::valueAsAny()
+    {
+        return _colorPicker->valueAsAny();
+    }
+
+    void ColorButton::setValue(const std::string& value)
+    {
+        _colorPicker->setValue(value);
+    }
+
+    void ColorButton::setValue(double value)
+    {
+        _colorPicker->setValue(value);
+    }
+
+    void ColorButton::setValue(const Color<double>& value)
+    {
+        _colorPicker->setValue(value);
+    }
+
+    void ColorButton::setValue(const json& value)
+    {
+        _colorPicker->setValue(value);
+    }
+
+    void ColorButton::addEventListener(Event event, const std::function<void(EventInfos&)>& callback)
+    {
+        if (event == CHANGE)
+            _colorPicker->addEventListener(event, callback);
+        else
+            _clickable->addEventListener(event, callback);
+    }
 }

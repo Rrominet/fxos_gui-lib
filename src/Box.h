@@ -28,6 +28,7 @@ namespace ml
         class ComposedPropertyWidget;
 
     class EnumProperty;
+    class ColorProperty;
     class Scrollable;
     class ComposedWidget;
     class Popover;
@@ -111,6 +112,7 @@ namespace ml
             void clear();
 
             std::shared_ptr<ComposedPropertyWidget<EnumProperty>> appendEnumProp(EnumProperty* prop);
+            std::shared_ptr<ComposedPropertyWidget<ColorProperty>> appendColorProp(ColorProperty* prop, DrawType type=COLOR_BUTTON);
 
         protected : 
             ml::Vec<std::shared_ptr<ml::Widget>> _children; //bp cg
