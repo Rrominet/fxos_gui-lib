@@ -17,7 +17,7 @@ namespace ml
         _clickable->setHAlign(CENTER);
         _clickable->setCursor("pointer");
 
-        _popover = parent->createPopover().get();
+        _popover = parent->window()->createPopover();
         _popover->hide();
 
         _colorPicker = _popover->content()->content().createComposedWidget<ColorPicker>(&_popover->content()->content()).get();
@@ -25,9 +25,8 @@ namespace ml
         _composed.push(_clickable);
         _composed.push(_popover);
 
-        _clickable->addEventListener(LEFT_UP, [this](EventInfos& e){
-                    _popover->show();
-                    _popover->setSize(300, 300);
+        _clickable->addEventListener(LEFT_UP, [this, parent](EventInfos& e){
+                    parent->window()->pop(_popover, 300, 300);
                 });
 
         _colorPicker->events().add("change", [this]{

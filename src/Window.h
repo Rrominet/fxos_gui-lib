@@ -132,6 +132,10 @@ namespace ml
             bool removeKeybind(const std::string& keybind);
             void clearKeybinds();
 
+            //the popover need to be already a child of the window
+            void pop(Popover* popover, int sx=-1, int sy=-1, int px=-1, int py=-1);
+            ml::Popover* createPopover();
+
         protected : 
             App* _app;
             ml::Window* _parent = nullptr; //pb s
