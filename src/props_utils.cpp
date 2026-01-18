@@ -2,6 +2,8 @@
 #include "./Property.h"
 #include "./Box.h"
 #include "./ComboBox.h"
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 namespace ml
 {
@@ -17,6 +19,13 @@ namespace ml
                 return std::to_string(std::any_cast<bool>(a));
             else if (a.type() == typeid(float))
                 return std::to_string(std::any_cast<float>(a));
+            else if (a.type() == typeid(Color<double>))
+            {
+                Color<double> c = std::any_cast<Color<double>>(a);
+                return c.serialize().dump();
+            }
+            else if (a.type() == typeid(json))
+                return std::any_cast<json>(a).dump();
             else
                 return std::to_string(std::any_cast<int>(a));
         }

@@ -364,6 +364,10 @@ namespace ml
         prop6->choices() = {"Choice 1", "Choice 2", "Choice 3", "Choice 4"};
 
         composed->body()->appendEnumProp(prop6);
+
+        auto prop12 = ml::app()->props().create<ColorProperty>("Color", "An example of a color property", Color<double>(1, 0, 0, 1));
+        composed->body()->appendColorProp(prop12);
+        composed->body()->appendColorProp(prop12, COLOR_PICKER);
     }
 
     void ExampleWindow::createPropertyGroups()

@@ -12,6 +12,9 @@ namespace ml
     class Property;
     class EnumProperty;
     class ComboBox;
+    class ColorPicker;
+    class ColorButton;
+    class ColorProperty;
     namespace props
     {
         std::string valueAsString(const std::any& a);

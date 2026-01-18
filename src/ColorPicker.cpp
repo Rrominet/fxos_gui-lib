@@ -71,4 +71,54 @@ namespace ml
         css = "* { " + css + " }";
         return css;
     }
+
+    std::any ColorPicker::valueAsAny()
+    {
+        return std::any(_color); 
+    }
+
+    void ColorPicker::setValue(const std::string& value)
+    {
+        try
+        {
+            auto data = json::parse(value) ;
+            _color.deserialize(data);
+            _updateGuiFromColor();
+        }
+        catch(const std::exception& e)
+        {
+            lg(e.what());
+        }
+    }
+
+    void ColorPicker::setValue(double value)
+    {
+        _color.set(value, value, value, 1) ;
+        _updateGuiFromColor();
+    }
+
+    void ColorPicker::setValue(const Color<double>& value)
+    {
+        _color = value; 
+        _updateGuiFromColor();
+    }
+
+    void ColorPicker::setValue(const json& value)
+    {
+        _color.deserialize(value); 
+        _updateGuiFromColor();
+    }
+
+    void ColorPicker::addEventListener(Event event, const std::function<void(EventInfos&)>& callback)
+    {
+        if(event == CHANGE)
+        {
+            _r->addEventListener(event, callback);
+            _g->addEventListener(event, callback);
+            _b->addEventListener(event, callback);
+            _a->addEventListener(event, callback);
+        }
+        else 
+            _main->addEventListener(event, callback);
+    }
 }
