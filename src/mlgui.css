@@ -400,4 +400,5 @@ button.dialog-cancel
 .color-button
 {
     border-radius : 3px;
+    margin : 0.5em;
 }

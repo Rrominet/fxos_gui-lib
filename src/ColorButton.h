@@ -26,6 +26,12 @@ namespace ml
             
 
             virtual void addEventListener(Event event, const std::function<void(EventInfos&)>& callback) override;
+            virtual void setHelp(const std::string& help) override {_clickable->setHelp(help);}
+            virtual void setHAlign(HAlignment align) override {_clickable->setHAlign(align);}
+            virtual void setVAlign(VAlignment align) override {_clickable->setVAlign(align);}
+            virtual void setHExpand(bool value=true) override {_clickable->setHExpand(value);}
+            virtual void setVExpand(bool value=true) override {_clickable->setVExpand(value);}
+
         private : 
             ml::Box* _clickable;
             ml::Popover* _popover;

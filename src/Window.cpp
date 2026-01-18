@@ -367,4 +367,27 @@ namespace ml
     {
         _windowKeyBinds.clear();
     }
+
+    void Window::pop(Popover* popover, int sx, int sy, int px, int py)
+    {
+        auto pos = this->mousePos();
+        if (px != -1)
+            pos.x() = px;
+        if (py != -1)
+            pos.y() = py;
+
+        popover->setPosition(pos.x(), pos.y());
+        if (sx != -1 && sy != -1)
+            popover->setSize(sx, sy);
+        else if(sx != -1)
+            popover->setWidth(sx);
+        else if (sy != -1)
+            popover->setHeight(sy);
+        popover->show();
+    }
+
+    ml::Popover* Window::createPopover()
+    {
+        return _content->createPopover().get();
+    }
 }
