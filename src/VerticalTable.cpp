@@ -347,6 +347,8 @@ namespace ml
                 label->setValue(std::to_string(data[k].get<bool>()));
             }
         }
+
+        _events.emit("row-modified", vrow.get());
     }
 
     void VerticalTable::_onDataPrepended(const json& data)
