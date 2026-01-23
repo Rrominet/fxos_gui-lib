@@ -43,6 +43,16 @@ namespace ml
 
             ml::Events& events() { return _events; }
 
+            void setCommandsScores(const json& scores) { _commandsScores = scores; }
+            void setActiveCommandButton(CommandButton* cmd);
+
+            CommandButton* active() const;
+
+            void moveActiveCommandButton(int mvt);
+            int activeButtonCommandIdx() const;
+
+            ml::Command* activeCommand() const;
+
         protected : 
             std::shared_ptr<Box> _box;
             std::shared_ptr<Entry> _search;
@@ -50,6 +60,8 @@ namespace ml
 
             ml::Vec<ml::Command*> _commands;
             ml::Vec<std::unique_ptr<CommandButton>> _buttons;
+
+            CommandButton* _active = nullptr;
 
             void _onSearchChange();
             void _onSearchValid();
@@ -59,9 +71,12 @@ namespace ml
 
             ml::Events _events;
 
+            //key : cmd id
+            //value : score as float
+            json _commandsScores;
 
             // if true, the app will not launch any process
-            // could be util, if you just want to react to fxhub event and manage the event withanother app.
+            // could be util, if you just want to react to fxhub event and manage the event with another app.
             bool _doNothing = false; //bp cgs
         public :
             #include "./Commander_gen.h"

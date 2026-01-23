@@ -42,7 +42,7 @@ namespace ml
             ml::Command* _cmd = nullptr; //bp cg
             bool _drawn = false;
 
-            std::shared_ptr<ml::Box> _button;
+            std::shared_ptr<ml::Box> _button; //bp cg
             std::shared_ptr<ml::Label> _label;
             std::shared_ptr<ml::Label> _right;
 

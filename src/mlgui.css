@@ -391,6 +391,12 @@ button.dialog-cancel
 {
     background-color : var(--selected-color);
 }
+
+.active
+{
+    background-color : var(--active-color);
+}
+
 .color-box
 {
     margin : 1em;

@@ -28,6 +28,15 @@ namespace ml
 
         _search->addEventListener(CHANGE, std::bind(&Commander::_onSearchChange, this));
         _search->addEventListener(VALID, std::bind(&Commander::_onSearchValid, this));
+        _search->addEventListener(KEY_DOWN, [this](EventInfos& e)
+                {
+                    if (e.key == "Down")
+                        this->moveActiveCommandButton(1);
+                    else if (e.key == "Up")
+                        this->moveActiveCommandButton(-1);
+                    else
+                        e.preventDefault = false;
+                });
     }
 
     Commander::~Commander()
@@ -74,45 +83,98 @@ namespace ml
             _buttons.push_back(std::move(button));
         }
 
+        if (_buttons.size() > 0)
+            this->setActiveCommandButton(_buttons[0].get());
+
         _events.emit("changed");
+    }
+
+    int Commander::activeButtonCommandIdx() const
+    {
+        auto a = this->active();
+        if (!a)
+            return -1;
+        for (unsigned int i=0; i<_buttons.size(); i++)
+        {
+            if (_buttons[i].get() == a)
+                return i;
+        }
+        return -1;
+    }
+
+    void Commander::moveActiveCommandButton(int mvt)
+    {
+        if (_buttons.size() == 0)
+            return;
+        auto current = this->activeButtonCommandIdx(); 
+        if (current == -1)
+            this->setActiveCommandButton(_buttons[0].get());
+
+        int next = current + mvt;
+        if (next < 0)
+            next = 0;
+        if (next >= _buttons.size())
+            next = _buttons.size() - 1;
+        this->setActiveCommandButton(_buttons[next].get());
+    }
+
+    ml::Command* Commander::activeCommand() const
+    {
+        if (_commands.size() == 0)
+            return nullptr;
+        auto btn = this->active();
+        if (!btn)
+            return _commands[0];
+
+        return btn->cmd();
     }
 
     void Commander::_onSearchValid()
     {
-        if(_commands.size() > 0)
-        {
-            if (!_doNothing)
-                _commands[0]->exec();
-            _events.emit("valid", _commands[0]);
-        }
-
+        auto cmd = this->activeCommand();
+        if (!cmd)
+            return;
+        if (!_doNothing)
+            cmd->exec();
+        _events.emit("valid", cmd);
     }
 
     double Commander::_score(const std::string& searched, ml::Command* cmd)
     {
+        float multiplier = 1.0;
+        bool scoreContained = false;
+        if (_commandsScores.contains(cmd->id()))
+        {
+            scoreContained = true;
+            multiplier = _commandsScores[cmd->id()].get<float>() + multiplier;
+        }
+
         for (auto& alias : cmd->aliases())
         {
             if (alias == searched)
-                return 100;
+                return multiplier * 100;
             else if (str::lower(alias) == str::lower(searched))
-                return 50;
+                return multiplier * 50;
             else if (str::contains(str::lower(alias), str::lower(searched)))
-                return 25;
+                return multiplier * 25;
             else if (str::contains(str::lower(alias), str::clean(searched, true)))
-                return 15;
+                return multiplier * 15;
         }
         
         if (str::contains(str::lower(cmd->name()), str::lower(searched)))
-            return 10;
+            return multiplier * 10;
         else if (str::contains(str::lower(cmd->name()), str::clean(searched, true)))
-            return 5;
+            return multiplier * 5;
 
         if (str::contains(str::lower(cmd->help()), str::lower(searched)))
-            return 2;
+            return multiplier * 2;
         else if (str::contains(str::lower(cmd->help()), str::clean(searched, true)))
-            return 1;
+            return multiplier * 1.5;
 
-        return 0;
+        if (scoreContained)
+            return multiplier * 0.5;
+        else 
+            return 0;
     }
 
     void Commander::_sortCommands(const std::string& searched)
@@ -223,5 +285,24 @@ namespace ml
     {
         _buttons.clear();
         _commands.clear();
+    }
+
+    void Commander::setActiveCommandButton(CommandButton* cmd)
+    {
+        if (_active)        
+            _active->button()->removeCssClass("active");
+        _active = cmd;
+        if (_active)
+            _active->button()->addCssClass("active");
+    }
+
+    CommandButton* Commander::active() const
+    {
+        if (_active)        
+            return _active;
+        else if (_buttons.size() > 0)
+            return _buttons[0].get();
+        else
+            return nullptr;
     }
 }

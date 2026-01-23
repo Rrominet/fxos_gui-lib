@@ -4,3 +4,7 @@ ml::Command* cmd(){return _cmd;}
 const ml::Command* cmd() const {return _cmd;}
 
 
+std::shared_ptr<ml::Box> button(){return _button;}
+const std::shared_ptr<ml::Box> button() const {return _button;}
+
+
