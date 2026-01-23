@@ -10,6 +10,7 @@
     --dialog-ok-color: #005030;
     --code-block-background-color: #202020;
     --selected-color: #116699;
+    --active-color: #116699;
 }
 
 .confirm .dialog-cancel, 
