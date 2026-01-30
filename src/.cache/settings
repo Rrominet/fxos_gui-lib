@@ -1,0 +1,4 @@
+mlgui
+O0,gsource-map,-fexceptions,-fsanitize=undefined,-ASSERTIONS=1 ,-sFETCH,-s,LLD_REPORT_UNDEFINED,-lembind,-std=c++17
+pthread,mydebug,mldebug,NO_LOG
+../src,/media/romain/Donnees/Programmation/cpp/frameworks,/media/romain/Donnees/Programmation/cpp/libs/json,/media/romain/Donnees/Programmation/cpp/libs/eigen,/media/romain/Donnees/Programmation/cpp/libs/fmodstudioapi20000linux/api/core/inc

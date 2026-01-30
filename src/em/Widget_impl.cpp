@@ -20,6 +20,27 @@ namespace ml
         (*_dom)["classList"].call<void>("remove", cls);
     }
 
+    void Widget_impl::clearCssClasses()
+    {
+        em::clearClasses(*_dom) ;
+    }
+
+    void Widget_impl::setCssClasses(const std::vector<std::string>& classes)
+    {
+        this->clearCssClasses();
+        em::addClasses(*_dom, classes); 
+    }
+
+    bool Widget_impl::hadCssClass(const std::string& cls)
+    {
+        return em::containsClasses(*_dom, cls);
+    }
+
+    void Widget_impl::addCss(const std::string& css)
+    {
+        em::addCss(*_dom, css); 
+    }
+
     void Widget_impl::show()
     {
         em::show(*_dom);
@@ -52,6 +73,16 @@ namespace ml
         //TODO (css class)
     }
 
+    void Widget_impl::setHExpand(bool value)
+    {
+        //TODO (css class)
+    }
+
+    void Widget_impl::setVExpand(bool value)
+    {
+        //TODO (css class)
+    }
+
     void Widget_impl::setText(const std::string& text)
     {
         _dom->set("innerText", text);
@@ -75,12 +106,12 @@ namespace ml
     void Widget_impl::addEventListener(Event event, const std::function<void(EventInfos&)>& callback)
     {
         if (event == ml::Event::CLICK || 
-            event == ml::Event::DOUBLE_CLICK || 
-            event == ml::Event::MOUSE_DOWN ||
-            event == ml::Event::MOUSE_UP ||
-            event == ml::Event::MOUSE_MOVE ||
-            event == ml::Event::MOUSE_ENTER ||
-            event == ml::Event::MOUSE_LEAVE)
+                event == ml::Event::DOUBLE_CLICK || 
+                event == ml::Event::MOUSE_DOWN ||
+                event == ml::Event::MOUSE_UP ||
+                event == ml::Event::MOUSE_MOVE ||
+                event == ml::Event::MOUSE_ENTER ||
+                event == ml::Event::MOUSE_LEAVE)
         {
             auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
             {
@@ -224,7 +255,6 @@ namespace ml
     {
         auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
         {
-            lg(event->button);
             if (event->button == 0)
             {
                 EventInfos infos;
@@ -246,5 +276,91 @@ namespace ml
             callback(infos);
         };
         em::addEventListener(*_dom, ml::Event::CHANGE, f);
+    }
+
+    void Widget_impl::setWidth(int w)
+    {
+        em::setCss(*_dom, "width", std::to_string(w) + "px");
+    }
+
+    void Widget_impl::setHeight(int h)
+    {
+        em::setCss(*_dom, "height", std::to_string(h) + "px");
+    }
+
+    void Widget_impl::setSize(int w,int h)
+    {
+        this->setWidth(w);
+        this->setHeight(h);
+    }
+
+    int Widget_impl::width() const
+    {
+        return em::width(*_dom);
+    }
+
+    int Widget_impl::height() const
+    {
+        return em::height(*_dom);
+    }
+
+    void Widget_impl::setFocusable(bool value)
+    {
+        em::setFocusable(*_dom, value); 
+    }
+
+    bool Widget_impl::hovered() const
+    {
+        return em::hovered(*_dom);
+    }
+
+    void Widget_impl::setCursor(const std::string& name)
+    {
+        em::setCss(*_dom, "cursor", name);
+    }
+
+    void Widget_impl::focus()
+    {
+        _dom->call<void>("focus");
+    }
+
+    void Widget_impl::setMargins(int left,int top,int right,int bottom)
+    {
+        em::setCss(*_dom, "margin", std::to_string(left) + "px " + std::to_string(top) + "px " + std::to_string(right) + "px " + std::to_string(bottom) + "px");
+    }
+
+    void Widget_impl::setMargins(int margin)
+    {
+        em::setCss(*_dom, "margin", std::to_string(margin) + "px " + std::to_string(margin) + "px " + std::to_string(margin) + "px " + std::to_string(margin) + "px");
+    }
+
+    void Widget_impl::setLeftMargin(int margin)
+    {
+        em::setCss(*_dom, "margin-left", std::to_string(margin) + "px");
+    }
+
+    void Widget_impl::setTopMargin(int margin)
+    {
+        em::setCss(*_dom, "margin-top", std::to_string(margin) + "px");
+    }
+
+    void Widget_impl::setRightMargin(int margin)
+    {
+        em::setCss(*_dom, "margin-right", std::to_string(margin) + "px");
+    }
+
+    void Widget_impl::setBottomMargin(int margin)
+    {
+        em::setCss(*_dom, "margin-bottom", std::to_string(margin) + "px");
+    }
+
+    void Widget_impl::redraw() const
+    {
+        (*_dom)["offsetHeight"];
+    }
+
+    float Widget_impl::fontSize() const
+    {
+        return em::fontSize(*_dom);
     }
 }

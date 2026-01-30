@@ -49,4 +49,20 @@ namespace ml
         em::remove(*child->dom());
         _abstract->window()->impl()->setMainHeight();
     }
+
+    void Box_impl::moveChild(size_t from,size_t to)
+    {
+        
+    }
+
+    void Box_impl::setSpacing(int space)
+    {
+        //TODO : spacing is the px between each child. 
+        //Certainly something to implement in css here... Maybe ?
+    }
+
+    int Box_impl::spacing() const
+    {
+        //TODO : Need to save the variable. 
+    }
 }
