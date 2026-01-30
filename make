@@ -3,6 +3,7 @@
 from ml import build
 from ml.boilerplate import cpp
 from ml import fileTools as ft
+from ml import log
 import os
 import sys
 import shutil
@@ -22,11 +23,11 @@ def replaceCss() :
     emdest = "./mlgui_em.css"
 
     if not os.path.exists(cssPath):
-        print ("Commun css not found.")
+        log.print("Commun css not found.", "red")
     if not os.path.exists(cssGtkPath):
-        print ("gtk css not found.")
+        log.print("gtk css not found.", "red")
     if not os.path.exists(cssEmPath):
-        print ("em css not found.")
+        log.print("em css not found.", "red")
 
     css = ""
     css = ft.read(cssPath)
@@ -53,13 +54,13 @@ def replaceCss() :
 
     if (os.path.exists("../src/mlgui_dark.css")) : 
         shutil.copyfile("../src/mlgui_dark.css", "./mlgui_dark.css")
-        print ("Dark theme variable copied.")
+        log.print("Dark theme variable copied.", "green")
 
     if (os.path.exists("../src/mlgui_light.css")) : 
         shutil.copyfile("../src/mlgui_light.css", "./mlgui_light.css")
-        print ("Light theme variable copied.")
+        log.print("Light theme variable copied.", "green")
 
-    print ("Css replaced.")
+    log.print("Css replaced.", "green")
 
 if (sys.argv[1] == "css"):
     replaceCss()
@@ -97,7 +98,7 @@ gbl = build.create("mlgui", sys.argv)
 gbl.flags = ["-std=c++17"]
 
 widgets_gen = widgets.get()
-print("Generating the widgets factory constructors...")
+log.print("Generating the widgets factory constructors...", "yellow")
 gbl.write("../src/WidgetsFactory_types_gen.h", widgets_gen["containersFactoryH"] + "\n" + widgets_gen["widgetsFactoryH"])
 gbl.write("../src/WidgetsFactory_types_impl_gen.h", widgets_gen["containersFactoryCpp"] + "\n" + widgets_gen["widgetsFactoryCpp"])
 gbl.write("../src/Widget_types_classes_gen.h", widgets_gen["classes"])
@@ -114,40 +115,34 @@ gbl.write("../src/Widget_creators_impl_fixed_gen.h", widgets_gen["widgetsCreator
 gbl.write("../src/Container_creators_impl_fixed_gen.h", widgets_gen["containersCreators_cpp"].replace("Box::", "Fixed::"))
 gbl.write("../src/Widget_types_widgets_classes_gen.h", widgets_gen["widgets_classes"])
 gbl.write("../src/creators_implpopover_gen.h", widgets_gen["popover_widgets_impl"])
-print("Widgets factory constructors generated.")
+log.print("Widgets factory constructors generated.", "green")
 
-print ("generating the widget events vectors and binding with impl...")
+log.print("generating the widget events vectors and binding with impl...", "yellow")
 events = widgets_events.get()
 gbl.write("../src/Widget_events_gen.h", events[0])
 gbl.write("../src/Widget_events_impl_gen.h", events[1])
 gbl.write("../src/Widget_events_trigger_impl_gen.h", events[2])
-print ("Widget events generated.")
+log.print("Widget events generated.", "green")
 
-print ("generating props subclasses...")
+log.print("generating props subclasses...")
 props_gen = props.props()
 gbl.write("../src/props_gen.h", props_gen["h"])
 gbl.write("../src/props_impl_gen.h", props_gen["cpp"])
-print ("props generated.")
+log.print("props generated.", "green")
 
 if ("gtk" not in sys.argv):
     #build for wasm
-    em = build.create("mlgui", sys.argv, "em++")
-    em.static = False
+    cpp = build.create("mlgui", sys.argv, "em++")
+    cpp.static = False
 
-    em.includes = includes
-    em.addToSrcs(srcs)
-    em.addToSrcs([
+    cpp.includes = includes
+    cpp.addToSrcs(srcs)
+    cpp.addToSrcs([
         "../src/em",
         ])
-    em.addEmiscriptenFlags()
-    em.addToLibs(libs)
-    em.definitions += defs
-
-    if("clean" in sys.argv or "clear" in sys.argv):
-        em.clean()
-        exit()
-    else:
-        em.build()
+    cpp.addEmiscriptenFlags()
+    cpp.addToLibs(libs)
+    cpp.definitions += defs
 
 if ("wasm" not in sys.argv):
     #build with g++
@@ -181,7 +176,7 @@ if not cpp.release :
         ])
     #cpp.flags += ["-fsanitize=thread"]
 
-elif cpp.release : 
+else : 
     #add the version dependencis for it
     cpp.addProject("/opt/mlapi/lib")
 

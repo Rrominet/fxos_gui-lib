@@ -304,5 +304,60 @@ namespace em
         }
         return false;
     }
+
+    std::vector<std::string> classes(const emval& dom)
+    {
+        std::vector<std::string> result;
+        auto classList = dom["classList"];
+        unsigned int length = classList["length"].as<unsigned int>();
+        for (unsigned int i = 0; i < length; i++)
+        {
+            result.push_back(classList[i].as<std::string>());
+        }
+        return result;
+    }
+
+    void clearClasses(const emval& dom)
+    {
+        removeClasses(dom, classes(dom));
+    }
+
+    void addCss(const emval& dom, const std::string& css)
+    {
+        element["style"].set("cssText", val(css));
+    }
+
+    //set the css dynamicly, equivalent of js dom.style.attr = "value;"
+    void setCss(const emval& dom, const std::string& attr, const std::string& value)
+    {
+        dom["style"].set(attr, value);
+    }
+
+    //set the html attribute tabindex to "1" if value == true, remove it otherwize
+    void setFocusable(const emval& dom, bool value)
+    {
+        if (value)
+        {
+            dom.call<void>("setAttribute", "tabindex", "1");
+        }
+        else
+        {
+            dom.call<void>("removeAttribute", "tabindex");
+        }
+    }
+
+    bool hovered(const emval& dom)
+    {
+        return dom.call<bool>("matches", val(":hover"));
+    }
+
+    float fontSize(const emval& dom)
+    {
+        val window = val::global("window");
+        val computedStyle = window.call<val>("getComputedStyle", dom);
+        std::string fontSize = computedStyle["fontSize"].as<std::string>();
+
+        return std::stof(fontSize);
+    }
 }
 

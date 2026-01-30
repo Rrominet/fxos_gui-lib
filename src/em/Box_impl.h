@@ -24,5 +24,9 @@ namespace ml
             void prepend(std::shared_ptr<ml::Widget> child);
 
             void remove(ml::Widget* child);
+
+            void moveChild(size_t from, size_t to);
+            void setSpacing(int space){}
+            int spacing() const{}
     };
 }

@@ -18,6 +18,12 @@ namespace ml
             void addCssClass(const std::string& cls);
             void removeCssClass(const std::string& cls);
 
+            void clearCssClasses();
+            void setCssClasses(const std::vector<std::string>& classes);
+            bool hadCssClass(const std::string& cls);
+
+            void addCss(const std::string& css);
+
             virtual void show();
             virtual void hide();
             bool isVisible();
@@ -26,6 +32,12 @@ namespace ml
 
             virtual void setHAlign(HAlignment align);
             virtual void setVAlign(VAlignment align);
+
+            virtual void setHExpand(bool value=true);
+            virtual void setVExpand(bool value=true);
+
+            void setHExpandSet(bool value=true){}
+            void setVExpandSet(bool value=true){}
 
             // this function should be called just after the constructor.
             // it create the widget itself (should be overriden in shild class)
@@ -41,6 +53,30 @@ namespace ml
             virtual std::string help();
 
             void addEventListener(Event event, const std::function<void(EventInfos&)>& callback);
+
+            virtual void setWidth(int w);
+            virtual void setHeight(int h);
+            virtual void setSize(int w, int h);
+
+            int width() const;
+            int height() const;
+
+            void setFocusable(bool value);
+            bool hovered() const;
+
+            void setCursor(const std::string& name);
+            void focus();
+
+            void setMargins(int left, int top, int right, int bottom);
+            void setMargins(int margin);
+            void setLeftMargin(int margin);
+            void setTopMargin(int margin);
+            void setRightMargin(int margin);
+            void setBottomMargin(int margin);
+
+            void redraw() const;
+
+            float fontSize() const;
 
         protected : 
             Widget* _abstract = nullptr;
