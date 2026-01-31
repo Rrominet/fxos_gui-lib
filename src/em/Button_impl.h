@@ -15,6 +15,10 @@ namespace ml
 
             virtual void _createWidget() override;
 
+            // tmp waiting for the global implementation gtk side
+            void mkLoading(){}
+            void stopLoading(){}
+
         protected:
             virtual void _addOnLeftUp(Event event, const std::function<void(EventInfos&)>& callback) override ;
     };

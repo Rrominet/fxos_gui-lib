@@ -52,7 +52,8 @@ namespace ml
 
     void Box_impl::moveChild(size_t from,size_t to)
     {
-        
+       // TODO : 
+       // implement it with diana
     }
 
     void Box_impl::setSpacing(int space)
@@ -63,6 +64,7 @@ namespace ml
 
     int Box_impl::spacing() const
     {
+        return 0;
         //TODO : Need to save the variable. 
     }
 }

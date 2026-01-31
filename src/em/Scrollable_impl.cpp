@@ -19,5 +19,4 @@ namespace ml
     {
         _dom->call<void>("appendChild", *child.dom()); 
     }
-
 }
