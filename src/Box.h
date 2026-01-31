@@ -69,7 +69,7 @@ namespace ml
             // if the type of your prop is NONE, the return ptr will be nullptr
             std::shared_ptr<ml::Box> appendPropBaseClass(Property* prop);
 
-            size_t childrenCount() const {return _children.size(); + _composedChildren.size();}
+            size_t childrenCount() const {return _children.size() + _composedChildren.size();}
 
             // swap the order of 2 children;
             // for now, lg if i and j are out of bounds and does nothing

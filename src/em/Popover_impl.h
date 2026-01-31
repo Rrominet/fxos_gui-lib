@@ -14,5 +14,8 @@ namespace ml
             virtual ~Popover_impl();
 
             virtual void _createWidget() override;
+
+            void setPosition(float x, float y);
+            void setAutoHide(bool v=true);
     };
 }

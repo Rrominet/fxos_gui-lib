@@ -1,6 +1,7 @@
 #pragma once
 #include "./Widget.h"
 #include "TextMetrics.h"
+#include "Color.h"
 
 #include <memory>
 #ifdef __EMSCRIPTEN__

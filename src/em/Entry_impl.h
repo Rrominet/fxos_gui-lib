@@ -15,6 +15,12 @@ namespace ml
             virtual ~Entry_impl();
 
             virtual void _createWidget() override;
+
+            void insertText(const std::string& text, int position);
+            void deleteText(unsigned int start, unsigned int end);
+            void setCursorPosition(unsigned int position);
+            int getCursorPosition() const;
+
             ENTRY_GET_SET_EM(std::string)
     };
 }

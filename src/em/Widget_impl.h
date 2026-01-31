@@ -1,6 +1,7 @@
 
 #pragma once
 #include "./em.h"
+#include "../enums.h"
 #include <memory>
 
 namespace ml
@@ -49,6 +50,16 @@ namespace ml
             virtual void setText(const std::string& text);
             virtual std::string text();
 
+            void setHtml(const std::string& html);
+            void setWordWrap(bool wrap);
+
+            void setTextJustify(HAlignment align);
+            void setWrap(bool wrap=true);
+            void setSelectable(bool sel=true);
+
+            void setEllipsizeMode(EllipsizeMode mode);
+            EllipsizeMode ellipsizeMode() const;
+
             virtual void setHelp(const std::string& help);
             virtual std::string help();
 
@@ -78,6 +89,18 @@ namespace ml
 
             float fontSize() const;
 
+            void scrollDown(double amount);
+            void scrollUp(double amount);
+
+            void scrollLeft(double amount);
+            void scrollRight(double amount);
+
+            void addOnXScroll(const std::function<void(double)>& cb);
+            void addOnYScroll(const std::function<void(double)>& cb);
+
+            double scrollX() const;
+            double scrollY() const;
+
         protected : 
             Widget* _abstract = nullptr;
 
@@ -87,5 +110,7 @@ namespace ml
 
             virtual void _addOnLeftUp(Event event, const std::function<void(EventInfos&)>& callback);
             virtual void _addOnChange(Event event, const std::function<void(EventInfos&)>& callback);
+
+            EllipsizeMode _ellipsizeMpde;
     };
 }

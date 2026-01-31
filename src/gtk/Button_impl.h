@@ -32,6 +32,8 @@ namespace ml
             virtual void _addOnMouseUp(Event event, const std::function<void (EventInfos&)>& callback) override ;
             virtual void _addOnLeftUp(Event event, const std::function<void (EventInfos&)>& callback) override ;
 
+            //FIXME : 
+            //This should be implemented directly in mlgui not in GTK - like this it's gonna be similar in em. (May will need to change the main element - box in a button one for the html coherency)
             std::shared_ptr<Gtk::Box> _box;
             std::shared_ptr<Gtk::Label> _label;
             std::shared_ptr<Gtk::Spinner> _spinner;

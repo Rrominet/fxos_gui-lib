@@ -68,4 +68,8 @@ namespace em
 
     bool hovered(const emval& dom);
     float fontSize(const emval& dom);
+
+    void scrollBy(const emval& dom, int x, int y);
+    int scrollTop(const emval& dom);
+    int scrollLeft(const emval& dom);
 }

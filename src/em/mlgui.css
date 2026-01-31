@@ -8,6 +8,12 @@
 {
     scrollbar-width: thin;
     scrollbar-color: #5d5d5d #282828;
+    user-select: none;
+}
+
+.selectable
+{
+    user-select: initial;
 }
 
 :focus,
@@ -296,4 +302,24 @@ input[type=checkbox]
 .window.main .title-bar
 {
     display: none;
+}
+
+.align-left
+{
+    text-align: left;
+}
+
+.align-right
+{
+    text-align: right;
+}
+
+.align-center
+{
+    text-align: center;
+}
+
+.align-fill
+{
+    text-align: left;
 }

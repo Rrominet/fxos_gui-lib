@@ -36,7 +36,7 @@ namespace ml
             template <typename W>
                 std::shared_ptr<W> child(size_t i);
 
-            size_t childrenCount() const {return _children.size(); + _composedChildren.size();}
+            size_t childrenCount() const {return _children.size() + _composedChildren.size();}
 
             bool containsChild(Widget* child);
             int childIndex(ml::Widget* child);

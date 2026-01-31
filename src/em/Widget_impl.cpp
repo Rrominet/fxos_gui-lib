@@ -90,7 +90,56 @@ namespace ml
 
     std::string Widget_impl::text()
     {
-        return (*_dom)["innerHTML"].as<std::string>();
+        return (*_dom)["innerText"].as<std::string>();
+    }
+
+    void Widget_impl::setHtml(const std::string& html)
+    {
+        _dom->set("innerHTML", html);
+    }
+
+    void Widget_impl::setWordWrap(bool wrap)
+    {
+        //TODO : need to check css attributes on the web
+    }
+
+    void Widget_impl::setTextJustify(HAlignment align)
+    {
+        em::removeClasses(*_dom, "align-left,align-right,align-center,align-fill");
+        if (align == LEFT)
+            this->addCssClass("align-left");
+        else if (align == RIGHT)
+            this->addCssClass("align-right");
+        else if (align == CENTER)
+            this->addCssClass("align-center");
+        else if (align == FILL)
+            this->addCssClass("align-fill");
+    }
+
+    void Widget_impl::setWrap(bool wrap)
+    {
+        //TODO : need to check css attributes on the web
+        //AND need to check the difference with wrap and word wrap in gtk to get a similar behavior
+    }
+
+    void Widget_impl::setSelectable(bool sel)
+    {
+        if (sel)
+            this->addCssClass("selectable");
+        else 
+            this->removeCssClass("selectable");
+    }
+
+    void Widget_impl::setEllipsizeMode(EllipsizeMode mode)
+    {
+        _ellipsizeMpde = mode;
+        //TODO in css
+    }
+
+    EllipsizeMode Widget_impl::ellipsizeMode() const
+    {
+        return _ellipsizeMpde;
+        //TODO in css
     }
 
     void Widget_impl::setHelp(const std::string& help)
@@ -362,5 +411,45 @@ namespace ml
     float Widget_impl::fontSize() const
     {
         return em::fontSize(*_dom);
+    }
+
+    void Widget_impl::scrollDown(double amount)
+    {
+        em::scrollBy(*_dom, 0, amount);
+    }
+
+    void Widget_impl::scrollUp(double amount)
+    {
+        em::scrollBy(*_dom, 0, -amount);
+    }
+
+    void Widget_impl::scrollLeft(double amount)
+    {
+        em::scrollBy(*_dom, amount, 0);
+    }
+
+    void Widget_impl::scrollRight(double amount)
+    {
+        em::scrollBy(*_dom, -amount, 0);
+    }
+
+    void Widget_impl::addOnXScroll(const std::function<void(double)>& cb)
+    {
+        //TODO : need to check the event listener in dom
+    }
+
+    void Widget_impl::addOnYScroll(const std::function<void(double)>& cb)
+    {
+        //TODO : need to check the event listener in dom
+    }
+
+    double Widget_impl::scrollX() const
+    {
+        return em::scrollLeft(*_dom);
+    }
+
+    double Widget_impl::scrollY() const
+    {
+        return em::scrollTop(*_dom);
     }
 }

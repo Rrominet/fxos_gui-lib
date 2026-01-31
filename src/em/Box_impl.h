@@ -26,7 +26,7 @@ namespace ml
             void remove(ml::Widget* child);
 
             void moveChild(size_t from, size_t to);
-            void setSpacing(int space){}
-            int spacing() const{}
+            void setSpacing(int space);
+            int spacing() const;
     };
 }

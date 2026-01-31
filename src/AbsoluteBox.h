@@ -43,7 +43,7 @@ namespace ml
             void removeChild(ml::Widget* child);
             void removeChild(ml::ComposedWidget* child);
 
-            size_t childrenCount() const {return _children.size(); + _composedChildren.size();}
+            size_t childrenCount() const {return _children.size() + _composedChildren.size();}
 
             virtual void init() override;
             virtual void init(ml::Scrollable* scrollable);

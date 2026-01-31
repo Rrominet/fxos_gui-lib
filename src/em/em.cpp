@@ -359,5 +359,20 @@ namespace em
 
         return std::stof(fontSize);
     }
+
+    void scrollBy(const emval& dom, int x, int y)
+    {
+        dom.call<int, int>("scrollBy", x, y);
+    }
+
+    int scrollTop(const emval& dom)
+    {
+        return dom["scrollTop"].as<int>();
+    }
+
+    int scrollLeft(const emval& dom)
+    {
+        return dom["scrollLeft"].as<int>();
+    }
 }
 

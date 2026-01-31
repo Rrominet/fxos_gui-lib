@@ -14,5 +14,8 @@ namespace ml
             virtual ~WebView_impl();
 
             virtual void _createWidget() override;
+
+            void setURI(const std::string& uri);
+            void readFile(const std::string& path);
     };
 }

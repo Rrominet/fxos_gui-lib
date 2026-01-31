@@ -68,6 +68,7 @@ namespace ml
 
     void Image_impl::loadFromMemory(const std::vector<unsigned char>& buf, ImageFormat format)
     {
+        //TODO do the other format
         if (format == JPEG)
         {
             auto loader = Gdk::PixbufLoader::create("jpeg");
