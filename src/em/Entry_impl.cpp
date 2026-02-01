@@ -21,27 +21,31 @@ namespace ml
         (*_dom)["classList"].call<void, std::string>("add", "entry");
     }
 
+    //insert text at the given position in the html "input" that is contains in the _dom
     void Entry_impl::insertText(const std::string& text,int position)
     {
-        //TODO : Need to check how to do this in js
+        std::string currentValue = (*_dom)["value"].as<std::string>();
+        std::string newValue = currentValue.substr(0, position) + text + currentValue.substr(position);
+        _dom->set("value", newValue);
     }
 
     void Entry_impl::deleteText(unsigned int start,unsigned int end)
     {
-
-        //TODO : Need to check how to do this in js
+        std::string currentValue = (*_dom)["value"].as<std::string>();
+        if (start >= currentValue.length()) return;
+        if (end > currentValue.length()) end = currentValue.length();
+        std::string newValue = currentValue.substr(0, start) + currentValue.substr(end);
+        _dom->set("value", newValue);
     }
 
     void Entry_impl::setCursorPosition(unsigned int position)
     {
-
-        //TODO : Need to check how to do this in js
+        (*_dom).call<void>("setSelectionRange", position, position);
     }
 
     int Entry_impl::getCursorPosition() const
     {
-
-        //TODO : Need to check how to do this in js
+        return (*_dom)["selectionStart"].as<int>();
     }
 
 }

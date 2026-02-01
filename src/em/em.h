@@ -5,6 +5,7 @@
 #include <emscripten/val.h>
 #include <functional>
 #include "../enums.h"
+#include "geometry.h"
 
 typedef emscripten::val emval;
 
@@ -21,11 +22,6 @@ namespace em
     // css classes a separated by spaces
     emval newNode(const emval& parent, const std::string tag, 
             const std::string& html="", 
-            const std::string& classes="", 
-            const std::string& id="");
-
-    emval newNode(const emval& parent, const std::string tag, 
-            emval& child,
             const std::string& classes="", 
             const std::string& id="");
 
@@ -72,4 +68,23 @@ namespace em
     void scrollBy(const emval& dom, int x, int y);
     int scrollTop(const emval& dom);
     int scrollLeft(const emval& dom);
+
+    void append(const emval& parent, const emval& child);
+    void prepend(const emval& parent, const emval& child);
+    void insertAfter(const emval& parent, const emval& child, const emval& ref);
+    void insertBefore(const emval& parent, const emval& child, const emval& ref);
+
+    void remove(const emval& parent, const emval& child);
+    emval& parent(const emval& dom);
+
+    void setCustomData(emval* dom, const std::any& data);
+
+    //if nothing founded, it returns a empty any
+    std::any& customData(emval* dom);
+
+    //set the left and top attr style in px from x and y values
+    void move(const emval& dom, double x, double y);
+
+    //return (0, 0) if not founded.
+    geometry::Point<double> position(const emval& dom);
 }

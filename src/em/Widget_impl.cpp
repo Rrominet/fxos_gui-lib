@@ -3,6 +3,7 @@
 #include "../Widget.h"
 #include "./em.h"
 #include "../EventInfos.h"
+#include "enums.h"
 
 namespace ml
 {
@@ -100,7 +101,10 @@ namespace ml
 
     void Widget_impl::setWordWrap(bool wrap)
     {
-        //TODO : need to check css attributes on the web
+        if (wrap)
+            em::setCss(*_dom, "word-wrap", "break-word");
+        else
+            em::setCss(*_dom, "word-wrap", "normal");
     }
 
     void Widget_impl::setTextJustify(HAlignment align)
@@ -133,13 +137,18 @@ namespace ml
     void Widget_impl::setEllipsizeMode(EllipsizeMode mode)
     {
         _ellipsizeMpde = mode;
-        //TODO in css
+        em::removeClasses(*_dom, "ellipsize-start,ellipsize-middle,ellipsize-end");
+        if (mode == ELLIPSIZE_START)
+            this->addCssClass("ellipsize-start");
+        else if (mode == ELLIPSIZE_MIDDLE)
+            this->addCssClass("ellipsize-middle");
+        else if (mode == ELLIPSIZE_END)
+            this->addCssClass("ellipsize-end");
     }
 
     EllipsizeMode Widget_impl::ellipsizeMode() const
     {
         return _ellipsizeMpde;
-        //TODO in css
     }
 
     void Widget_impl::setHelp(const std::string& help)

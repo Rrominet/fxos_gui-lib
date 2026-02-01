@@ -7,9 +7,11 @@ namespace ml
     Fixed_impl::Fixed_impl(Fixed* abstract) : Widget_impl((Widget*)abstract)
     {
     }
+
     void Fixed_impl::_createWidget()
     {
         _gtk = std::make_shared<Gtk::Fixed>();
+        this->addCssClass("fixed");
         // implement sepecific stuff here if necessecary.
     }
 

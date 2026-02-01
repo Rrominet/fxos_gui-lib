@@ -28,5 +28,8 @@ namespace ml
             void moveChild(size_t from, size_t to);
             void setSpacing(int space);
             int spacing() const;
+    
+    private:
+        int _spacing = 0;
     };
 }

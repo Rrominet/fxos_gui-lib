@@ -7,6 +7,8 @@
 
 namespace em
 {
+    std::unordered_map<emval* , std::any> _custom_datas;
+
     // represent a counter for each dom element created.
     long global_id = 0;
 
@@ -213,14 +215,6 @@ namespace em
         return node;
     }
 
-    emval newNode(const emval& parent, const std::string tag, 
-            emval& child,
-            const std::string& classes,
-            const std::string& id)
-    {
-        // TODO
-    }
-
     void show(const emval& dom)
     {
         dom["style"].set("display", "");
@@ -373,6 +367,79 @@ namespace em
     int scrollLeft(const emval& dom)
     {
         return dom["scrollLeft"].as<int>();
+    }
+
+    void append(const emval& parent, const emval& child)
+    {
+        parent.call<void>("appendChild", child);
+    }
+
+    void prepend(const emval& parent, const emval& child)
+    {
+        parent.call<void>("prepend", child);
+    }
+
+    void insertAfter(const emval& parent, const emval& child, const emval& ref)
+    {
+        auto nextSibling = ref["nextSibling"];
+        if (nextSibling.isNull() || nextSibling.isUndefined())
+            parent.call<void>("appendChild", child);
+        else
+            parent.call<void>("insertBefore", child, nextSibling);
+    }
+
+    void insertBefore(const emval& parent, const emval& child, const emval& ref)
+    {
+        parent.call<void>("insertBefore", child, ref);
+    }
+
+    void remove(const emval& parent, const emval& child)
+    {
+        parent.call<void>("removeChild", child);
+    }
+
+    emval& parent(const emval& dom)
+    {
+        return dom["parentNode"];
+    }
+
+    void setCustomData(emval* dom, const std::any& data)
+    {
+        _customData[dom] = data;    
+    }
+
+    std::any& customData(emval* dom)
+    {
+        if (_customData.find(dom) == _customData.end())
+        {
+            _customData[dom] = std::any();
+            lg("The custom data asked was not found, returning an empty any");
+        }
+        return _customData[dom];
+    }
+
+    void move(const emval& dom, double x, double y)
+    {
+        dom["style"].set("left", std::to_string(x) + "px");
+        dom["style"].set("top", std::to_string(y) + "px");
+
+        setCusomData(&dom, geometry::Point<double>(x, y));
+    }
+
+    geometry::Point<double> position(const emval& dom)
+    {
+        geomtry::Point<double> _r(0, 0);
+        try
+        {
+            auto& any = getCusomData(&dom);
+            _r = std::any_cast<geometry::Point<double>>(any);
+        }
+        catch(const std::exception& e)
+        {
+            lg("Warning : The cast failed for em::position, returning (0, 0)");
+        }
+
+        return _r;    
     }
 }
 

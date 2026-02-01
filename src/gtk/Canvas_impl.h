@@ -53,11 +53,13 @@ namespace ml
             TextMetrics textMetrics(const std::string& text, const TextStyle& style = {12.0, false, false, false, false, "sans-serif"});
 
             void drawImage(std::shared_ptr<Gdk::Pixbuf> px, int x, int y, int pivotx = 0, int pivoty = 0, float scaleX = 1.0, float scaleY = 1.0);
-            //
-        //for now it's sync maybe see if it need a async one
+
+        //for now it's sync maybe see if it needed a async one
             void drawImage(const std::string& path, int x, int y, int pivotx = 0, int pivoty = 0, float scaleX = 1.0, float scaleY = 1.0);
+
             Cairo::RefPtr<Cairo::Context> cr(){return _cr;}
             Cairo::RefPtr<Cairo::Context> cr()const {return _cr;}
+
         private : 
             bool _inside_draw = false;
             void _check_inside() const;

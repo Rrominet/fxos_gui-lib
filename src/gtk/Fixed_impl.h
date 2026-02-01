@@ -22,6 +22,7 @@ namespace ml
             void append(std::shared_ptr<ml::Widget> child);
             void remove(ml::Widget* child);
 
+            //setPosition equivalent(it does not add to the existing translation)
             void move(ml::Widget* w, double x, double y);
             geometry::Point<double> widgetPos(ml::Widget* w);
 

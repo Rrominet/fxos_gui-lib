@@ -52,19 +52,36 @@ namespace ml
 
     void Box_impl::moveChild(size_t from,size_t to)
     {
-       // TODO : 
-       // implement it with diana
+        if (from == to) return;
+        
+        emval children = (*_dom)["children"];
+        int childCount = children["length"].as<int>();
+        
+        if (from >= childCount || to >= childCount) return;
+        
+        emval childToMove = children[from];
+        
+        if (to >= childCount - 1)
+        {
+            _dom->call<void, emval&>("appendChild", childToMove);
+        }
+        else
+        {
+            emval referenceChild = children[to > from ? to + 1 : to];
+            _dom->call<void, emval&, emval&>("insertBefore", childToMove, referenceChild);
+        }
+        
+        _abstract->window()->impl()->setMainHeight();
     }
 
     void Box_impl::setSpacing(int space)
     {
-        //TODO : spacing is the px between each child. 
-        //Certainly something to implement in css here... Maybe ?
+        _spacing = space;
+        (*_dom)["style"].set("gap", std::to_string(space) + "px");
     }
 
     int Box_impl::spacing() const
     {
-        return 0;
-        //TODO : Need to save the variable. 
+        return _spacing;
     }
 }
