@@ -323,3 +323,37 @@ input[type=checkbox]
 {
     text-align: left;
 }
+
+.ellipsize-start
+{
+    direction: rtl;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+}
+
+.ellipsize-middle,
+.ellipsize-end
+{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.overlay
+{
+    position: relative;
+    display: inline-block; /* Size to base child */
+}
+
+.overlay .overlay-background
+{
+
+}
+
+.overlay .overlay-child
+{
+    position: absolute;
+    pointer-events: auto; /* Or 'none' for pass-through */
+}

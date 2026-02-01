@@ -22,7 +22,11 @@ namespace ml
 
     void Image_impl::load(const std::string& filepath, const std::function<void()>& callback)
     {
-        //TODO : Check how to add the addeventlistener on load
+        if (callback) {
+            em::addEventListener(*_dom, "load", [callback](emval event) {
+                callback();
+            });
+        }
         _dom->set("src", filepath);
     }
 
@@ -32,13 +36,23 @@ namespace ml
         //TODO check if it's possible in js ???
     }
 
-    ImageState state()
+    ImageState Image_impl::state()
     {
-
+        // Check if image has loaded by checking if naturalWidth > 0
+        int naturalWidth = (*_dom)["naturalWidth"].as<int>();
+        if (naturalWidth > 0) {
+            return ImageState::Loaded;
+        }
+        // Check if there's an error
+        bool complete = (*_dom)["complete"].as<bool>();
+        if (complete && naturalWidth == 0) {
+            return ImageState::Error;
+        }
+        return ImageState::Loading;
     }
 
     void Image_impl::setWidth(int w)
     {
-        em::setCss(*_dom, "width", std::to_string(w) + "px")
+        em::setCss(*_dom, "width", std::to_string(w) + "px");
     }
 }

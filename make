@@ -145,7 +145,7 @@ if ("gtk" not in sys.argv):
     cpp.definitions += defs
 
 if ("wasm" not in sys.argv):
-    #build with g++
+    #build with gtkmm (gtk4 c++ binding)
     cpp = build.create("mlgui", sys.argv)
     cpp.static = False
 
@@ -169,16 +169,16 @@ if ("wasm" not in sys.argv):
         "fmodL",
         ])
 
-#should add a way to add the version of mlapi in dependencies here.
-if not cpp.release : 
-    cpp.addToLibs([
-        fm + "/build/libmlapi.so",
-        ])
-    #cpp.flags += ["-fsanitize=thread"]
+    #should add a way to add the version of mlapi in dependencies here.
+    if not cpp.release : 
+        cpp.addToLibs([
+            fm + "/build/libmlapi.so",
+            ])
+        #cpp.flags += ["-fsanitize=thread"]
 
-else : 
-    #add the version dependencis for it
-    cpp.addProject("/opt/mlapi/lib")
+    else : 
+        #add the version dependencis for it
+        cpp.addProject("/opt/mlapi/lib")
 
 if ("shared" in sys.argv):
     cpp.shared = True
