@@ -164,6 +164,20 @@ namespace ml
         _children.swap(i, j);
     }
 
+    void Box::swap(Widget* a,Widget* b)
+    {
+        int idx_a = this->childIndex(a);
+        int idx_b = this->childIndex(b);
+        
+        if (idx_a == -1 || idx_b == -1)
+        {
+            lg("Warning in Box::swap: one or both widgets not found in children.");
+            return;
+        }
+        
+        this->swap((size_t)idx_a, (size_t)idx_b);
+    }
+
     void Box::moveChildTop(Widget* child)
     {
         auto idx = this->childIndex(child);

@@ -130,12 +130,23 @@ namespace ml
             bool isComposed()const {return false;}
             void redraw()const {_impl->redraw();};
 
+            void setDraggable();
+            bool isDragging() const;
+
         protected : 
             std::shared_ptr<Widget_impl> _impl;
             ml::Widget* _parent = nullptr;
             ml::Window* _window = nullptr;
 
             bool _allowEvents = true;
+
+            bool _dragging = false;
+            bool _draggable_setted = false;
+            bool _first_drag_event = false;
+
+            ml::Vec<std::function<void(EventInfos&)>> _drag_start;
+            ml::Vec<std::function<void(EventInfos&)>> _drag_end;
+            ml::Vec<std::function<void(EventInfos&)>> _drag_move;
 
 #include "./Widget_events_gen.h"
     };
