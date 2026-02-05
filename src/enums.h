@@ -33,6 +33,9 @@ namespace ml
         SHOWN,
         HIDDEN,
         RESIZE,
+        DRAG_START,
+        DRAG_END,
+        DRAGGING,
     };
 
     enum HAlignment

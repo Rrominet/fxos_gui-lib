@@ -6,7 +6,7 @@ namespace ml
     struct EventInfos
     {
         double x, y, dx, dy, mvtx, mvty;
-        int click_numbers;
+        int click_numbers = -1;
         unsigned int  keyval;
         unsigned int  keycode;
         std::string key;
