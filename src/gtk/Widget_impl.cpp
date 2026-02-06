@@ -555,4 +555,10 @@ namespace ml
             vec.push_back(classes[i]);
         _gtk->set_css_classes(vec);
     }
+
+    geometry::Point<double> Widget_impl::position() const 
+    {
+        auto alloc = _gtk->get_allocation();
+        return geometry::Point<double>(alloc.get_x(), alloc.get_y());
+    }
 }

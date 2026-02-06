@@ -5,6 +5,7 @@
 #include "./Widget.h"
 #include "vec.h"
 #include "./enums.h"
+#include "geometry.h"
 
 
 #ifdef __EMSCRIPTEN__
