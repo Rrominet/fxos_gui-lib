@@ -10,6 +10,7 @@
 #include <gtkmm/cssprovider.h>
 #include <memory>
 #include "../enums.h"
+#include "geometry.h"
 
 namespace ml
 {
@@ -65,6 +66,8 @@ namespace ml
 
             int width() const{return _gtk->get_allocated_width();}
             int height() const{return _gtk->get_allocated_height();}
+
+            geometry::Point<double> position() const;
 
             void setFocusable(bool value){_gtk->set_focusable(value);}
             bool hovered() const{return _hovered;}

@@ -16,6 +16,7 @@
 #include "./EventInfos.h"
 #include "vec.h"
 #include "observers/Observer.h"
+#include "geometry.h"
 #ifdef __EMSCRIPTEN__
 #include "./em/Widget_impl.h"
 #else
@@ -111,6 +112,18 @@ namespace ml
             int width() const{return _impl->width();}
             int height() const{return _impl->height();}
 
+            //coordonates are relative from it parent.
+            //it's not from the window or even from the screen
+            geometry::Point<double> position() const {return _impl->position();}
+            double x() const {return _impl->position().x;}
+            double y() const {return _impl->position().y;}
+
+            double left() const {return _impl->position().x;}
+            double top() const {return _impl->position().y;}
+
+            double right() const {return _impl->position().x + this->width();}
+            double bottom() const {return _impl->position().y + this->height();}
+
             void setFocusable(bool value){_impl->setFocusable(value);}
             bool hovered() const{return _impl->hovered();}
 
@@ -132,6 +145,9 @@ namespace ml
 
             void setDraggable();
             bool isDragging() const;
+
+            //coordonates needs to be relative to its parent
+            bool isInside(double x, double y) const;
 
         protected : 
             std::shared_ptr<Widget_impl> _impl;

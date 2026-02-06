@@ -296,6 +296,7 @@ namespace ml
         return ml::app()->widgetsFactory().createImage(icon, this);
     }
 
+
 #include "./Widget_creators_impl_gen.h"
 #include "./Container_creators_impl_gen.h"
 }

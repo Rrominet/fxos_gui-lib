@@ -161,4 +161,12 @@ namespace ml
         this->addEventListener(Event::RIGHT_DOWN, f);
     }
 
+    bool Widget::isInside(double x,double y) const
+    {
+        auto pos = this->position();        
+        auto r = this->right();
+        auto b = this->bottom();
+
+        return (x > pos.x && x < r && y > pos.y && y < b);
+    }
 }
