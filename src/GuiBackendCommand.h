@@ -52,6 +52,9 @@ namespace ml
             bool _waiting = false;
             bool _useDefaultErrorWindow = true;
 
+            //mean sync in the backend not in the gui. It will force other backend command to wait until this one has been executed.
+            bool _sync = false; //bp cgs
+
         public : 
 #include "./GuiBackendCommand_gen.h"
     };
