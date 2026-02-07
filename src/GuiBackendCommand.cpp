@@ -64,7 +64,7 @@ namespace ml
                 b->mkLoading();
             try
             {
-                ipc::call(_process, _function, _jsonArgs, _cb);
+                ipc::call(_process, _function, _jsonArgs, _cb, _sync);
                 _waiting = true; //changed
             }
             catch(const std::exception& e)
