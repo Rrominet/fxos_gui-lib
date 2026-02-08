@@ -11,6 +11,7 @@
 #include <memory>
 #include "../enums.h"
 #include "geometry.h"
+#include "Ret.h"
 
 namespace ml
 {
@@ -31,7 +32,8 @@ namespace ml
             void setCssClasses(const std::vector<std::string>& classes);
             bool hadCssClass(const std::string& cls){return _gtk->has_css_class(cls);}
 
-            void addCss(const std::string& css);
+            ml::Ret<> addCss(const std::string& css);
+            void addCss(const std::string& attr, const std::string& value);
 
             virtual void show(){_gtk->show();}
             virtual void hide(){_gtk->hide();}
@@ -139,5 +141,11 @@ namespace ml
             virtual void _addOnHidden(Event event, const std::function<void (EventInfos&)>& callback);
 
             virtual void _addOnResize(Event event, const std::function<void (EventInfos&)>& callback);
+
+            void _createCssProviderIfNeeded();
+
+            std::unordered_map<std::string, std::string>_css;
+            std::string _generatedCss() const;
+            void _updateCssProvider();
     };
 }
