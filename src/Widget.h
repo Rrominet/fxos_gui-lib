@@ -17,6 +17,7 @@
 #include "vec.h"
 #include "observers/Observer.h"
 #include "geometry.h"
+#include "Ret.h"
 #ifdef __EMSCRIPTEN__
 #include "./em/Widget_impl.h"
 #else
@@ -47,7 +48,8 @@ namespace ml
             void clearCssClasses(){_impl->clearCssClasses();}
             void setCssClasses(const std::vector<std::string>& classes){_impl->setCssClasses(classes);}
             bool hadCssClass(const std::string& cls){return _impl->hadCssClass(cls);}
-            void addCss(const std::string& css){_impl->addCss(css);}
+            ml::Ret<> addCss(const std::string& css){return _impl->addCss(css);}
+            void addCss(const std::string& attr, const std::string& value){_impl->addCss(attr, value);}
 
             virtual void show(){_impl->show();}
             virtual void hide(){_impl->hide();}

@@ -537,14 +537,46 @@ namespace ml
         _gtk->set_margin_bottom(margin);
     }
 
-    void Widget_impl::addCss(const std::string& css)
+    void Widget_impl::_createCssProviderIfNeeded()
     {
         if (!_cssProvider)        
         {
             _cssProvider = Gtk::CssProvider::create();
             _gtk->get_style_context()->add_provider(_cssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
         }
-        _cssProvider->load_from_string(css);
+    }
+
+    std::string Widget_impl::_generatedCss() const
+    {
+        std::string res; 
+        for (auto& c : _css)
+            res += c.first + ":" + c.second + ";";
+        return res;
+    }
+
+    void Widget_impl::_updateCssProvider()
+    {
+        std::string gcss = "*{" + _generatedCss() + ";}";
+        _cssProvider->load_from_string(gcss);
+    }
+
+    ml::Ret<> Widget_impl::addCss(const std::string& css)
+    {
+        _createCssProviderIfNeeded();
+        auto tmp = str::split(css,":");
+        if (tmp.size() != 2)
+            return ml::ret::fail("Invalid css given, couldn't split by ':'. Given : " + css);
+
+        _css[tmp[0]] = tmp[1];
+        _updateCssProvider();
+        return ml::ret::success();
+    }
+
+    void Widget_impl::addCss(const std::string& attr,const std::string& value)
+    {
+        _createCssProviderIfNeeded();
+        _css[attr] = value;
+        _updateCssProvider();
     }
 
     void Widget_impl::setCssClasses(const std::vector<std::string>& classes)
