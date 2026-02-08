@@ -54,6 +54,8 @@ namespace ml
             virtual void show(){_impl->show();}
             virtual void hide(){_impl->hide();}
             bool isVisible(){return _impl->isVisible();}
+            bool visible(){return _impl->isVisible();}
+            void setVisible(bool value);
 
             void remove();
 

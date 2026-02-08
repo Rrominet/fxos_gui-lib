@@ -222,10 +222,17 @@ namespace ml
     {
         lg("Box::clear");
         lg("Removing " << _children.size() << " children");
-        for (size_t i = 0; i < _children.size(); i++)
-            this->removeChild(_children[i]);
-        _children.clear();
-        _composedChildren.clear();
+        while (_children.size() > 0)
+        {
+            this->removeChild(_children[0]);
+            lg("_children size : "<< _children.size());
+        }
+        while (_composedChildren.size() > 0)
+        {
+            this->removeChild(_composedChildren[0].get());
+            lg("_composedChildren size : "<< _composedChildren.size());
+        }
+
         lg("All children are removed.");
     }
 

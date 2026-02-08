@@ -169,4 +169,12 @@ namespace ml
 
         return (x > pos.x && x < r && y > pos.y && y < b);
     }
+
+    void Widget::setVisible(bool value)
+    {
+        if (value)        
+            this->show();
+        else 
+            this->hide();
+    }
 }
