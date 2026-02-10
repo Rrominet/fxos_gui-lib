@@ -113,8 +113,17 @@ namespace ml
                 event.preventDefault = false;
         });
 
-        this->addEventListener(Event::KEY_DOWN, [this](EventInfos& event) {
-                lg("keydown event (basic events)");
+
+        auto keyevents = [this](EventInfos& event)
+        {
+            lg("keydown event (basic events)");
+            auto focusedWidget = ml::app()->focusedWidget();
+            if(focusedWidget)
+            {
+                if (focusedWidget->isEditable())
+                    return;
+            }
+
             for (const auto& cmd : ml::app()->cmds().commands())  
             {
                 if (keybinds::match(cmd.second->keybind(), event))
@@ -146,7 +155,10 @@ namespace ml
                     return;
                 }
             }
-        });
+
+        };
+
+        this->addEventListener(Event::KEY_DOWN, keyevents);
     }
 
     void Window::createBaseUi()

@@ -68,7 +68,6 @@ namespace ml
 
             void unparent(){_parent = nullptr;}
 
-            virtual void _createWidget();
             virtual void init() {}
 
             // this is executes after the widget is parented.
@@ -141,7 +140,7 @@ namespace ml
             void setRightMargin(int margin){_impl->setRightMargin(margin);}
             void setBottomMargin(int margin){_impl->setBottomMargin(margin);}
 
-            //careful this value is computed so it could be long to call this repetidly, just cahce it because font size rarely change during the lifetime of a gui program.
+            //careful this value is computed so it could be long to call this repetidly, just cache it because font size rarely change during the lifetime of a gui program.
             float fontSize() const{return _impl->fontSize();}
 
             bool isComposed()const {return false;}
@@ -152,6 +151,9 @@ namespace ml
 
             //coordonates needs to be relative to its parent
             bool isInside(double x, double y) const;
+            bool isEditable() const {return _impl->isEditable();}
+            bool focused() const {return _impl->focused();}
+            bool containsFocus() const {return _impl->containsFocus();}
 
         protected : 
             std::shared_ptr<Widget_impl> _impl;
@@ -167,6 +169,8 @@ namespace ml
             ml::Vec<std::function<void(EventInfos&)>> _drag_start;
             ml::Vec<std::function<void(EventInfos&)>> _drag_end;
             ml::Vec<std::function<void(EventInfos&)>> _drag_move;
+
+            void _createBasicEvents();
 
 #include "./Widget_events_gen.h"
     };

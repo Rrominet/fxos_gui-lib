@@ -6,7 +6,9 @@
 #include <gtkmm/box.h>
 #include <gtkmm/layoutmanager.h>
 #include "../Window.h"
-#include "gtkmm/eventcontroller.h"
+#include <gtkmm/editable.h>
+#include <gtkmm/eventcontroller.h>
+#include <gtkmm/textview.h>
 
 namespace ml
 {
@@ -407,6 +409,7 @@ namespace ml
     void Widget_impl::_createBasicEvents()
     {
         lg("GTK : Widget_impl::createBasicEvents()");
+        _createControllerFocus();
         this->addEventListener(MOUSE_ENTER, [this](EventInfos&){_hovered=true;});
         this->addEventListener(MOUSE_LEAVE, [this](EventInfos&){_hovered=false;});
         lg("GTK : Widget_impl::createBasicEvents() done");
@@ -592,5 +595,16 @@ namespace ml
     {
         auto alloc = _gtk->get_allocation();
         return geometry::Point<double>(alloc.get_x(), alloc.get_y());
+    }
+
+    bool Widget_impl::isEditable() const
+    {
+        auto edit = dynamic_cast<Gtk::Editable*>(_gtk.get());        
+        if(edit)
+            return true;
+        auto textview = dynamic_cast<Gtk::TextView*>(_gtk.get());
+        if (textview)
+            return true;
+        return false;
     }
 }
