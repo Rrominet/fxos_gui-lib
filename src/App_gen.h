@@ -24,6 +24,10 @@ Window* main(){return _main;}
 const Window* main() const {return _main;}
 
 
+ml::Widget* focusedWidget(){return _focusedWidget;}
+const ml::Widget* focusedWidget() const {return _focusedWidget;}
+void setFocusedWidget(ml::Widget* focusedWidget){_focusedWidget = focusedWidget;}
+
 ml::MenusFactory& menusFactory(){return _menusFactory;}
 const ml::MenusFactory& menusFactory() const {return _menusFactory;}
 

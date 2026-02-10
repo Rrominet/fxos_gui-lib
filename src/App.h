@@ -200,6 +200,7 @@ namespace ml
 
             Window* _focused = nullptr; //bp cgs
             Window* _main = nullptr; //bp cg
+            ml::Widget* _focusedWidget = nullptr; //bp cgs
 
             ml::MenusFactory _menusFactory; //bp cg
             ml::PropertiesManager _props; //bp cg

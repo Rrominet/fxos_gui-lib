@@ -44,105 +44,72 @@ def containerCode(cType) :
     for c in ls : 
         factoryH += "std::shared_ptr<ml::*type*> create*type*(ml::*ContainerType** parent);\n".replace("*ContainerType*", c)
 
-    factoryCpp = """
-    std::shared_ptr<ml::*type*> WidgetsFactory::create*type*()
-    {
+    create = """
         ml::app()->checker().set("can-construct-widget", true);
         auto widget = std::make_shared<ml::*type*>();
         widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
         widget->_impl->_createWidget();
         widget->_impl->_createBasicEvents();
+        widget->_createBasicEvents();
         ml::app()->checker().set("can-construct-widget", false);
-
+    """
+    init_events = """
         widget->init();
         widget->setEvents();
+    """
+    factoryCpp = """
+    std::shared_ptr<ml::*type*> WidgetsFactory::create*type*()
+    {
+        """ + create + init_events + """
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Window* parent)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
-
+        """ + create + """
         parent->setChild(widget);
-        widget->init();
-        widget->setEvents();
+        """ + init_events + """
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Popover* parent)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
-
+        """ + create + """
         parent->setChild(widget);
-        widget->init();
-        widget->setEvents();
+        """ + init_events + """
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Box* parent)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         parent->append(widget);
-        widget->init();
-        widget->setEvents();
+        """ + init_events + """
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::AbsoluteBox* parent)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         parent->append(widget);
-        widget->init();
-        widget->setEvents();
+        """ + init_events + """
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Fixed* parent)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         parent->append(widget);
-        widget->init();
-        widget->setEvents();
+        """ + init_events + """
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Scrollable* parent)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         widget->setParent(&parent->content());
         parent->append(widget);
-        widget->init();
-        widget->setEvents();
+        """ + init_events + """
         return widget;
     }
 
@@ -155,102 +122,80 @@ def widgetCode(cType) :
     for c in containers:
         factoryH += "\nstd::shared_ptr<ml::*type*> create*type*(ml::" + c +" * parent, const std::string& text = \"\");"
 
-    factoryCpp = """
-    std::shared_ptr<ml::*type*> WidgetsFactory::create*type*()
-    {
+    create = """
         ml::app()->checker().set("can-construct-widget", true);
         auto widget = std::make_shared<ml::*type*>();
         widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
         widget->_impl->_createWidget();
         widget->_impl->_createBasicEvents();
+        widget->_createBasicEvents();
         ml::app()->checker().set("can-construct-widget", false);
+    """
+    init_events = """
         widget->init();
         widget->setEvents();
+    """
+
+    factoryCpp = """
+    std::shared_ptr<ml::*type*> WidgetsFactory::create*type*()
+    {
+        """ + create + """
+        """ + init_events + """
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Box* parent,const std::string& text)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         widget->setParent(parent);
         parent->append(widget);
-        widget->init();
+        """ + init_events + """
         if (!text.empty())
             widget->setText(text);
-        widget->setEvents();
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Fixed* parent,const std::string& text)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         widget->setParent(parent);
         parent->append(widget);
-        widget->init();
+        """ + init_events + """
         if (!text.empty())
             widget->setText(text);
-        widget->setEvents();
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::AbsoluteBox* parent,const std::string& text)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         widget->setParent(parent);
         parent->append(widget);
-        widget->init();
+        """ + init_events + """
         if (!text.empty())
             widget->setText(text);
-        widget->setEvents();
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Scrollable* parent,const std::string& text)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         widget->setParent(parent);
         parent->append(widget);
-        widget->init();
+        """ + init_events + """
         if (!text.empty())
             widget->setText(text);
-        widget->setEvents();
         return widget;
     }
 
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*(ml::Popover* parent,const std::string& text)
     {
-        ml::app()->checker().set("can-construct-widget", true);
-        auto widget = std::make_shared<ml::*type*>();
-        widget->_impl = std::make_shared<ml::*itype*_impl>(widget.get());
-        widget->_impl->_createWidget();
-        widget->_impl->_createBasicEvents();
-        ml::app()->checker().set("can-construct-widget", false);
+        """ + create + """
         widget->setParent(parent);
         parent->content()->append(widget);
-        widget->init();
+        """ + init_events + """
         if (!text.empty())
             widget->setText(text);
-        widget->setEvents();
         return widget;
     }
 """

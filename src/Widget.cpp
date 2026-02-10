@@ -23,11 +23,17 @@ namespace ml
             this->show();
     }
 
-    void Widget::_createWidget()
+    void Widget::_createBasicEvents()
     {
-        _impl = std::make_shared<Widget_impl>(this);
-        _impl->_createWidget();
-        _impl->_createBasicEvents();
+        this->addEventListener(FOCUS, [this](EventInfos&){
+                lg(this << " focused.");
+                    ml::app()->setFocusedWidget(this);
+                }); 
+
+        this->addEventListener(UNFOCUS, [this](EventInfos&){
+                    if (ml::app()->focusedWidget() == this)
+                        ml::app()->setFocusedWidget(nullptr);
+                }); 
     }
 
     void Widget::remove()

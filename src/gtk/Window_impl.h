@@ -49,6 +49,7 @@ namespace ml
 
             void addOnClose(const std::function<void()>& callback){_onclose.push_back(callback);}
             void addOnHide(const std::function<void()>& callback){_onhide.push_back(callback);}
+            ml::Widget* focusedWidget() const;
 
         protected : 
             Window* _win = nullptr;

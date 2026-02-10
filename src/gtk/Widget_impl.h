@@ -90,6 +90,12 @@ namespace ml
 
             void redraw() const{_gtk->queue_draw();}
 
+            bool isEditable() const;
+            bool focused() const {return _controller_focus->is_focus();}
+
+            //return true is one of its children contains focus too.
+            bool containsFocus() const {return _controller_focus->contains_focus();}
+
         protected : 
             Widget* _abstract = nullptr;
             std::shared_ptr<Gtk::Widget> _gtk;
