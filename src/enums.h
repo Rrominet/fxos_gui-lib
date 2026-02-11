@@ -10,7 +10,8 @@ namespace ml
 
     enum Event
     {
-        CLICK = 0,
+        NONE = 0,
+        CLICK,
         DOUBLE_CLICK,
         MOUSE_ENTER,
         MOUSE_LEAVE,

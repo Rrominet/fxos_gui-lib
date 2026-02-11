@@ -52,3 +52,7 @@ ml::Events& events(){return _events;}
 const ml::Events& events() const {return _events;}
 
 
+std::unordered_map<Event,bool>& stopEventPropagationMap(){return _stopEventPropagationMap;}
+const std::unordered_map<Event,bool>& stopEventPropagationMap() const {return _stopEventPropagationMap;}
+
+

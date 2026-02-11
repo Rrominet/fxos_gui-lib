@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "./enums.h"
 
 namespace ml
 {
@@ -10,10 +11,12 @@ namespace ml
         unsigned int  keyval;
         unsigned int  keycode;
         std::string key;
-        bool stopPropagation = false;
-        bool preventDefault = true; // this is for JS
+        bool preventDefault = true; // this is for JS (works a bit in gtk actually)
         bool ctrl = false, alt = false, shift = false, super = false;
         bool visible = true;
         double width = 0, height = 0;
+        Event type = NONE;
+
+        void stopPropagation();
     };
 }

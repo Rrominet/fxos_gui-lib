@@ -123,6 +123,10 @@ namespace ml
             void _createControllerAnyClick();
             void _createControllerKey();
 
+            bool _setEventInfosMove(Event event, EventInfos& e, double x, double y);
+            bool _setEventInfosClick(Event event, EventInfos& e, int numbers, double x, double y);
+            void _onMouseAnyClick(Event event, int numbers, double x, double y, const std::function<void (EventInfos&)>& callback);
+
             virtual void _addOnMouseDown(Event event, const std::function<void (EventInfos&)>& callback);
             virtual void _addOnMouseUp(Event event, const std::function<void (EventInfos&)>& callback);
 
