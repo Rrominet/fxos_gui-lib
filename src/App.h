@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <unordered_map>
 #include "vec.h"
 #include "./Window.h"
 #include "./Checker.h"
@@ -223,6 +224,11 @@ namespace ml
             void _createAboutCommand();
             void _createQuitCommand();
             //...
+
+            //FIXME :
+            //need to make it per event type ! 
+            //use a map instead !
+            std::unordered_map<Event, bool> _stopEventPropagationMap; //bp cg
 
         private : 
             void _init();

@@ -9,6 +9,7 @@
 #include <gtkmm/editable.h>
 #include <gtkmm/eventcontroller.h>
 #include <gtkmm/textview.h>
+#include "../App.h"
 
 namespace ml
 {
@@ -37,9 +38,10 @@ namespace ml
             case MOUSE_ENTER:
                 {
                     _createControllerMotion();
-                    auto f = [callback](double x, double y)
+                    auto f = [callback, event](double x, double y)
                     {
                         EventInfos e;
+                        e.type = event;
                         e.x = x;
                         e.y = y;
                         callback(e);
@@ -51,9 +53,10 @@ namespace ml
             case MOUSE_LEAVE:
                 {
                     _createControllerMotion();
-                    auto f = [callback]()
+                    auto f = [callback, event]()
                     {
                         EventInfos e;
+                        e.type = event;
                         callback(e);
                     };
                     _controller_motion->signal_leave().connect(f);
@@ -62,14 +65,12 @@ namespace ml
             case MOUSE_MOVE:
                 {
                     _createControllerMotion();
-                    auto f = [this, callback](double x, double y)
+                    auto f = [this, callback, event](double x, double y)
                     {
                         EventInfos e;
-                        e.x = x;
-                        e.y = y;
-                        e.mvtx = e.x - _lastX;
-                        e.mvty = e.y - _lastY;
-                        callback(e);
+                        e.type = event;
+                        if (_setEventInfosMove(event, e, x, y))
+                            callback(e);
                         _lastX = x;
                         _lastY = y;
                     };
@@ -109,9 +110,10 @@ namespace ml
             case FOCUS:
                 {
                     _createControllerFocus();
-                    auto f = [callback]()
+                    auto f = [callback, event]()
                     {
                         EventInfos e;
+                        e.type = event;
                         callback(e);
                     };
                     _controller_focus->signal_enter().connect(f);
@@ -120,9 +122,10 @@ namespace ml
             case UNFOCUS:
                 {
                     _createControllerFocus();
-                    auto f = [callback]()
+                    auto f = [callback, event]()
                     {
                         EventInfos e;
+                        e.type = event;
                         callback(e);
                     };
                     _controller_focus->signal_leave().connect(f);
@@ -167,7 +170,6 @@ namespace ml
         }
     }
 
-
     void Widget_impl::_createControllerFocus()
     {
         if (!_controller_focus)
@@ -176,7 +178,6 @@ namespace ml
             _gtk->add_controller(_controller_focus);
         }
     }
-
 
     void Widget_impl::_createControllerLeftClick()
     {
@@ -187,7 +188,6 @@ namespace ml
             _gtk->add_controller(_controller_leftclick);
         }
     }
-
 
     void Widget_impl::_createControllerRightClick()
     {
@@ -204,7 +204,7 @@ namespace ml
         if (!_controller_middleclick)
         {
             _controller_middleclick = Gtk::GestureClick::create();
-            _controller_middleclick->set_button(2); // changed
+            _controller_middleclick->set_button(2); 
             _gtk->add_controller(_controller_middleclick);
         }
     }
@@ -229,20 +229,41 @@ namespace ml
         }
     }
 
+#define SET_MOUSE_EVENT \
+        e.type = event; \
+        e.x = x; \
+        e.y = y; \
+        e.mvtx = e.x - _lastX; \
+        e.mvty = e.y - _lastY; \
+
+    bool Widget_impl::_setEventInfosClick(Event event, EventInfos& e, int numbers, double x, double y)
+    {
+        SET_MOUSE_EVENT
+        e.click_numbers = numbers;
+        return !ml::app()->stopEventPropagationMap()[event];
+    }
+
+    bool Widget_impl::_setEventInfosMove(Event event, EventInfos& e, double x,double y)
+    {
+        SET_MOUSE_EVENT
+        return !ml::app()->stopEventPropagationMap()[event];
+    }
+
+    void Widget_impl::_onMouseAnyClick(Event event, int numbers, double x, double y, const std::function<void (EventInfos&)>& callback)
+    {
+        EventInfos e;
+        if (_setEventInfosClick(event, e, numbers, x, y))
+            callback(e);
+        _lastX = x;
+        _lastY = y;
+    }
+
     void Widget_impl::_addOnMouseDown(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerAnyClick();
-        auto f = [callback, this](int numbers, double x, double y)
+        auto f = [callback, this, event](int numbers, double x, double y)
         {
-            EventInfos e;
-            _lastX = x;
-            _lastY = y;
-            e.x = x;
-            e.y = y;
-            e.mvtx = e.x - _lastX;
-            e.mvty = e.y - _lastY;
-            e.click_numbers = numbers;
-            callback(e);
+            _onMouseAnyClick(event, numbers, x, y, callback);
         };
         _controller_anyclick->signal_pressed().connect(f);
     }
@@ -250,17 +271,9 @@ namespace ml
     void Widget_impl::_addOnMouseUp(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerAnyClick();
-        auto f = [callback, this](int numbers, double x, double y)
+        auto f = [callback, this, event](int numbers, double x, double y)
         {
-            EventInfos e;
-            e.x = x;
-            e.y = y;
-            e.mvtx = e.x - _lastX;
-            e.mvty = e.y - _lastY;
-            e.click_numbers = numbers;
-            callback(e);
-            _lastX = x;
-            _lastY = y;
+            _onMouseAnyClick(event, numbers, x, y, callback);
         };
         _controller_anyclick->signal_released().connect(f);
     }
@@ -268,17 +281,9 @@ namespace ml
     void Widget_impl::_addOnLeftDown(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerLeftClick();
-        auto f = [callback, this](int numbers, double x, double y)
+        auto f = [callback, this, event](int numbers, double x, double y)
         {
-            EventInfos e;
-            e.x = x;
-            e.y = y;
-            e.mvtx = e.x - _lastX;
-            e.mvty = e.y - _lastY;
-            e.click_numbers = numbers;
-            callback(e);
-            _lastX = x;
-            _lastY = y;
+            _onMouseAnyClick(event, numbers, x, y, callback);
         };
         _controller_leftclick->signal_pressed().connect(f);
     }
@@ -286,17 +291,9 @@ namespace ml
     void Widget_impl::_addOnLeftUp(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerLeftClick();
-        auto f = [callback, this](int numbers, double x, double y)
+        auto f = [callback, this, event](int numbers, double x, double y)
         {
-            EventInfos e;
-            e.x = x;
-            e.y = y;
-            e.mvtx = e.x - _lastX;
-            e.mvty = e.y - _lastY;
-            e.click_numbers = numbers;
-            callback(e);
-            _lastX = x;
-            _lastY = y;
+            _onMouseAnyClick(event, numbers, x, y, callback);
         };
         _controller_leftclick->signal_released().connect(f);
     }
@@ -304,17 +301,9 @@ namespace ml
     void Widget_impl::_addOnRightDown(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerRightClick();
-        auto f = [callback, this](int numbers, double x, double y)
+        auto f = [callback, this, event](int numbers, double x, double y)
         {
-            EventInfos e;
-            e.x = x;
-            e.y = y;
-            e.mvtx = e.x - _lastX;
-            e.mvty = e.y - _lastY;
-            e.click_numbers = numbers;
-            callback(e);
-            _lastX = x;
-            _lastY = y;
+            _onMouseAnyClick(event, numbers, x, y, callback);
         };
         _controller_rightclick->signal_pressed().connect(f);
     }
@@ -322,17 +311,9 @@ namespace ml
     void Widget_impl::_addOnRightUp(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerRightClick();
-        auto f = [callback, this](int numbers, double x, double y)
+        auto f = [callback, this, event](int numbers, double x, double y)
         {
-            EventInfos e;
-            e.x = x;
-            e.y = y;
-            e.mvtx = e.x - _lastX;
-            e.mvty = e.y - _lastY;
-            e.click_numbers = numbers;
-            callback(e);
-            _lastX = x;
-            _lastY = y;
+            _onMouseAnyClick(event, numbers, x, y, callback);
         };
         _controller_rightclick->signal_released().connect(f);
     }
@@ -340,17 +321,9 @@ namespace ml
     void Widget_impl::_addOnMiddleDown(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerMiddleClick();
-        auto f = [callback, this](int numbers, double x, double y)
+        auto f = [callback, this, event](int numbers, double x, double y)
         {
-            EventInfos e;
-            e.x = x;
-            e.y = y;
-            e.mvtx = e.x - _lastX;
-            e.mvty = e.y - _lastY;
-            e.click_numbers = numbers;
-            callback(e);
-            _lastX = x;
-            _lastY = y;
+            _onMouseAnyClick(event, numbers, x, y, callback);
         };
         _controller_middleclick->signal_pressed().connect(f);
     }
@@ -358,35 +331,33 @@ namespace ml
     void Widget_impl::_addOnMiddleUp(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerMiddleClick();
-        auto f = [callback, this](int numbers, double x, double y)
+        auto f = [callback, this, event](int numbers, double x, double y)
         {
-            EventInfos e;
-            e.x = x;
-            e.y = y;
-            e.mvtx = e.x - _lastX;
-            e.mvty = e.y - _lastY;
-            e.click_numbers = numbers;
-            callback(e);
-            _lastX = x;
-            _lastY = y;
+            _onMouseAnyClick(event, numbers, x, y, callback);
         };
         _controller_middleclick->signal_released().connect(f);
-
     }
+
+#define SET_KEY_EVENT \
+            EventInfos e; \
+            e.type = event; \
+            e.keyval = keyval; \
+            e.keycode = keycode; \
+            gtk::setModifiersOnEventInfos(state, e); \
+            e.key = gdk_keyval_name(keyval); \
 
     void Widget_impl::_addOnKeyDown(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerKey();
-        auto f = [callback](guint keyval, guint keycode, Gdk::ModifierType state)
+        auto f = [callback, event](guint keyval, guint keycode, Gdk::ModifierType state)
         {
-            EventInfos e;
-            e.keyval = keyval;
-            e.keycode = keycode;
-            gtk::setModifiersOnEventInfos(state, e);
-            e.key = gdk_keyval_name(keyval);
-            callback(e);
-
-            return e.preventDefault;
+            SET_KEY_EVENT
+            if (!ml::app()->stopEventPropagationMap()[event])
+            {
+                callback(e); 
+                return e.preventDefault;
+            }
+            return false;
         };
         _controller_key->signal_key_pressed().connect(f, true);
     }
@@ -394,14 +365,11 @@ namespace ml
     void Widget_impl::_addOnKeyUp(Event event, const std::function<void (EventInfos&)>& callback)
     {
         _createControllerKey();
-        auto f = [callback](guint keyval, guint keycode, Gdk::ModifierType state)
+        auto f = [callback, event](guint keyval, guint keycode, Gdk::ModifierType state)
         {
-            EventInfos e;
-            e.keyval = keyval;
-            e.keycode = keycode;
-            gtk::setModifiersOnEventInfos(state, e);
-            e.key = gdk_keyval_name(keyval);
-            callback(e);
+            SET_KEY_EVENT
+            if (!ml::app()->stopEventPropagationMap()[event])
+                callback(e); 
         };
         _controller_key->signal_key_released().connect(f);
     }
@@ -418,9 +386,10 @@ namespace ml
     void Widget_impl::_addOnWheel(Event event, const std::function<void (EventInfos&)>& callback)
     {
         auto window = _abstract->window()->impl();
-        auto f = [callback, this](EventInfos& e)
+        auto f = [callback, this, event](EventInfos& e)
         {
-            if (this->hovered() && callback)
+            e.type = event;
+            if (this->hovered() && callback && !ml::app()->stopEventPropagationMap()[event])
                 callback(e); 
         };
 
@@ -430,18 +399,20 @@ namespace ml
     void Widget_impl::_addOnShown(Event event, const std::function<void (EventInfos&)>& callback)
     {
         lg("Adding a function on shown");
-        _gtk->signal_show().connect([callback]
+        _gtk->signal_show().connect([callback, event]
         {
             lg("GTKWidget shown");
             EventInfos e;
+            e.type = event;
             e.visible = true;
             callback(e);
         });
 
-        _gtk->signal_map().connect([callback]
+        _gtk->signal_map().connect([callback, event]
         {
             lg("GTKWidget shown");
             EventInfos e;
+            e.type = event;
             e.visible = true;
             callback(e);
         });
@@ -449,18 +420,20 @@ namespace ml
 
     void Widget_impl::_addOnHidden(Event event, const std::function<void (EventInfos&)>& callback)
     {
-        _gtk->signal_hide().connect([callback]
+        _gtk->signal_hide().connect([callback, event]
         {
         lg("GTKWidget hidden");
             EventInfos e;
+            e.type = event;
             e.visible = false;
             callback(e);
         });
 
-        _gtk->signal_unmap().connect([callback]
+        _gtk->signal_unmap().connect([callback, event]
         {
             lg("GTKWidget hidden");
             EventInfos e;
+            e.type = event;
             e.visible = false;
             callback(e);
         });
@@ -468,8 +441,9 @@ namespace ml
 
     void Widget_impl::_addOnResize(Event event, const std::function<void (EventInfos&)>& callback)
     {
-            _gtk->add_tick_callback([this,callback](const Glib::RefPtr<Gdk::FrameClock>&){
+            _gtk->add_tick_callback([this,callback, event](const Glib::RefPtr<Gdk::FrameClock>&){
                 EventInfos e; 
+                e.type = event;
                 e.width = _gtk->get_width();
                 e.height = _gtk->get_height();
                 if (_oldWidth == e.width && _oldHeight == e.height)

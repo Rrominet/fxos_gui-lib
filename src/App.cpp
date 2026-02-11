@@ -33,6 +33,34 @@ namespace ml
 
     void App::_init()
     {
+        _stopEventPropagationMap[NONE] = false;
+        _stopEventPropagationMap[CLICK] = false;
+        _stopEventPropagationMap[DOUBLE_CLICK] = false;
+        _stopEventPropagationMap[MOUSE_ENTER] = false;
+        _stopEventPropagationMap[MOUSE_LEAVE] = false;
+        _stopEventPropagationMap[MOUSE_MOVE] = false;
+        _stopEventPropagationMap[MOUSE_UP] = false;
+        _stopEventPropagationMap[MOUSE_DOWN] = false;
+        _stopEventPropagationMap[LEFT_UP] = false;
+        _stopEventPropagationMap[LEFT_DOWN] = false;
+        _stopEventPropagationMap[RIGHT_UP] = false;
+        _stopEventPropagationMap[RIGHT_DOWN] = false;
+        _stopEventPropagationMap[MIDDLE_UP] = false;
+        _stopEventPropagationMap[MIDDLE_DOWN] = false;
+        _stopEventPropagationMap[KEY_DOWN] = false;
+        _stopEventPropagationMap[KEY_UP] = false;
+        _stopEventPropagationMap[WHEEL] = false;
+        _stopEventPropagationMap[FOCUS] = false;
+        _stopEventPropagationMap[UNFOCUS] = false;
+        _stopEventPropagationMap[CHANGE] = false;
+        _stopEventPropagationMap[VALID] = false;
+        _stopEventPropagationMap[SHOWN] = false;
+        _stopEventPropagationMap[HIDDEN] = false;
+        _stopEventPropagationMap[RESIZE] = false;
+        _stopEventPropagationMap[DRAG_START] = false;
+        _stopEventPropagationMap[DRAG_END] = false;
+        _stopEventPropagationMap[DRAGGING] = false;
+
         _checker.init("can-construct-widget", "You can't construct a widget with new or make_unique/shared or even on the stack.\nYou need to create it via the createWidget method in Box or Window.");
         _checker.init("can-construct-window", "You can't construct a window with new or make_unique/shared or even on the stack.\nYou need to create it via the windowsFactory.");
         _checker.init("can-set-window", "The setWindow method can't be called by you. Use append, prepend or setChild to trigger it from its logic.");
