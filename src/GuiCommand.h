@@ -32,6 +32,9 @@ namespace ml
             std::function<void(const std::any&)> _before; //bp cgs
             std::function<void(const std::any&)> _after; //bp cgs
 
+            //this will be queue after the execution and exec on the next event tick. (so wayy after the _after function)
+            ml::Vec<std::function<void()>> _toQueue; //bp cg
+
             // if confirm is true, it will ask the user to confirm the command before executing it.
             bool _confirm = false; //bp cg
             bool _execSetted = false;

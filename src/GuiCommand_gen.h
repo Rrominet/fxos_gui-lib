@@ -8,6 +8,10 @@ std::function<void(const std::any&)>& after(){return _after;}
 const std::function<void(const std::any&)>& after() const {return _after;}
 void setAfter(const std::function<void(const std::any&)>& after){_after = after;}
 
+ml::Vec<std::function<void()>>& toQueue(){return _toQueue;}
+const ml::Vec<std::function<void()>>& toQueue() const {return _toQueue;}
+
+
 bool confirm(){return _confirm;}
 const bool confirm() const {return _confirm;}
 
