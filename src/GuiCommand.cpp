@@ -33,6 +33,8 @@ namespace ml
                 _exec(_args);
             if (_after)
                 _after(_args);
+            for (const auto&f : _toQueue)
+                app()->queue(f);
         };
         app()->queue(ex);
     }
