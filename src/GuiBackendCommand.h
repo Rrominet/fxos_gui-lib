@@ -21,7 +21,7 @@ namespace ml
 
             void init();
             virtual bool check() override;
-            virtual void execJson(const json& args){this->setJsonArgs(args); this->exec();}
+            virtual void execJson(const json& args);
 
             // need to be setted before calling exec (often when clicking on a button.)
             void setProcessCommand(Process* process, const std::string &function, const json& args, const std::function<void(const json& response)>& cb=0, bool onetime=false);
@@ -45,7 +45,6 @@ namespace ml
             std::string _function;
             json _jsonArgs; //bp cgs
             std::function<void(const json& response)> _cb;
-            std::function<json()> _getjsonArgs;
 
             th::Safe<ml::Vec<GuiCallback>> _callbacks;
 
@@ -54,6 +53,8 @@ namespace ml
 
             //mean sync in the backend not in the gui. It will force other backend command to wait until this one has been executed.
             bool _sync = false; //bp cgs
+
+            bool _autorizeGetjsonArgsFunction = true;
 
         public : 
 #include "./GuiBackendCommand_gen.h"
