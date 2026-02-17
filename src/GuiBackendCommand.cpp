@@ -89,7 +89,16 @@ namespace ml
 
         auto exec = [this, getjsonArgs](const std::any&)
         {
-            _jsonArgs = getjsonArgs();
+            lg("_autorizeGetjsonArgsFunction : " << _autorizeGetjsonArgsFunction);
+            if (_autorizeGetjsonArgsFunction)
+            {
+                lg("So we get the args from the getjsonArgs function...");
+                _jsonArgs = getjsonArgs();
+            }
+            else 
+            {
+                lg("getjsonArgs function is not autorized.");
+            }
             for (auto& b : _buttons)
                 b->mkLoading();
             try
@@ -104,9 +113,23 @@ namespace ml
             lg("process backend called : " << _function);
             lg("with these args : " << _jsonArgs.dump(4));
             app()->main()->setInfosFromCommand(this);
+
+            // reset to default value if it has been changed before.
+            _autorizeGetjsonArgsFunction = true;
         };
 
         GuiCommand::setExec(exec);
+    }
+
+    void GuiBackendCommand::execJson(const json& args)
+    {
+        lg("GuiBackendCommand::execJson with args : " << args.dump(4));
+        this->setJsonArgs(args);
+
+        //if not used, the args would be overwritten by the _jsonArgs callbacks if it exists (see the setProcessCommand(...) function above.
+        _autorizeGetjsonArgsFunction = false;
+        lg("_autorizeGetjsonArgsFunction : " << _autorizeGetjsonArgsFunction);
+        this->exec();        
     }
 
     void GuiBackendCommand::addCallback(const std::function<void(const json& response)>& cb, bool onetime)
