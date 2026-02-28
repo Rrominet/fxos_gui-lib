@@ -23,7 +23,14 @@ namespace ml
                 if (res.contains("success") && !res["success"])
                 {
                     if (_useDefaultErrorWindow)
-                        this->onError(res["error"]);
+                    {
+                        std::string error = "An unkown error occured.";
+                        if (res.contains("error"))
+                            error = res["error"].get<std::string>();
+                        else if (res.contains("message"))
+                            error = res["message"].get<std::string>();
+                        this->onError(error);
+                    }
                 }
                 else 
                     this->execCallbacks(res);

@@ -5,6 +5,7 @@
 #include "vec.h"
 #include "observers/Observed.h"
 #include <unordered_map>
+#include "Date.h"
 
 //TODO : add the Color Property
 
@@ -68,6 +69,8 @@ namespace ml
             void addAttribute(const std::string& name, const std::any& value){_attrs[name] = value;}
             void setAttribute(const std::string& name, const std::any& value){_attrs[name] = value;}
             void removeAttribute(const std::string& name){if(_attrs.find(name) != _attrs.end()) _attrs.erase(name);};
+
+            ml::Date asDate() const;
 
         protected : 
             std::string _name;//bp cgs

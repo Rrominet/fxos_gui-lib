@@ -66,5 +66,30 @@ namespace ml
 
     bool Property::visible() const{return _visible;}
 
+    ml::Date Property::asDate() const
+    {
+        if (this->type() == BOOL)
+            return ml::Date();
+        if (this->type() != STRING)
+            return ml::Date(this->asInt());
+
+        std::string val = this->asString();
+        try
+        {
+            return ml::Date(ml::time::fromString(val, "%Y-%m-%d"));
+        }
+        catch(const std::exception& e)
+        {
+            try
+            {
+                return ml::Date(ml::time::fromString(val, "%Y-%m-%d : %H:%M:%S"));
+            }
+            catch(const std::exception& e)
+            {
+                return ml::Date();
+            }
+        }
+    }
+
     #include "./props_impl_gen.h"    
 }
