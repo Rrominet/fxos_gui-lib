@@ -114,29 +114,30 @@ namespace ml
         });
 
 
+        //note this is important to know : 
+        //the priority of the keybinds arelike this : 
+        // 1 - basic keybinds of the window
+        // 2 - the commands of the window
+        // 3 - the commands of the app.
+        //
+        // If 1 is triggered, 2 and 3 are ignored.
+        // if 2 is triggered, 3 is ignored.
         auto keyevents = [this](EventInfos& event)
         {
             lg("keydown event (basic events)");
             auto focusedWidget = ml::app()->focusedWidget();
+            ml::keybinds::FocusedType focusedType = ml::keybinds::NONE;
             if(focusedWidget)
             {
-                if (focusedWidget->isEditable())
-                    return;
-            }
-
-            for (const auto& cmd : ml::app()->cmds().commands())  
-            {
-                if (keybinds::match(cmd.second->keybind(), event))
-                {
-                    cmd.second->exec();
-                    event.preventDefault = true;
-                    return;
-                }
+                if (focusedWidget->isOnelineEditable())
+                    focusedType = ml::keybinds::ONELINE_EDITABLE;
+                else if (focusedWidget->isMultilineEditable())
+                    focusedType = ml::keybinds::MULTILINE_EDITABLE;
             }
 
             for (const auto& kb : _windowKeyBinds)
             {
-                if (keybinds::match(kb.first, event))
+                if (keybinds::match(kb.first, event, focusedType))
                 {
                     if (kb.second())
                     {
@@ -148,7 +149,7 @@ namespace ml
 
             for (const auto& cmd : _cmds.commands())  
             {
-                if (keybinds::match(cmd.second->keybind(), event))
+                if (keybinds::match(cmd.second->keybind(), event, focusedType))
                 {
                     cmd.second->exec();
                     event.preventDefault = true;
@@ -156,6 +157,15 @@ namespace ml
                 }
             }
 
+            for (const auto& cmd : ml::app()->cmds().commands())  
+            {
+                if (keybinds::match(cmd.second->keybind(), event, focusedType))
+                {
+                    cmd.second->exec();
+                    event.preventDefault = true;
+                    return;
+                }
+            }
         };
 
         this->addEventListener(Event::KEY_DOWN, keyevents);
