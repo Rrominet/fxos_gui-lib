@@ -581,4 +581,21 @@ namespace ml
             return true;
         return false;
     }
+
+    bool Widget_impl::isOnelineEditable() const
+    {
+
+        auto edit = dynamic_cast<Gtk::Editable*>(_gtk.get());        
+        if(edit)
+            return true;
+        return false;
+    }
+
+    bool Widget_impl::isMultilineEditable() const
+    {
+        auto textview = dynamic_cast<Gtk::TextView*>(_gtk.get());
+        if (textview)
+            return true;
+        return false;
+    }
 }

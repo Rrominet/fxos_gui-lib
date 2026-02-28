@@ -152,6 +152,9 @@ namespace ml
             //coordonates needs to be relative to its parent
             bool isInside(double x, double y) const;
             bool isEditable() const {return _impl->isEditable();}
+            bool isOnelineEditable() const{return _impl->isOnelineEditable();}
+            bool isMultilineEditable() const {return _impl->isMultilineEditable();}
+
             bool focused() const {return _impl->focused();}
             bool containsFocus() const {return _impl->containsFocus();}
 

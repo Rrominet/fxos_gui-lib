@@ -91,6 +91,8 @@ namespace ml
             void redraw() const{_gtk->queue_draw();}
 
             bool isEditable() const;
+            bool isOnelineEditable() const;
+            bool isMultilineEditable() const;
             bool focused() const {return _controller_focus->is_focus();}
 
             //return true is one of its children contains focus too.
