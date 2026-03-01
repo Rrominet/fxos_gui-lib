@@ -3,6 +3,7 @@
 #include <gtkmm/textbuffer.h>
 #include <memory>
 #include "./Widget_impl.h"
+#include <gtkmm/enums.h>
 
 namespace ml
 {
@@ -21,6 +22,8 @@ namespace ml
 
             std::string value(){return _buffer->get_text();}
             void setValue(const std::string& value){_buffer->set_text(value);}
+
+            void setWrap(bool wrap=true){this->textview()->set_wrap_mode(Gtk::WrapMode::WORD);};
 
         protected : 
             Glib::RefPtr<Gtk::TextBuffer> _buffer;

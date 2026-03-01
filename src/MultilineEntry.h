@@ -21,5 +21,7 @@ namespace ml
             std::shared_ptr<ml::MultilineEntry_impl> entry(){return std::static_pointer_cast<MultilineEntry_impl>(_impl);}
 
             ENTRY_GET_SET(entry)
+
+            void setWrap(bool wrap=true){this->entry()->setWrap(wrap);}
     };
 }
