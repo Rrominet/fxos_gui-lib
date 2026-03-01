@@ -15,5 +15,6 @@ namespace ml
         this->setHExpand();
         this->setHAlign(ml::FILL);
         this->setVExpand();
+        this->setWrap(true);
     }
 }
