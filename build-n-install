@@ -53,7 +53,7 @@ def main():
     os.chdir("build")
     run("chmod +x ../make")
     run("chmod +x ../install")
-    run('../make gtk shared release libs="../../cpp-utils_dependencies" fm="../../cpp-utils"')
+    run('../make gtk shared keep-same release libs="../../cpp-utils_dependencies" fm="../../cpp-utils"')
     run("../install shared")
 
 if __name__ == "__main__":
