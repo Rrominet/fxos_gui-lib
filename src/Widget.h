@@ -18,6 +18,7 @@
 #include "observers/Observer.h"
 #include "geometry.h"
 #include "Ret.h"
+#include "str.h"
 #ifdef __EMSCRIPTEN__
 #include "./em/Widget_impl.h"
 #else
@@ -157,6 +158,8 @@ namespace ml
 
             bool focused() const {return _impl->focused();}
             bool containsFocus() const {return _impl->containsFocus();}
+
+            virtual std::string searchStr() {return str::clean(this->text(), true);}
 
         protected : 
             std::shared_ptr<Widget_impl> _impl;

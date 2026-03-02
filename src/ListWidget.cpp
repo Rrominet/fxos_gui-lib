@@ -19,7 +19,7 @@ namespace ml
 
     void ListWidget::_construct(Box* parent)
     {
-        _body = parent->createBox().get();
+        _body = parent->createScrollable().get();
         _body->setOrient(Orient::VERTICAL);
         _body->addCssClass("list");
         _body->setVExpand();
@@ -42,7 +42,7 @@ namespace ml
 
     void ListWidget::hideElement(Widget* widget)
     {
-        if (!_body->containsChild(widget)) 
+        if (!_body->content().containsChild(widget)) 
         {
             lg("This list Widget does not contains the widget : " << widget);
             return;
@@ -52,7 +52,7 @@ namespace ml
 
     void ListWidget::showElement(Widget* widget)
     {
-        if (!_body->containsChild(widget)) 
+        if (!_body->content().containsChild(widget)) 
         {
             lg("This list Widget does not contains the widget : " << widget);
             return;
@@ -62,26 +62,26 @@ namespace ml
 
     void ListWidget::clear()
     {
-        _body->clear();
+        _body->content().clear();
     }
 
     int ListWidget::elementIndex(Widget* widget)
     {
-        return _body->childIndex(widget);
+        return _body->content().childIndex(widget);
     }
 
     void ListWidget::swap(size_t i,size_t j)
     {
-        _body->swap(i,j);
+        _body->content().swap(i,j);
     }
 
     void ListWidget::moveTop(Widget* widget)
     {
-        _body->moveChildTop(widget);
+        _body->content().moveChildTop(widget);
     }
 
     void ListWidget::moveBottom(Widget* widget)
     {
-        _body->moveChildBottom(widget);
+        _body->content().moveChildBottom(widget);
     }
 }

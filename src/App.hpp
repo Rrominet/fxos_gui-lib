@@ -24,6 +24,15 @@ namespace ml
             return _windowsFactory.createDialog<T>(parent, id);
         }
 
+        template<typename T>
+            void App::createOrShowWindow(T** winPointer, ml::Window* parent, const std::string& id)
+        {
+
+            if (!*winPointer)
+                *winPointer = this->createWindow<T>(parent, id).get();
+            (*winPointer)->show();
+        }
+
     template<typename T>
         std::shared_ptr<T> App::message(const std::string& message, ml::Window* parent, const std::string& id)
         {
