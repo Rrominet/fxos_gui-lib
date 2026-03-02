@@ -1,6 +1,8 @@
 #pragma once
 #include "./ComposedWidget.h"
 
+//List.h is certainly better for what you want to do.
+
 namespace ml
 {
     class Box;
@@ -25,8 +27,10 @@ namespace ml
             void moveTop(Widget* widget);
             void moveBottom(Widget* widget);
 
+            Scrollable* body(){return _body;}
+
         protected : 
-            Box* _body = nullptr;
+            Scrollable* _body = nullptr;
 
         private : 
             void _construct(Box* parent);

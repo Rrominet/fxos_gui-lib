@@ -61,6 +61,9 @@ namespace ml
             template<typename T=ml::Window>
                 std::shared_ptr<T> createWindow(ml::Window* parent = nullptr, const std::string& id="");
 
+            template<typename T>
+                void createOrShowWindow(T** winPointer, ml::Window* parent = nullptr, const std::string& id="");
+
             template<typename T=ml::Dialog>
                 std::shared_ptr<T> createDialog(ml::Window* parent = nullptr, const std::string& id="");
 
