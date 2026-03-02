@@ -303,6 +303,26 @@ namespace ml
         return ml::app()->widgetsFactory().createImage(icon, this);
     }
 
+    std::string searchStr(ml::Box* b)
+    {
+        std::string res;
+        for (auto& c : b->children())       
+        {
+            auto b = dynamic_cast<ml::Box*>(c.get());
+            if (!b)
+                res += c->searchStr();
+            else 
+                res += searchStr(b);
+        }
+        return res;
+    }
+
+    std::string Box::searchStr()
+    {
+        std::string res = ::ml::searchStr(this);
+        return str::clean(res, true);
+    }
+
 
 #include "./Widget_creators_impl_gen.h"
 #include "./Container_creators_impl_gen.h"

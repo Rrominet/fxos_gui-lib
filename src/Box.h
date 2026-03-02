@@ -116,6 +116,8 @@ namespace ml
             std::shared_ptr<ComposedPropertyWidget<EnumProperty>> appendEnumProp(EnumProperty* prop);
             std::shared_ptr<ComposedPropertyWidget<ColorProperty>> appendColorProp(ColorProperty* prop, DrawType type=COLOR_BUTTON);
 
+            virtual std::string searchStr() override; 
+
         protected : 
             ml::Vec<std::shared_ptr<ml::Widget>> _children; //bp cg
             ml::Vec<std::shared_ptr<ml::ComposedWidget>> _composedChildren; //bp cg
