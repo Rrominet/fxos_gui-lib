@@ -96,6 +96,7 @@ namespace ml
         }
 
         void setOnAddElmt(const std::function<void()>& f) {_onAddElmt = f;}
+        void setBeforeRemoveElmt(const std::function<void(T*)>& f) {_beforeRemoveElmt = f;}
 
         protected: 
             ml::Box* _body;
@@ -159,7 +160,12 @@ namespace ml
             void _removeActiveElmt()
             {
                 if (_activeElmt)
+                {
+                    if (_beforeRemoveElmt)
+                        _beforeRemoveElmt(_activeElmt);
                     this->removeElmt(_activeElmt);
+                    _activeElmt = nullptr;
+                }
             }
 
             void __createCommands()
@@ -184,6 +190,7 @@ namespace ml
             ml::Window* _parent = nullptr;
             T* _activeElmt = nullptr;
             std::function<void()> _onAddElmt = nullptr;
+            std::function<void(T*elmt)> _beforeRemoveElmt = nullptr;
 
         public : 
             ml::Vec<std::shared_ptr<T>>& elmts() {return _elmts;}
