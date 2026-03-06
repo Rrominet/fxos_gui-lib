@@ -30,6 +30,7 @@ namespace ml
 
             void show();
             void hide(){_popover->hide();}
+            void redraw() {_popover->redraw();}   
 
         protected : 
             std::string _id; //bp cg
