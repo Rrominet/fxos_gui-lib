@@ -72,6 +72,8 @@ namespace ml
 
             ml::Date asDate() const;
 
+            void focus();
+
         protected : 
             std::string _name;//bp cgs
             std::string _description;//bp cgs
