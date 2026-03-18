@@ -196,6 +196,13 @@ namespace ml
                     else 
                         _box->setOrient(Orient::HORIZONTAL);
                 }
+
+                if (_label)
+                    _box->data().add(_label.get(), "label");
+                if(_input)
+                    _box->data().add(_input.get(), "input");
+                if(_change_action)
+                    _box->data().add(_change_action.get(), "button");
             }
 
             void connect()

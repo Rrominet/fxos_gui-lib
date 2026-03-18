@@ -241,9 +241,9 @@ namespace ml
     void Window::setMain(bool main)
     {
         if (main)
-            this->addCssClass("main");
+            this->addCssClass("main-window");
         else 
-            this->removeCssClass("main");
+            this->removeCssClass("main-window");
         this->impl()->setMain(main);
     }
 

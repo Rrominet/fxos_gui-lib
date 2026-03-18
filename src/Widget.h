@@ -19,6 +19,7 @@
 #include "geometry.h"
 #include "Ret.h"
 #include "str.h"
+#include "AnyData.h"
 #ifdef __EMSCRIPTEN__
 #include "./em/Widget_impl.h"
 #else
@@ -178,6 +179,11 @@ namespace ml
 
             void _createBasicEvents();
 
+            ml::AnyData _data; //bp cg
+
 #include "./Widget_events_gen.h"
+
+        public : 
+#include "./Widget_gen.h"
     };
 }

@@ -57,11 +57,30 @@ namespace ml
             w->hide();
         _visible = false;
     }
+
     void Property::show()
     {
         for (const auto& w : _widgetsConnected)
             w->show();
         _visible = true;
+    }
+
+    void Property::focus()
+    {
+        if(_widgetsConnected.empty())
+            return;
+        for (const auto& w : _widgetsConnected)
+        {
+            if (w->visible())
+            {
+                auto input_r = w->data().get<Input*>("input");
+                if (input_r.success)
+                {
+                    input_r.value->focus();
+                    return;
+                }
+            }
+        }
     }
 
     bool Property::visible() const{return _visible;}
