@@ -20,6 +20,10 @@ namespace ml
             void hideAll();
             void show(unsigned int index);
 
+            TabButton* active() const;
+            int activeIdx() const;
+            void setActiveIdx(unsigned int index);
+
         protected : 
             std::shared_ptr<Box> _header; //bp cg
             std::shared_ptr<Scrollable> _body; //bp cg

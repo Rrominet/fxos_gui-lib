@@ -32,6 +32,7 @@ namespace ml
     class GuiBackendCommand;
     class Popover;
     class Commander;
+    class Menu;
 
     class Window
     {
@@ -135,6 +136,9 @@ namespace ml
             //the popover need to be already a child of the window
             void pop(Popover* popover, int sx=-1, int sy=-1, int px=-1, int py=-1);
             ml::Popover* createPopover();
+
+            //will create it if non existant
+            ml::Menu* menu(const std::string& id, std::string name="");
 
         protected : 
             App* _app;

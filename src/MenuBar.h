@@ -19,6 +19,7 @@ namespace ml
             void init();
 
             void addMenu(const std::string& id);
+            bool containsMenu(const std::string& id);
 
         protected : 
             ml::Vec<std::shared_ptr<ml::MenuBarButton>> _buttons; //bp cg

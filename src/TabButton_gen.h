@@ -1,5 +1,9 @@
 //This is a generated file, don't change it manually, it will be override when rebuild.
 
+bool active(){return _active;}
+const bool active() const {return _active;}
+
+
 std::shared_ptr<Box> body(){return _body;}
 const std::shared_ptr<Box> body() const {return _body;}
 

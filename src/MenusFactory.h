@@ -32,10 +32,8 @@ namespace ml
 
             bool has(const std::string& id) const {return _menus.find(id) != _menus.end();}
 
+            std::unordered_map<std::string, std::shared_ptr<ml::Menu>>& menus() {return _menus;}
         protected : 
-            std::unordered_map<std::string, std::shared_ptr<ml::Menu>> _menus; //bp cg
-
-        public : 
-#include "./MenusFactory_gen.h"
+            std::unordered_map<std::string, std::shared_ptr<ml::Menu>> _menus;
     };
 }

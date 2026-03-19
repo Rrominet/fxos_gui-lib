@@ -5,6 +5,7 @@
 #include "./Label.h"
 #include "enums.h"
 #include <memory>
+#include "./App.h"
 
 namespace ml
 {
@@ -96,5 +97,35 @@ namespace ml
             _tabs[index]->setActive(true);
         else 
             _tabs.last()->setActive(true);
+    }
+
+    TabButton* Tabs::active() const
+    {
+        for (auto& t : _tabs) 
+        {
+            if (t->active())
+                return t.get();
+        }
+        return nullptr;
+    }
+
+    int Tabs::activeIdx() const
+    {
+        for (unsigned int i = 0; i < _tabs.size(); i++)       
+        {
+            if (_tabs[i]->active())
+                return i;
+        }
+        return -1;
+    }
+
+    void Tabs::setActiveIdx(unsigned int index)
+    {
+        for (auto&t : _tabs)        
+            t->setActive(false);
+
+        if (index >= _tabs.size())
+            ml::app()->error("Index out of range : " + std::to_string(index) + " >= " + std::to_string(_tabs.size()));
+        _tabs[index]->setActive(true);
     }
 }

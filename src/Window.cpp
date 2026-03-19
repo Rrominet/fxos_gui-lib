@@ -412,4 +412,15 @@ namespace ml
     {
         return _content->createPopover().get();
     }
+
+    ml::Menu* Window::menu(const std::string& id, std::string name)
+    {
+        if (name.empty())
+            name = id;
+        ml::app()->menusFactory().createIfItNotExists<ml::Menu>(id, name);
+        if (!_menuBar->containsMenu(id))
+            _menuBar->addMenu(id);
+
+        return ml::app()->menusFactory().menus().at(id).get();
+    }
 }

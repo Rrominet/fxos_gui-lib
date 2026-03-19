@@ -81,6 +81,8 @@ namespace ml
             // used to ask about an existing prop
             std::shared_ptr<AskPropertyDialog> ask(ml::Property* prop, const std::string& message="", ml::Window* parent = nullptr);
             std::shared_ptr<AskPropertyDialog> ask(ml::Property* prop, std::function<void()> onvalid, std::function<void()> oncancel=0 ,const std::string& message="", ml::Window* parent = nullptr);
+
+            //TODO : add a DrawType
             std::shared_ptr<AskPropertyDialog> ask(Property::PropertyType type, const std::string& propname="Value", const std::string& message="", ml::Window* parent = nullptr);
 
             std::shared_ptr<AskPropertyGroupDialog> ask(ml::PropertyGroup* prop, const std::string& message="", ml::Window* parent = nullptr);
@@ -132,6 +134,7 @@ namespace ml
                 std::shared_ptr<GuiCommand> createShowWindowCommand(W** winptr, const std::string& cmdName, const std::string& id="", const std::string& keybind="");
 
             void setClipboardText(const std::string& text){_impl.setClipboardText(text);}
+            void copyToClipboard(const std::string& text){_impl.setClipboardText(text);}
             std::string clipboardText() const {return _impl.clipboardText();}
 
             //return nullptr if it does not exists
@@ -192,6 +195,7 @@ namespace ml
 
             ml::MenusFactory& menus() {return _menusFactory;}
             const ml::MenusFactory& menus() const {return _menusFactory;}
+
 
         protected : 
             bool _setIdCalled = false;

@@ -97,6 +97,9 @@ namespace ml
 
             //return true is one of its children contains focus too.
             bool containsFocus() const {return _controller_focus->contains_focus();}
+            void enable(){_gtk->set_sensitive(true);}
+            void disable(){_gtk->set_sensitive(false);}
+            bool enabled() const {return _gtk->get_sensitive();}
 
         protected : 
             Widget* _abstract = nullptr;
