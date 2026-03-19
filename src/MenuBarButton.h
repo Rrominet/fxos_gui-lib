@@ -10,5 +10,11 @@ namespace ml
         public :
             MenuBarButton(ml::MenuBar* menubar, ml::Menu* menu);
             virtual ~MenuBarButton();
+
+        private : 
+            ml::Menu* _menu = nullptr; //bp cg
+
+        public : 
+#include "./MenuBarButton_gen.h"
     };
 }

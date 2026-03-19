@@ -162,6 +162,10 @@ namespace ml
 
             virtual std::string searchStr() {return str::clean(this->text(), true);}
 
+            void enable(){_impl->enable();}
+            void disable(){_impl->disable();}
+            bool enabled() const {return _impl->enabled();}
+
         protected : 
             std::shared_ptr<Widget_impl> _impl;
             ml::Widget* _parent = nullptr;

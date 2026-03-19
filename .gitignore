@@ -9,3 +9,5 @@ build/mlgui.wasm
 build/mlgui.wasm.map
 build/mlgui_em.css
 build/mlgui_gtk.css
+build/libmlgui.so
+build/mlgui

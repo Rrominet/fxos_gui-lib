@@ -22,6 +22,7 @@ namespace ml
 
     void TabButton::setActive(bool active)
     {
+        _active = active;
         if (active)
         {
             _button->addCssClass("active");

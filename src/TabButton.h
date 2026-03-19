@@ -16,7 +16,7 @@ namespace ml
             // this show or hide its content too.
             void setActive(bool active);
         protected : 
-            bool _active = false; //pb cg
+            bool _active = false; //bp cg
             std::shared_ptr<Box> _body; //bp cg 
             std::shared_ptr<Box> _button; //bp cg
             std::shared_ptr<Label> _label; //bp cg

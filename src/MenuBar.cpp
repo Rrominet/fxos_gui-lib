@@ -36,4 +36,14 @@ namespace ml
         auto button = std::make_shared<ml::MenuBarButton>(this, menu.get());
         _buttons.push_back(button);
     }
+
+    bool MenuBar::containsMenu(const std::string& id)
+    {
+        for (auto& button : _buttons) 
+        {
+            if (button->menu()->id() == id)
+                return true;
+        }
+        return false;
+    }
 }
