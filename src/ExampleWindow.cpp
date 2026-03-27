@@ -43,7 +43,7 @@
 #include "./GuiCommand.h"
 #include "./Commander.h"
 #include "./CommandButton.h"
-#include "./ListWidget.h"
+#include "./List.h"
 #include "./WebView.h"
 #include "./ColorPicker.h"
 #include "./ColorButton.h"
@@ -51,8 +51,37 @@
 #include <any>
 #include <memory>
 
+//this changed again !
+
 namespace ml
 {
+    class ListElementExample
+    {
+        private : 
+            ml::Box* _box = nullptr;
+            ml::Box* _parent;
+            int _idx;
+            std::string _searched = "";
+        public : 
+            ListElementExample(List<ListElementExample, true, true>* ls, int idx) 
+            {
+                _parent = ls->listbox();
+                _idx = idx;
+                _searched = "Label " + std::to_string(_idx) + " Click Me " + std::to_string(_idx);
+            }
+
+            void draw()
+            {
+                _box = _parent->createBox().get();
+                _box->createLabel("Label " + std::to_string(_idx));
+                _box->createButton("Click Me " + std::to_string(_idx));
+                _box->createSwitch();
+                _box->setOrient(ml::HORIZONTAL);
+            }
+            std::string searchStr(){return _searched;};
+            ml::Widget* gui(){return _box;}
+    };
+
     void ExampleWindow::init()
     {
         Window::init();
@@ -238,12 +267,15 @@ namespace ml
         collapsable->body()->createButton("Me tooo");
         collapsable->body()->createComposedWidget<ColorButton>(collapsable->body().get());
 
-        auto commander = (Commander*)_composedWidgets->createComposedWidget<Commander>(_composedWidgets.get()).get();
+        auto commander_collapsable = (Collapsable*)_composedWidgets->createComposedWidget<Collapsable>(_composedWidgets.get(), "Commander").get();
+        auto commander = (Commander*)commander_collapsable->body()->createComposedWidget<Commander>(commander_collapsable->body().get()).get();
         commander->addAllCommands(ml::app());
+        commander_collapsable->collapse();
 
         auto subrg = (Subrange*)_composedWidgets->createComposedWidget<Subrange>(_composedWidgets.get(), 0, 100, 33, 66).get();
 // 
-        auto vtable = (VerticalTable*)_composedWidgets->createComposedWidget<VerticalTable>(_composedWidgets.get()).get();
+        auto vtable_collapsable = (Collapsable*)_composedWidgets->createComposedWidget<Collapsable>(_composedWidgets.get(), "Vertical Table").get();
+        auto vtable = (VerticalTable*)vtable_collapsable->body()->createComposedWidget<VerticalTable>(vtable_collapsable->body().get()).get();
         auto model = std::make_shared<VerticalTableModel>();
         vtable->linkToModel(model); // vtable keep a reference to the shared_ptr of the model so it's perfect.
         model->setAttributes({
@@ -276,18 +308,15 @@ namespace ml
             lg("--");
         });
 
-        _composedWidgets->createLabel("List Widget :");
-        auto list = (ListWidget*)_composedWidgets->createComposedWidget<ListWidget>(_composedWidgets.get()).get();
-        for (size_t i=0; i<5; i++)
-        {
-            auto w = ml::app()->widgetsFactory().createBox();
-            w->createLabel("Label " + std::to_string(i));
-            w->createButton("Click Me " + std::to_string(i));
-            w->createSwitch();
-            w->setOrient(ml::HORIZONTAL);
+        vtable_collapsable->collapse();
 
-            list->add(w);
-        }
+        auto collapsable_list = (Collapsable*)_composedWidgets->createComposedWidget<Collapsable>(_composedWidgets.get(), "List").get();
+        collapsable_list->body()->createLabel("List can be searchable and selectable and you can add or remove elements dynamicly");
+        auto list = collapsable_list->body()->createComposedWidget<List<ListElementExample, true, true>>(collapsable_list->body().get(), true, List<ListElementExample, true, true>::MULTIPLE, 50).get();
+        for (size_t i=0; i<5000; i++)
+            list->createElmt(list, i);
+
+        collapsable_list->collapse();
     }
 
     void ExampleWindow::createFixed()

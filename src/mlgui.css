@@ -413,3 +413,13 @@ button.dialog-cancel
     border-radius : 3px;
     margin : 0.5em;
 }
+
+.list-search
+{
+   margin-bottom : 0.5em;
+}
+
+.prop .entry.input
+{
+    margin:0;
+}
