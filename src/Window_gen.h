@@ -44,3 +44,7 @@ bool stayHiddenFirstRun(){return _stayHiddenFirstRun;}
 const bool stayHiddenFirstRun() const {return _stayHiddenFirstRun;}
 void setStayHiddenFirstRun(bool stayHiddenFirstRun){_stayHiddenFirstRun = stayHiddenFirstRun;}
 
+ml::Vec<std::function<void (EventInfos &)>>& resize(){return _resize;}
+const ml::Vec<std::function<void (EventInfos &)>>& resize() const {return _resize;}
+
+

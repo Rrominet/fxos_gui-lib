@@ -1,56 +1,6 @@
 //This is a generated file, don't change it manually, it will be override when rebuild.
 
 
-    case(CLICK) :
-    {
-        _click.push(callback);
-        if (!_click_initialized)
-        {
-            auto cb = [this](EventInfos& e)
-            {
-                if (!_allowEvents)
-                    return;
-                if (this->hasWindow())
-                {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
-                }
-                for (auto& f : _click)
-                    f(e);
-            };
-            _impl->addEventListener(event, cb);
-            _click_initialized = true;
-        }
-        break;
-    }
-    
-    case(DOUBLE_CLICK) :
-    {
-        _double_click.push(callback);
-        if (!_double_click_initialized)
-        {
-            auto cb = [this](EventInfos& e)
-            {
-                if (!_allowEvents)
-                    return;
-                if (this->hasWindow())
-                {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
-                }
-                for (auto& f : _double_click)
-                    f(e);
-            };
-            _impl->addEventListener(event, cb);
-            _double_click_initialized = true;
-        }
-        break;
-    }
-    
     case(MOUSE_ENTER) :
     {
         _mouse_enter.push(callback);
@@ -547,31 +497,6 @@
             };
             _impl->addEventListener(event, cb);
             _hidden_initialized = true;
-        }
-        break;
-    }
-    
-    case(RESIZE) :
-    {
-        _resize.push(callback);
-        if (!_resize_initialized)
-        {
-            auto cb = [this](EventInfos& e)
-            {
-                if (!_allowEvents)
-                    return;
-                if (this->hasWindow())
-                {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
-                }
-                for (auto& f : _resize)
-                    f(e);
-            };
-            _impl->addEventListener(event, cb);
-            _resize_initialized = true;
         }
         break;
     }

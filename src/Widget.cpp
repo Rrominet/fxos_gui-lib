@@ -34,6 +34,12 @@ namespace ml
                     if (ml::app()->focusedWidget() == this)
                         ml::app()->setFocusedWidget(nullptr);
                 }); 
+
+        this->addEventListener(MOUSE_DOWN, [this](EventInfos& e){
+            if (e.click_numbers >= 2) 
+                for (auto& f : _double_click)
+                    f(e);
+        });
     }
 
     void Widget::remove()
@@ -74,6 +80,23 @@ namespace ml
             case DRAGGING : 
             {
                 _drag_move.push(callback);
+                break;
+            }
+            case DOUBLE_CLICK :
+            {
+                _double_click.push(callback);
+                break;
+            }
+            case CLICK : 
+            {
+                _mouse_up.push(callback);
+                break;
+            }
+            case RESIZE : 
+            {
+                if (!this->hasWindow())
+                    break;
+                this->window()->addEventListener(RESIZE, callback);
                 break;
             }
         }

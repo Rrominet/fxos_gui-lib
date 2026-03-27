@@ -169,6 +169,13 @@ namespace ml
         };
 
         this->addEventListener(Event::KEY_DOWN, keyevents);
+
+        auto onresize = [this](EventInfos& event)
+        {
+            for (const auto& cb : _resize)
+                cb(event);
+        };
+        _impl->setResizeEventListener(onresize);
     }
 
     void Window::createBaseUi()
@@ -234,6 +241,8 @@ namespace ml
         assert(_content);
         if (event == WHEEL)
             this->addWheelEventListener(callback);
+        else if (event == RESIZE)
+            _resize.push_back(callback);
         else 
             _content->addEventListener(event, callback);
     }
@@ -270,6 +279,14 @@ namespace ml
             _footLabel = _foot->createLabel(infos);
         else 
             _footLabel->setText(infos);
+    }
+
+    void Window::setInfosFromOtherThread(const std::string& infos)
+    {
+        auto later = [this, infos] {
+            this->setInfos(infos);            
+        };
+        ml::app()->queue(later);
     }
 
 

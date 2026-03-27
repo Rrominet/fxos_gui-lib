@@ -1,6 +1,7 @@
 #pragma once
 #include <gtkmm/window.h>
 #include <memory>
+#include <functional>
 
 #include "../Widget.h"
 #include "mlMath.h"
@@ -44,6 +45,7 @@ namespace ml
             math::vec2d mousePos();
 
             void addWheelEventListener(const std::function<void(EventInfos&)>& callback);
+            void setResizeEventListener(const std::function<void(EventInfos&)>& callback);
             void hideOnClose(bool val);
             bool doHideOnClose() const {return _hideOnClose;}
 

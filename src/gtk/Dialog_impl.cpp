@@ -12,7 +12,7 @@ namespace ml
         if (_win->hasParent())
             _window = std::make_shared<Gtk::Dialog>("Dialog", *_win->parent()->gtk());
         else 
-            _window = std::make_shared<Gtk::Dialog>();
+            _window = std::make_shared<Gtk::Dialog>("Dialog");
         _window->add_css_class("window");
         _window->add_css_class("dialog");
         _setCloseEvent();

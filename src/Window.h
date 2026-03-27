@@ -99,6 +99,7 @@ namespace ml
 
             // this the footer content
             void setInfos(const std::string& infos);
+            void setInfosFromOtherThread(const std::string& infos);
 
             // add a spinner at the end of the window.
             void setWorking(bool val);
@@ -172,6 +173,8 @@ namespace ml
             // the function return true if it consider the keybind "treated"
             // behind the scene, it will cut the event propagation if return true.
             std::unordered_map<std::string, std::function<bool()>> _windowKeyBinds;
+
+            ml::Vec<std::function<void (EventInfos &)>> _resize; //bp cg
 
         public : 
 #include "Window_gen.h"
