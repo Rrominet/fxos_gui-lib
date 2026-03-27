@@ -12,40 +12,48 @@
 //The elements needs to be drawn in their constructor.
 //You pass the List as argument (as a pointer or ref) and use list->listbox()->create... to draw your interface in your element directly
 //
-//Your element T needs to have the methods searchStr() and gui() representing its main gui component (should descent of ml::Widget*).
+//Your element T needs to have the methods searchStr() (returning a string that would be used for the search feature) and gui() representing its main gui component (should descent of ml::Widget*) and return a ptr.
 //The searchStr() don't need to be cleaned up, it's done directly here.
 //
-//TODO : certainly a way to add/remove elements dynamicly
-//TODO : certainly a way to add/remove elements directly in the GUI (or at least removing one)
+//if MaxDrawn == true, you need the function draw() in the element to draw the element. (and draw shouldn't be executed in the constructor)
+//else, the element should be drawn in its constructor
 
 namespace ml
 {
-    template<typename T, bool Dynamic=false>
+    template<typename T, bool Dynamic=false, bool MaxDrawn=false>
     class List: public ComposedWidget
     {
         public : 
-        List(Box* parent, bool search = true) : ComposedWidget(), _search(_S"Search", "")
-        {
-            _parent = parent->window();
+            enum SelectionType
+            {
+                NONE = 0,
+                SINGLE,
+                MULTIPLE
+            };
+
+#define __CONSTRUCT \
+            _maxDrawn = maxDrawn; \
+            _parent = parent->window(); \
             __draw(parent);
+
+        List(Box* parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50) : ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
+        {
+            __CONSTRUCT;
         }
 
-        List(Scrollable* parent, bool search = true): ComposedWidget(), _search(_S"Search", "")
+        List(Scrollable* parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50): ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
         {
-            _parent = parent->window();
-            __draw(&parent->content());
+            __CONSTRUCT;
         }
 
-        List(std::shared_ptr<Box> parent, bool search = true) : ComposedWidget(), _search(_S"Search", "")
+        List(std::shared_ptr<Box> parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50) : ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
         {
-            _parent = parent->window();
-            __draw(parent.get());
+            __CONSTRUCT;
         }
 
-        List(std::shared_ptr<Scrollable> parent, bool search = true): ComposedWidget(), _search(_S"Search", "")
+        List(std::shared_ptr<Scrollable> parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50): ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
         {
-            _parent = parent->window();
-            __draw(&parent->content());
+            __CONSTRUCT;
         }
 
         virtual ~List() = default;
@@ -72,31 +80,76 @@ namespace ml
         {
             _elmts.push_back(std::make_shared<T>(std::forward<Args>(args)...));
             auto _r = _elmts.back().get();
-            _r->gui()->addCssClass("list-item");
-            _r->gui()->setHAlign(HAlignment::FILL);
-            _r->gui()->setHExpand(true);
-            if constexpr(Dynamic)
-                _r->gui()->addEventListener(ml::MOUSE_ENTER, [this, _r](auto&e){_activeElmt = _r;});
 
+            if constexpr(MaxDrawn)
+            {
+                if (_drawn < _maxDrawn)
+                {
+                    __drawElmt(_r);
+                    _drawn ++;
+                }
+            }
+            else 
+                __drawElmt(_r);
             return _elmts.back().get();
         }
 
+        void removeElmt(unsigned int idx)
+        {
+            if (idx >= _elmts.size())
+                return;
+            this->unselect(idx);
+            if constexpr(!MaxDrawn)
+                _list->remove(_elmts[idx]->gui());
+            else 
+            {
+                if (_guiCreated.contains(idx))
+                {
+                    _list->remove(_elmts[idx]->gui());
+                    _guiCreated.remove(idx);
+                }
+            }
+            _elmts.removeByIndex(idx);
+            for (auto& sidx : _selected)
+            {
+                if (sidx > idx)
+                    sidx --;
+            }
+            if constexpr(MaxDrawn)
+            {
+                for (auto& idx_c : _guiCreated)
+                {
+                    if (idx_c > idx)
+                        idx --;
+                }
+            }
+        }
         void removeElmt(T* elmt)
+        {
+            this->removeElmt(this->index(elmt));
+        }
+
+        void setOnAddElmt(const std::function<void()>& f) {_onAddElmt.push_back(f);}
+        void setBeforeRemoveElmt(const std::function<void(T*)>& f) {_beforeRemoveElmt.push_back(f);}
+        void addOnAddElmt(const std::function<void()>& f) {_onAddElmt.push_back(f);}
+        void addBeforeRemoveElmt(const std::function<void(T*)>& f) {_beforeRemoveElmt.push_back(f);}
+        void addOnSelected(const std::function<void(const ml::Vec<T>&)>& f) {_onSelected.push_back(f);}
+        void addOnUnselected(const std::function<void(const ml::Vec<T>&)>& f) {_onUnselected.push_back(f);}
+
+        void clearOnSelected() {_onSelected.clear();}
+        void clearOnUnselected() {_onUnselected.clear();}
+        void clearOnAddElmt() {_onAddElmt.clear();}
+        void clearBeforeRemoveElmt() {_beforeRemoveElmt.clear();}
+
+        int index(T* elmt)
         {
             for (int i = 0; i < _elmts.size(); i++) 
             {
                 if (_elmts[i].get() == elmt)
-                {
-                    _elmts[i]->gui()->addCssClass("list-item");
-                    _list->remove(_elmts[i]->gui());
-                    _elmts.removeByIndex(i);
-                    break;
-                }
+                    return i;
             }
+            return -1;
         }
-
-        void setOnAddElmt(const std::function<void()>& f) {_onAddElmt = f;}
-        void setBeforeRemoveElmt(const std::function<void(T*)>& f) {_beforeRemoveElmt = f;}
 
         protected: 
             ml::Box* _body;
@@ -112,23 +165,101 @@ namespace ml
                     searched = str::clean(searched, true);
                     if (searched.empty())
                     {
-                        for (auto& elmt : _elmts)
-                            elmt->gui()->show();
+                        for (unsigned i=0; i<_elmts.size(); i++)
+                            __hide(i);
+                        for (unsigned i=0; i<_elmts.size(); i++)
+                            __show(i);
                         return;
                     }
 
-                    for (auto& elmt : _elmts)
-                        elmt->gui()->hide();
-                    for (auto& elmt : _elmts)
+                    for (unsigned i=0; i<_elmts.size(); i++)
+                        __hide(i);
+                    for (unsigned i=0; i<_elmts.size(); i++)
                     {
-                        auto elmt_searchstr = elmt->searchStr();
+                        auto elmt_searchstr = _elmts[i]->searchStr();
                         elmt_searchstr = str::clean(elmt_searchstr, true);
                         if(str::contains(elmt_searchstr, searched))
-                            elmt->gui()->show();
+                            __show(i);
                     }
                 };
                 _search.addOnUpdate(searchf);
                 _search.addOnValid(searchf);
+            }
+
+            void __drawElmt(T* elmt)
+            {
+                if constexpr(MaxDrawn)
+                {
+                    elmt->draw();
+                    _guiCreated.push_back(this->index(elmt));
+                    lg("elmt " << this->index(elmt)<< " drawn");
+                }
+                elmt->gui()->addCssClass("list-item");
+                elmt->gui()->setHAlign(HAlignment::FILL);
+                elmt->gui()->setHExpand(true);
+                if constexpr(Dynamic)
+                    elmt->gui()->addEventListener(ml::MOUSE_ENTER, [this, elmt](auto&e){_activeElmt = elmt;});
+
+                elmt->gui()->addEventListener(ml::LEFT_DOWN, [this, elmt](auto&e){__onLeftDown(e, elmt);});
+                elmt->gui()->addEventListener(ml::RIGHT_DOWN, [this, elmt](auto&e){__onRightDown(e, elmt);});
+                if (_selectionType != NONE)
+                    elmt->gui()->setCursor("pointer");
+            }
+
+            void __hide(unsigned int idx)
+            {
+                if constexpr(MaxDrawn)
+                {
+                    if (!_guiCreated.contains(idx))
+                    {
+                        lg("elmt " << idx << " not drawn yet, nothing to hide");
+                        return;
+                    }
+                }
+                if (idx < _elmts.size())
+                {
+                    lg("elmt " << idx << " drawn, hidding it");
+                    if (_elmts[idx]->gui()->visible())
+                    {
+                        _elmts[idx]->gui()->hide();
+                        lg("elmt " << idx << " hidden");
+                        if constexpr(MaxDrawn)
+                        {
+                            _drawn --;
+                            lg("drawn " << _drawn);
+                        }
+                    }
+                }
+
+                this->unselect(idx);
+            }
+
+            void __hide(T* elmt)
+            {
+                __hide(this->index(elmt));
+            }
+
+            void __show(unsigned int idx)
+            {
+                if (idx >= _elmts.size())
+                    return;
+                if constexpr(MaxDrawn)
+                {
+                    if (_drawn >= _maxDrawn)
+                        return;
+                    if (!_guiCreated.contains(idx))
+                        __drawElmt(_elmts[idx].get());
+                    else 
+                        _elmts[idx]->gui()->show();
+                    _drawn ++;
+                }
+                else 
+                    _elmts[idx]->gui()->show();
+            }
+
+            void __show(T* elmt)
+            {
+                __show(this->index(elmt));
             }
 
             void __draw(ml::Box* parent, bool search = true)
@@ -151,21 +282,36 @@ namespace ml
 
             void _addElmt()
             {
-                if (_onAddElmt)
-                    _onAddElmt();
-                else 
-                    ml::app()->error("No List::onAddElmt function setted.");
+                if (_onAddElmt.empty())
+                {
+                    ml::app()->error("Error in the list : no onAddElmt function defined.\nYou need to create one that create the element.");
+                    return;
+                }
+                for (auto& f : _onAddElmt)
+                    f();
             }
 
             void _removeActiveElmt()
             {
                 if (_activeElmt)
                 {
-                    if (_beforeRemoveElmt)
-                        _beforeRemoveElmt(_activeElmt);
+                    for (auto& f : _beforeRemoveElmt)
+                        f(_activeElmt);
                     this->removeElmt(_activeElmt);
                     _activeElmt = nullptr;
                 }
+            }
+
+            void _removeSelection()
+            {
+                for (auto& idx : _selected)
+                {
+                    for (auto& f : _beforeRemoveElmt)
+                        f(_elmts[idx].get());
+                    this->removeElmt(idx);
+                }
+
+                _selected.clear();
             }
 
             void __createCommands()
@@ -173,7 +319,12 @@ namespace ml
                 if constexpr(!Dynamic)
                     return;
                 auto c = _parent->cmds().createCommand<ml::GuiCommand>("Add", "add-elmt", [this](auto&e){_addElmt();});	
-                c = _parent->cmds().createCommand<ml::GuiCommand>("Remove", "remove-active-elmt", [this](auto&e){_removeActiveElmt();});	
+                c = _parent->cmds().createCommand<ml::GuiCommand>("Remove", "remove-active-elmt", [this](auto&e){
+                        if (_selectionType == NONE)
+                            _removeActiveElmt();
+                        else 
+                            _removeSelection();
+                        });	
             }
 
             void __createMenus()
@@ -187,10 +338,139 @@ namespace ml
                 this->listbox()->setContextMenu(id);
             }
 
+            void __selectOnMouseDown(ml::EventInfos& e, T* elmt)
+            {
+                if (_selectionType == NONE)
+                    return;
+                else if (_selectionType == SINGLE)
+                    this->replaceSelection(elmt);
+                else if (_selectionType == MULTIPLE)
+                {
+                    if (!e.ctrl && !e.shift && !e.alt)
+                    {
+                        if (!this->selected(elmt))
+                            this->replaceSelection(elmt);
+                        else 
+                        {
+                            if (_selected.size() == 1)
+                                this->unselect(elmt);
+                            else 
+                                this->replaceSelection(elmt);
+                        }
+                    }
+
+                    else if (e.ctrl && !e.shift && !e.alt)
+                    {
+                        if (!this->selected(elmt))
+                            this->select(elmt);
+                        else 
+                            this->unselect(elmt);
+                    }
+
+                    else if (!e.ctrl && e.shift && !e.alt)
+                    {
+                        if (_selected.empty())
+                        {
+                            this->select(elmt);
+                            return;
+                        }
+
+                        if (this->selected(elmt))
+                        {
+                            this->unselect(elmt);
+                            return;
+                        }
+
+                        auto firstselected = _selected.first();
+                        auto lastselected = _selected.last();
+                        auto curr = this->index(elmt);
+
+                        if (curr < firstselected)
+                        {
+                            for (auto i = curr; i <= lastselected; i++)
+                                this->select(i);
+                        }
+                        else if (curr > lastselected)
+                        {
+                            for (auto i = lastselected; i <= curr; i++)
+                                this->select(i);
+                        }
+                    }
+                }
+            }
+
+            void __onLeftDown(ml::EventInfos& e, T* elmt)
+            {
+                __selectOnMouseDown(e, elmt);
+                if (_selectionType != NONE)
+                    e.stopPropagation();
+            }
+
+            void __onRightDown(ml::EventInfos& e, T* elmt)
+            {
+                if (_selectionType == NONE)
+                    return;
+                else if (_selectionType == SINGLE)
+                    this->replaceSelection(elmt);
+                else if (_selectionType == MULTIPLE)
+                {
+                    if (!e.ctrl && !e.shift && !e.alt)
+                    {
+                        if (!this->selected(elmt))
+                            this->replaceSelection(elmt);
+                    }
+
+                    else if (e.ctrl && !e.shift && !e.alt)
+                    {
+                        if (!this->selected(elmt))
+                            this->select(elmt);
+                    }
+
+                    else if (!e.ctrl && e.shift && !e.alt)
+                    {
+                        if (_selected.empty())
+                        {
+                            this->select(elmt);
+                            return;
+                        }
+
+                        auto firstselected = _selected.first();
+                        auto lastselected = _selected.last();
+                        auto curr = this->index(elmt);
+
+                        if (curr < firstselected)
+                        {
+                            for (auto i = curr; i <= lastselected; i++)
+                                this->select(i);
+                        }
+                        else if (curr > lastselected)
+                        {
+                            for (auto i = lastselected; i <= curr; i++)
+                                this->select(i);
+                        }
+                    }
+                }
+            }
+
             ml::Window* _parent = nullptr;
             T* _activeElmt = nullptr;
-            std::function<void()> _onAddElmt = nullptr;
-            std::function<void(T*elmt)> _beforeRemoveElmt = nullptr;
+
+            ml::Vec<std::function<void()>> _onAddElmt;
+            ml::Vec<std::function<void(T*elmt)>> _beforeRemoveElmt;
+            ml::Vec<std::function<void(T*elmt)>> _onSelected;
+            ml::Vec<std::function<void(T*elmt)>> _onUnselected;
+
+            //TODO if necessary : 
+//             ml::Vec<std::function<void(T*elmt)>> _onShown;
+//             ml::Vec<std::function<void(T*elmt)>> _onHidden;
+//             ml::Vec<std::function<void(T*elmt)>> _onDrawn;
+
+            SelectionType _selectionType = SelectionType::NONE;
+            ml::Vec<unsigned int> _selected;
+
+            int _maxDrawn;
+            int _drawn = 0;
+            ml::Vec<unsigned int> _guiCreated;
 
         public : 
             ml::Vec<std::shared_ptr<T>>& elmts() {return _elmts;}
@@ -201,7 +481,132 @@ namespace ml
                 return &_list->body()->content();
             }
 
+            void setSelectionType(SelectionType type) {_selectionType = type;}
+
+            void select(unsigned int idx)
+            {
+                auto elmt = _elmts[idx];
+                if constexpr(!MaxDrawn)
+                    elmt->gui()->addCssClass("selected");
+                else 
+                {
+                    if (_guiCreated.contains(idx))
+                        elmt->gui()->addCssClass("selected");
+                }
+                if (idx != -1 && !_selected.contains(idx))
+                {
+                    _selected.push_back(idx);
+                    for (auto& f : _onSelected)
+                        f(elmt.get());
+                }
+            }
+            void select(T* elmt)
+            {
+                this->select(this->index(elmt));
+            }
+            
+            void unselect(unsigned int idx)
+            {
+                auto elmt = _elmts[idx];
+                if constexpr(!MaxDrawn)
+                    elmt->gui()->removeCssClass("selected");
+                else 
+                {
+                    if (_guiCreated.contains(idx))
+                        elmt->gui()->removeCssClass("selected");
+                }
+                if (_selected.contains(idx))
+                {
+                    _selected.remove(idx);
+                    for (auto& f : _onUnselected)
+                        f(elmt.get());
+                }
+            }
+
+            void unselect(T* elmt)
+            {
+                this->unselect(this->index(elmt));
+            }
+
+            void selectAll()
+            {
+                this->selectRange(0, _elmts.size() - 1);
+            }
+
+            void unselectAll()
+            {
+                _selected.clear();
+                for (auto& elmt : _elmts)
+                    this->unselect(elmt.get());
+            }
+
+            void selectRange(unsigned int start, unsigned int end)
+            {
+                if (start > end)
+                    std::swap(start, end);
+                if (start > _elmts.size() || end > _elmts.size())
+                    return;
+                for (unsigned int i = start; i <= end; i++)
+                    this->select(i);
+            }
+
+            void selectIndexes(const ml::Vec<unsigned int>& idxs)
+            {
+                for (auto& idx : idxs)
+                    this->select(idx);
+            }
+
+            void replaceSelection(T* elmt)
+            {
+                this->unselectAll();
+                this->select(elmt);
+            }
+
+            bool selected(T* elmt) {return _selected.contains(this->index(elmt));}
+
             std::shared_ptr<ListWidget> list() {return _list;}
             const std::shared_ptr<ListWidget> list()const {return _list;}
+
+            void runOnSelected(const std::function<void(T*)>& f)
+            {
+                for (auto& elmt : _elmts)
+                {
+                    if (this->selected(elmt.get()))
+                        f(elmt.get());
+                }
+            }
+
+            void runOnSelected(const std::function<void(const ml::Vec<std::shared_ptr<T>>&)>& f)
+            {
+                f(_elmts);
+            }
+
+            void runOnUnselected(const std::function<void(T*)>& f)
+            {
+                for (auto& elmt : _elmts)
+                {
+                    if (!this->selected(elmt.get()))
+                        f(elmt.get());
+                }
+            }
+
+            void runOnUnselected(const std::function<void(const ml::Vec<T>&)>& f)
+            {
+                auto unselected = ml::Vec<T>();
+                for (auto& elmt : _elmts)
+                {
+                    if (!this->selected(elmt.get()))
+                        unselected.push_back(elmt.get());
+                }
+                f(unselected);
+            }
+
+            int maxDrawn() const
+            {
+                if constexpr(MaxDrawn)
+                    return _maxDrawn;
+                else 
+                    return -1;
+            }
     };
 }
