@@ -4,6 +4,7 @@
 #include "gdkmm/enums.h"
 #include <gdkmm/seat.h>
 #include "../EventInfos.h"
+#include "../App.h"
 
 namespace ml
 {
@@ -73,6 +74,23 @@ namespace ml
         _controller_scroll->signal_scroll().connect(f, true);
     }
 
+    void Window_impl::setResizeEventListener(const std::function<void(EventInfos&)>& callback)
+    {
+        if (!_window->get_surface())
+        {
+            ml::app()->setTimeout([callback, this](){
+                this->setResizeEventListener(callback);
+            }, 100);
+            return;
+        }
+
+        _window->get_surface()->property_width().signal_changed().connect([callback, this](){
+                    EventInfos e;
+                    e.width = _window->get_width();
+                    e.height = _window->get_height();
+                    callback(e);
+                });
+    }
 
     void Window_impl::_createControllerScroll()
     {

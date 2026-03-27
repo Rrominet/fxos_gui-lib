@@ -1,3 +1,5 @@
+#pragma once
+#include <gtkmm/dialog.h>
 #include "./Window_impl.h"
 #include "../Dialog.h"
 

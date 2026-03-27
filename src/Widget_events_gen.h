@@ -1,9 +1,5 @@
 //This is a generated file, don't change it manually, it will be override when rebuild.
 
-ml::Vec<std::function<void (EventInfos&)>> _click;
-bool _click_initialized = false;
-ml::Vec<std::function<void (EventInfos&)>> _double_click;
-bool _double_click_initialized = false;
 ml::Vec<std::function<void (EventInfos&)>> _mouse_enter;
 bool _mouse_enter_initialized = false;
 ml::Vec<std::function<void (EventInfos&)>> _mouse_leave;
@@ -44,5 +40,3 @@ ml::Vec<std::function<void (EventInfos&)>> _shown;
 bool _shown_initialized = false;
 ml::Vec<std::function<void (EventInfos&)>> _hidden;
 bool _hidden_initialized = false;
-ml::Vec<std::function<void (EventInfos&)>> _resize;
-bool _resize_initialized = false;

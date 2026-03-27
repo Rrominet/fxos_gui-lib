@@ -34,7 +34,7 @@ namespace ml
 #define __CONSTRUCT \
             _maxDrawn = maxDrawn; \
             _parent = parent->window(); \
-            __draw(parent);
+            __draw(parent, search);
 
         List(Box* parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50) : ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
         {
@@ -70,6 +70,9 @@ namespace ml
 
         void clear()
         {
+            _selected.clear();
+            _drawn = 0;
+            _guiCreated.clear();
             _list->clear();
             _elmts.clear();
             _search.set(_S"");
@@ -573,6 +576,21 @@ namespace ml
                 {
                     if (this->selected(elmt.get()))
                         f(elmt.get());
+                }
+            }
+
+            void runOnDrawn(const std::function<void(T*)>& f)
+            {
+                for (auto idx : _guiCreated)
+                    f(_elmts[idx].get());
+            }
+
+            void runOnVisble(const std::function<void(T*)>& f)
+            {
+                for (auto idx : _guiCreated)
+                {
+                    if (_elmts[idx]->gui()->visible())
+                        f(_elmts[idx].get());
                 }
             }
 

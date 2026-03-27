@@ -180,6 +180,7 @@ namespace ml
             ml::Vec<std::function<void(EventInfos&)>> _drag_start;
             ml::Vec<std::function<void(EventInfos&)>> _drag_end;
             ml::Vec<std::function<void(EventInfos&)>> _drag_move;
+            ml::Vec<std::function<void(EventInfos&)>> _double_click;
 
             void _createBasicEvents();
 

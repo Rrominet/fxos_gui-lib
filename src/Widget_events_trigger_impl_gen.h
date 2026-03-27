@@ -1,13 +1,5 @@
 //This is a generated file, don't change it manually, it will be override when rebuild.
 
-case(CLICK) :
-    for (const auto& f : _click)
-        f(infos);
-    break;
-case(DOUBLE_CLICK) :
-    for (const auto& f : _double_click)
-        f(infos);
-    break;
 case(MOUSE_ENTER) :
     for (const auto& f : _mouse_enter)
         f(infos);
@@ -86,9 +78,5 @@ case(SHOWN) :
     break;
 case(HIDDEN) :
     for (const auto& f : _hidden)
-        f(infos);
-    break;
-case(RESIZE) :
-    for (const auto& f : _resize)
         f(infos);
     break;

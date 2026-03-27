@@ -1,8 +1,6 @@
 
 #update them here if needed.
 events = (
-        "CLICK",
-        "DOUBLE_CLICK",
         "MOUSE_ENTER",
         "MOUSE_LEAVE",
         "MOUSE_MOVE",
@@ -23,7 +21,6 @@ events = (
         "VALID",
         "SHOWN",
         "HIDDEN",
-        "RESIZE",
         )
 
 def widget_h(event) : 

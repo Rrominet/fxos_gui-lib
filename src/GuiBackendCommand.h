@@ -53,7 +53,6 @@ namespace ml
 
             //mean sync in the backend not in the gui. It will force other backend command to wait until this one has been executed.
             bool _sync = false; //bp cgs
-
             bool _autorizeGetjsonArgsFunction = true;
 
         public : 
