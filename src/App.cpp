@@ -9,6 +9,7 @@
 #include "./GuiBackendCommand.h"
 #include "./WorkDialog.h"
 #include "./ProgressDialog.h"
+#include "mlprocess.h"
 
 namespace ml
 {
@@ -135,10 +136,23 @@ namespace ml
 
     void App::execAsync(const std::function<void()>& torun, const std::function<void()>& onfinished)
     {
+         auto onexcept = [this](const std::string& msg){
+            this->error(_S"Error during the async execution of a task :\n" + msg);   
+             this->main()->setWorking(false);
+         };
          this->main()->setWorking(true);
-         auto job = [this, torun, onfinished]
+         auto job = [this, torun, onfinished, onexcept]
          {
-             torun();   
+             try
+             {
+                 torun();   
+             }
+             catch(const std::exception& e)
+             {
+                 auto msg = std::string(e.what());
+                 this->queue([msg, onexcept] {onexcept(msg);});
+                 return;
+             }
              auto _onfinished = [onfinished, this]{
                  if (onfinished)
                      onfinished(); 
@@ -154,10 +168,24 @@ namespace ml
     //so copy it or create it before, ore use a shared_ptr
     void App::execAsync(const std::function<std::any()>& torun, const std::function<void(const std::any&)>& onfinished)
     {
+         auto onexcept = [this](const std::string& msg){
+            this->error(_S"Error during the async execution of a task :\n" + msg);   
+             this->main()->setWorking(false);
+         };
          this->main()->setWorking(true);
-         auto job = [this, torun, onfinished]
+         auto job = [this, torun, onfinished, onexcept]
          {
-             std::any res = torun();   
+             std::any res;
+             try
+             {
+                 res = torun();   
+             }
+             catch(const std::exception& e)
+             {
+                 auto msg = std::string(e.what());
+                 this->queue([msg, onexcept] {onexcept(msg);});
+                 return;
+             }
              auto _onfinished = [onfinished, res, this]{
                  if (onfinished)
                      onfinished(res); 
@@ -185,9 +213,23 @@ namespace ml
     {
          this->main()->setWorking(true);
          this->main()->setInfos(runningInfos);
-         auto job = [this, torun, onfinished, finishedInfos]
+         auto onexcept = [this, runningInfos](const std::string& msg){
+            this->error("Error during the async execution of a task : " + runningInfos + "\n" + msg);   
+             this->main()->setWorking(false);
+         };
+         auto job = [this, torun, onfinished, finishedInfos, onexcept]
          {
-             std::any res = torun();   
+             std::any res;
+             try
+             {
+                 res = torun();   
+             }
+             catch(const std::exception& e)
+             {
+                 auto msg = std::string(e.what());
+                 this->queue([msg, onexcept] {onexcept(msg);});
+                 return;
+             }
              auto _onfinished = [onfinished, res, this, finishedInfos]{onfinished(res); this->main()->setWorking(false); this->main()->setInfos(finishedInfos);};
              this->queue(_onfinished);
          };

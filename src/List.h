@@ -68,6 +68,16 @@ namespace ml
             _search.show();
         }
 
+        void toggleSearch()
+        {
+            if(_search.visible())
+                _search.hide();
+            else 
+                _search.show();
+        }
+
+        ml::StringProperty& search() {return _search;}
+
         void clear()
         {
             _selected.clear();
@@ -164,6 +174,7 @@ namespace ml
             {
                 auto searchf = [this]
                 {
+                    _searchedMatched.clear();
                     std::string searched = _search.value();
                     searched = str::clean(searched, true);
                     if (searched.empty())
@@ -182,7 +193,10 @@ namespace ml
                         auto elmt_searchstr = _elmts[i]->searchStr();
                         elmt_searchstr = str::clean(elmt_searchstr, true);
                         if(str::contains(elmt_searchstr, searched))
+                        {
                             __show(i);
+                            _searchedMatched.push_back(i);
+                        }
                     }
                 };
                 _search.addOnUpdate(searchf);
@@ -455,6 +469,29 @@ namespace ml
                 }
             }
 
+            void _cleanUpSelectedList()
+            {
+                auto good_selected = ml::Vec<unsigned int>();
+                for (const auto& i : _selected)
+                {
+                    if (i >= _elmts.size())
+                        continue;
+                    good_selected.push_back(i);
+                }
+                _selected = good_selected;
+            }
+
+            void _updateDrawFromSelected()
+            {
+                for (unsigned int i = 0; i < _elmts.size(); i++)
+                {
+                    if (_selected.contains(i))
+                        this->select(i);
+                    else 
+                        this->unselect(i);
+                }
+            }
+
             ml::Window* _parent = nullptr;
             T* _activeElmt = nullptr;
 
@@ -474,6 +511,7 @@ namespace ml
             int _maxDrawn;
             int _drawn = 0;
             ml::Vec<unsigned int> _guiCreated;
+            ml::Vec<unsigned int> _searchedMatched;
 
         public : 
             ml::Vec<std::shared_ptr<T>>& elmts() {return _elmts;}
@@ -483,6 +521,8 @@ namespace ml
             {
                 return &_list->body()->content();
             }
+
+            ml::Vec<unsigned int> lastSearchedMatched() {return _searchedMatched;}
 
             void setSelectionType(SelectionType type) {_selectionType = type;}
 
@@ -497,11 +537,10 @@ namespace ml
                         elmt->gui()->addCssClass("selected");
                 }
                 if (idx != -1 && !_selected.contains(idx))
-                {
                     _selected.push_back(idx);
-                    for (auto& f : _onSelected)
-                        f(elmt.get());
-                }
+
+                for (auto& f : _onSelected)
+                    f(elmt.get());
             }
             void select(T* elmt)
             {
@@ -519,11 +558,10 @@ namespace ml
                         elmt->gui()->removeCssClass("selected");
                 }
                 if (_selected.contains(idx))
-                {
                     _selected.remove(idx);
-                    for (auto& f : _onUnselected)
-                        f(elmt.get());
-                }
+
+                for (auto& f : _onUnselected)
+                    f(elmt.get());
             }
 
             void unselect(T* elmt)
@@ -626,5 +664,83 @@ namespace ml
                 else 
                     return -1;
             }
+
+            void moveSelection(int offset)
+            {
+                if (_selected.size() == 0)
+                    return;
+                for (auto& idx : _selected)
+                    idx += offset;
+
+                _cleanUpSelectedList();
+                _updateDrawFromSelected();
+            }
+
+            void extendSelection(int offset)
+            {
+                if (offset == 0)
+                    return;
+                if (_selected.size() == 0)
+                    return;
+                if (offset > 0)
+                {
+                    int last = -1;
+                    for (auto idx : _selected)
+                    {
+                        if ((int)idx > last)
+                        {
+                            last = idx; 
+                            lg(last);
+                        }
+                    }
+                    lg(last);
+
+                    for (int i = last + 1; i < last + offset + 1; i++)
+                    {
+                        lg("Pushing into selection : " << i);
+                        _selected.push_back(i);
+                    }
+                }
+                else 
+                {
+                    int first = INT_MAX;
+                    for (auto idx : _selected)
+                    {
+                        if ((int)idx < first)
+                        {
+                            first = idx; 
+                            lg(first);
+                        }
+                    }
+                    int i = first - offset;
+                    lg("first selected : " << first);
+                    lg("first - offset : " << (first - offset));
+                    lg("i < first: " << (i < first));
+                    for (int i = first + offset; i < first; i++)
+                    {
+                        if (i < 0)
+                            continue;
+                        lg("Pushing into selection : " << i);
+                        _selected.push_back(i);
+                    }
+                }
+
+                _cleanUpSelectedList();
+                _updateDrawFromSelected();
+            }
+
+            void invertSelection()
+            {
+                auto goodselect = ml::Vec<unsigned int>();
+                for (unsigned int i = 0; i < _elmts.size(); i++)
+                {
+                    if (!_selected.contains(i))
+                        goodselect.push_back(i);
+                }
+                _selected = goodselect;
+                _updateDrawFromSelected();
+            }
+
+            ml::Vec<unsigned int> selected() const {return _selected;}
     };
 }
