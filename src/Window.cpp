@@ -124,7 +124,7 @@ namespace ml
         // if 2 is triggered, 3 is ignored.
         auto keyevents = [this](EventInfos& event)
         {
-            lg("keydown event (basic events)");
+            lg("keydown event (basic events) : " << event.key);
             auto focusedWidget = ml::app()->focusedWidget();
             ml::keybinds::FocusedType focusedType = ml::keybinds::NONE;
             if(focusedWidget)
@@ -439,5 +439,37 @@ namespace ml
             _menuBar->addMenu(id);
 
         return ml::app()->menusFactory().menus().at(id).get();
+    }
+
+    void Window::loadMenusFromFile(const std::string& filepath)
+    {
+        if (!files::exists(filepath))        
+            return;
+
+        try
+        {
+            auto data = json::parse(files::read(filepath));
+            this->loadMenusFromData(data);
+        }
+        catch(const std::exception& e)
+        {
+            ml::app()->error("Error loading menus from file " + filepath + " : \n" + e.what());
+        }
+    }
+
+    void Window::loadMenusFromData(const json& data)
+    {
+        for (const auto& m : data)
+        {
+            ml::Menu* menu = nullptr;
+            if (m.contains("id") && m.contains("name"))
+                menu = this->menu(m["id"], m["name"]);
+            else if (m.contains("id"))
+                menu = this->menu(m["id"]);
+            else
+                continue;
+
+            menu->deserialize(m);
+        }
     }
 }

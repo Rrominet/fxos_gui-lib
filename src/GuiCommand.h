@@ -12,6 +12,7 @@ namespace ml
             virtual ~GuiCommand() = default;
 
             virtual void exec() override;
+            virtual void exec(const std::any& args){_args = args; this->exec();}
             virtual void reverse() override;
 
             virtual void setExec(const std::function<void(const std::any&)>& f) override;

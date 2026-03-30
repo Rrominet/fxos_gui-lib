@@ -38,8 +38,16 @@ namespace ml
             if (focusedType == FocusedType::NONE || focusedType == FocusedType::NON_EDITABLE)
                 return _match;
 
-            else if (focusedType == FocusedType::ONELINE_EDITABLE || focusedType == FocusedType::MULTILINE_EDITABLE)
+            if (focusedType == ONELINE_EDITABLE)
             {
+                if (key == "Up" || key == "Down")
+                    return _match;
+            }
+
+            if (focusedType == FocusedType::ONELINE_EDITABLE || focusedType == FocusedType::MULTILINE_EDITABLE)
+            {
+                if (key == "Escape")
+                    return _match;
                 if (!ctrl && !alt && !super)
                     return false;
                 if (ctrl && key=="c")

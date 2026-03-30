@@ -141,6 +141,10 @@ namespace ml
             //will create it if non existant
             ml::Menu* menu(const std::string& id, std::string name="");
 
+            //the file content should be in json format.
+            void loadMenusFromFile(const std::string& filepath);
+            void loadMenusFromData(const json& data);
+
         protected : 
             App* _app;
             ml::Window* _parent = nullptr; //pb s

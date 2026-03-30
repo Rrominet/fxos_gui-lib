@@ -9,6 +9,7 @@ namespace ml
             virtual ~AsyncGuiCommand() = default;
 
             virtual void exec() override;
+            virtual void exec(const std::any& args) override {_args = args; this->exec();}
             virtual void reverse() override;
 
             virtual bool async()const override{return true;}
