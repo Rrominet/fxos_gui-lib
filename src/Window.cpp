@@ -459,8 +459,10 @@ namespace ml
 
     void Window::loadMenusFromData(const json& data)
     {
+        lg("Window::loadMenusFromData : " << data.dump(4));
         for (const auto& m : data)
         {
+            lg("m : " << m.dump(4));
             ml::Menu* menu = nullptr;
             if (m.contains("id") && m.contains("name"))
                 menu = this->menu(m["id"], m["name"]);
