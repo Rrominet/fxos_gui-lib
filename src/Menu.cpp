@@ -57,7 +57,9 @@ namespace ml
 
     std::shared_ptr<ml::MenuButton> Menu::addCommand(Command* cmd, const std::any& overrideArgs, const std::string& overrideText)
     {
-        _cmdsIds.push_back(cmd->id());
+        auto id = cmd->id();
+        if (!_cmdsIds.contains(id))
+            _cmdsIds.push_back(id);
         auto _onclick = [cmd, overrideArgs]()
         {
             if (overrideArgs.has_value())
@@ -97,6 +99,8 @@ namespace ml
 
     void Menu::deserialize(const json& j)
     {
+        int startIdx = _cmdsIds.size();
+        lg("Menu::deserialize : "<< j.dump(4));
         if (j.contains("id"))
             _id = j["id"].get<std::string>();
         if (j.contains("name"))
@@ -105,16 +109,22 @@ namespace ml
         {
             for (auto& i : j["cmdsIds"])
             {
+                lg("i : " << i.get<std::string>());
                 if (i == "--") //separator
-                    _cmdsIds.push_back(i);
-                if (!_cmdsIds.contains(i.get<std::string>()))
+                    _cmdsIds.push_back(i.get<std::string>());
+                else if (!_cmdsIds.contains(i.get<std::string>()))
                     _cmdsIds.push_back(i.get<std::string>());
             }
         }
 
 
-        for (const auto& i : _cmdsIds)
+        if (startIdx >= _cmdsIds.size())
+            return;
+        auto ids = _cmdsIds;
+        for (int idx = startIdx; idx < ids.size(); idx++)
         {
+            auto& i = ids[idx];
+            lg ("cmd id deserialised : " << i);
             if (i == "--")
             {
                 this->addSeparator();
@@ -132,5 +142,7 @@ namespace ml
                 lg(e.what());
             }
         }
+
+        db::log(_cmdsIds);
     }
 }
