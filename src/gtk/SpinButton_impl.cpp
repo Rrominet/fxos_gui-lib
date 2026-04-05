@@ -11,6 +11,7 @@ namespace ml
     void SpinButton_impl::_createWidget()
     {
         _gtk = std::make_shared<Gtk::SpinButton>();
+        this->spinButton()->set_update_policy(Gtk::SpinButton::UpdatePolicy::ALWAYS);
         // implement sepecific stuff here if necessecary.
     }
 
