@@ -32,6 +32,8 @@ namespace ml
 
             Events _events; //bp cg
 
+            std::function<void(EventInfos&e)> _onok;
+
         public : 
 #include "./MessageDialog_gen.h"
     };

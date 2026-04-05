@@ -8,6 +8,14 @@ namespace ml
     void MessageDialog::init()
     {
         Dialog::init();
+        _onok = [this](EventInfos&e)
+        {
+            _events.emit("ok");
+            if (!this->doHideOnClose())
+                this->destroy();
+            else 
+                this->hide();
+        };
         this->setTitle("Message");
         this->addCssClass("message");
         this->createMessage();
@@ -28,19 +36,11 @@ namespace ml
         _ok->addCssClass("dialog-ok");
         _ok->setHAlign(FILL);
         _ok->setHExpand(true);
-        auto f = [this](EventInfos& e)
-        {
-            _events.emit("ok");
-            if (!this->doHideOnClose())
-                this->destroy();
-            else 
-                this->hide();
-        };
-        _ok->addEventListener(MOUSE_UP, f);
-        this->addEventListener(KEY_DOWN, [this, f](EventInfos&e)
+        _ok->addEventListener(MOUSE_UP, _onok);
+        this->addEventListener(KEY_DOWN, [this](EventInfos&e)
                 {
                     if (e.key == "Return")
-                        f(e);
+                        _onok(e);
                 });
 
         _foot->setVAlign(BOTTOM);

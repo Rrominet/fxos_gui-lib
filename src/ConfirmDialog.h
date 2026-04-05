@@ -20,5 +20,7 @@ namespace ml
         protected : 
             std::string _cancelBtnText = "Cancel";
             std::shared_ptr<Button> _cancel = nullptr;
+
+            std::function<void(EventInfos&e)> _oncancel;
     };
 }

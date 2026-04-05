@@ -9,6 +9,15 @@ namespace ml
         IconMessageDialog::init();
         this->setTitle("Confirmation"); //changed
         this->addCssClass("confirm");
+
+        _oncancel = [this](EventInfos&e)
+        {
+            _events.emit("cancel");
+            if (!this->doHideOnClose())
+                this->destroy();
+            else 
+                this->hide();
+        };
     }
 
     void ConfirmDialog::createFooter() 
@@ -21,18 +30,11 @@ namespace ml
         MessageDialog::createFooter(); 
 
         _ok->setHAlign(RIGHT);
-
-        auto cancelf = [this](EventInfos& e)
-        {
-            _events.emit("cancel");
-            this->destroy();
-        };
-
-        _cancel->addEventListener(MOUSE_UP, cancelf);
-        this->addEventListener(KEY_DOWN, [this, cancelf](EventInfos& e)
+        _cancel->addEventListener(MOUSE_UP, _oncancel);
+        this->addEventListener(KEY_DOWN, [this](EventInfos& e)
                 {
                     if (e.key == "Escape")
-                        cancelf(e);
+                        _oncancel(e);
                 });
     }
 }

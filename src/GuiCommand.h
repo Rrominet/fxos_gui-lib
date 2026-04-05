@@ -5,14 +5,14 @@
 namespace ml
 {
     class Button;
-    class GuiCommand : public Command    
+    class GuiCommand : virtual public Command    
     {
         public :
             GuiCommand();
             virtual ~GuiCommand() = default;
 
             virtual void exec() override;
-            virtual void exec(const std::any& args){_args = args; this->exec();}
+            virtual void exec(const std::any& args) override {_args = args; this->exec();}
             virtual void reverse() override;
 
             virtual void setExec(const std::function<void(const std::any&)>& f) override;

@@ -180,6 +180,11 @@
 {
     font-style : italic;
 }
+.prop
+{
+    padding : 0.5em 1em;
+}
+
 .property-group
 {
     padding : 0.5em;
@@ -248,6 +253,12 @@ button.dialog-cancel
     border-radius : 5px;
     margin : 1em;
     border: 1px solid var(--hover-background-color);
+}
+
+.prop .multiline-entry
+{
+    padding : 0.7em 1em;
+    margin : 0;
 }
 
 .vtable-header-label:hover,

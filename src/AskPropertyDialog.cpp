@@ -6,6 +6,11 @@
 #include "./Box.hpp"
 #include "./Scrollable.hpp"
 
+#ifdef __EMSCRIPTEN__
+#else
+#include "gtkmm/spinbutton.h"
+#endif
+
 namespace ml
 {
     AskPropertyDialog::AskPropertyDialog(App* app) : ConfirmDialog(app)
@@ -50,11 +55,30 @@ namespace ml
     {
         assert(_setCalled && "the method AskPropertyDialog::set has not been called before AskPropertyDialog::drawProp(), you nust call it before.");
         auto box = _main->appendPropBaseClass(_prop);
-
-        this->setSize(-1, -1);
-        _prop->addOnValid([this]{this->hide(); _events.emit("ok");});
-        
         auto input = props::propInput(_prop, box.get());
+
+        _onok = [this, box](EventInfos&e)
+        {
+#ifdef __EMSCRIPTEN__
+#else 
+             auto input = props::propInput(_prop, box.get());
+             Gtk::SpinButton* sb = dynamic_cast<Gtk::SpinButton*>(input->gtk().get());
+             if (sb)
+                 sb->update();
+#endif
+            _events.emit("ok");
+            if (!this->doHideOnClose())
+                this->destroy();
+            else 
+                this->hide();
+        };
+
+        this->setSize(540, 205);
+        _prop->addOnValid([this]{
+                    EventInfos e;
+                    _onok(e);
+                });
+        
         input->focus();
         if (_prop->isANumber())
             input->setHAlign(FILL);
