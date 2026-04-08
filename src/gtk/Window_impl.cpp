@@ -78,9 +78,7 @@ namespace ml
     {
         if (!_window->get_surface())
         {
-            ml::app()->setTimeout([callback, this](){
-                this->setResizeEventListener(callback);
-            }, 100);
+            lg("GTKWindow surface is null. Try again when the window is visible.");
             return;
         }
 
