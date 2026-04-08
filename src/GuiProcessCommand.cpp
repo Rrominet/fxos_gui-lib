@@ -4,7 +4,7 @@
 
 namespace ml
 {
-    GuiProcessCommand::GuiProcessCommand(): Command(), ProcessCommand(){}
+    GuiProcessCommand::GuiProcessCommand(): ProcessCommand(){}
 
     void GuiProcessCommand::exec()
     {

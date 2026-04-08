@@ -64,50 +64,29 @@ namespace ml
 
     void Commander::_onSearchChange()
     {
-        lg("a");
         std::string searched = _search->value();
-        lg("a");
         _sortCommands(searched);
-        lg("a");
         _buttons.clear();
-        lg("a");
 
         int max=30;
-        lg("a");
-        lg("commands size " << _commands.size());
-        lg("a");
         for (int i=0; i<_commands.size(); i++)
         {
-        lg("a");
-            lg("i " << i << " max " << max);
-        lg("a");
             if (i>=max)
                 break;
-        lg("a");
             auto cmd = _commands[i];
-        lg("a");
             auto button = std::make_unique<CommandButton>(&_list->content(), cmd);
-        lg("a");
             button->events().add("context", [this, cmd](){ _events.emit("context", cmd); });
-        lg("a");
             button->events().add("executed", [this, cmd](){ _events.emit("valid", cmd); });
-        lg("a");
             button->draw();
-        lg("a");
             _buttons.push_back(std::move(button));
-        lg("a");
         }
 
         if (_buttons.size() > 0)
         {
-        lg("a");
             this->setActiveCommandButton(_buttons[0].get());
-        lg("a");
         }
 
-        lg("a");
         _events.emit("changed");
-        lg("a");
     }
 
     int Commander::activeButtonCommandIdx() const
