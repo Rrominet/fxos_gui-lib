@@ -10,6 +10,7 @@ namespace ml
     void WorkDialog::init()
     {
         Dialog::init();
+        this->setSize(640, 360);
         this->setTitle("Working...");
         this->addCssClass("work");
         this->createMessage();
@@ -84,7 +85,5 @@ namespace ml
             _spinner->show();
         else
             _spinner->hide();
-
-        this->fitToContent();
     }
 }

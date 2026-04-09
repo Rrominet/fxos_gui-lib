@@ -36,22 +36,24 @@ namespace ml
             _parent = parent->window(); \
             __draw(parent, search);
 
-        List(Box* parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50) : ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
+#define __CONSTRUCT_ARGS bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50
+
+        List(Box* parent, __CONSTRUCT_ARGS) : ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
         {
             __CONSTRUCT;
         }
 
-        List(Scrollable* parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50): ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
+        List(Scrollable* parent, __CONSTRUCT_ARGS): ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
         {
             __CONSTRUCT;
         }
 
-        List(std::shared_ptr<Box> parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50) : ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
+        List(std::shared_ptr<Box> parent, __CONSTRUCT_ARGS) : ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
         {
             __CONSTRUCT;
         }
 
-        List(std::shared_ptr<Scrollable> parent, bool search = true, SelectionType selectionType = SelectionType::NONE, int maxDrawn = 50): ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
+        List(std::shared_ptr<Scrollable> parent, __CONSTRUCT_ARGS): ComposedWidget(), _search(_S"Search", ""), _selectionType(selectionType)
         {
             __CONSTRUCT;
         }
@@ -247,8 +249,6 @@ namespace ml
                         }
                     }
                 }
-
-                this->unselect(idx);
             }
 
             void __hide(T* elmt)
