@@ -101,15 +101,39 @@ namespace ml
             double scrollX() const;
             double scrollY() const;
 
+            geometry::Point<double> position() const;
+
+            bool isEditable() const;
+            bool isOnelineEditable() const;
+            bool isMultilineEditable() const;
+
+            bool focused() const;
+            bool containsFocus() const;
+
+            void enable();
+            void disable();
+            bool enabled() const;
+
+            void _createBasicEvents();
+
         protected : 
             Widget* _abstract = nullptr;
 
             // the dom element representing the window
             std::shared_ptr<emval> _dom = nullptr;
             bool _visible = false;
+            bool _hovered = false;
+            bool _enabled = true;
+
+            double _oldWidth = 0, _oldHeight = 0;
 
             virtual void _addOnLeftUp(Event event, const std::function<void(EventInfos&)>& callback);
             virtual void _addOnChange(Event event, const std::function<void(EventInfos&)>& callback);
+            virtual void _addOnValid(Event event, const std::function<void(EventInfos&)>& callback);
+            virtual void _addOnWheel(Event event, const std::function<void(EventInfos&)>& callback);
+            virtual void _addOnShown(Event event, const std::function<void(EventInfos&)>& callback);
+            virtual void _addOnHidden(Event event, const std::function<void(EventInfos&)>& callback);
+            virtual void _addOnResize(Event event, const std::function<void(EventInfos&)>& callback);
 
             EllipsizeMode _ellipsizeMpde;
     };

@@ -28,6 +28,5 @@ namespace ml
     {
         assert(_setCalled && "the method AskPropertyGroupDialog::set has not been called before AskPropertyGroupDialog::drawProp(), you nust call it before.");
         auto box = _main->appendPropertyGroup(_prop);
-        this->setSize(-1, -1);
     }
 }

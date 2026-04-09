@@ -161,6 +161,68 @@ namespace ml
         return (*_dom)["title"].as<std::string>();
     }
 
+    void Widget_impl::_createBasicEvents()
+    {
+        this->addEventListener(MOUSE_ENTER, [this](EventInfos&){ _hovered = true; });
+        this->addEventListener(MOUSE_LEAVE, [this](EventInfos&){ _hovered = false; });
+    }
+
+    geometry::Point<double> Widget_impl::position() const
+    {
+        double x = em::x(*_dom);
+        double y = em::y(*_dom);
+        return geometry::Point<double>(x, y);
+    }
+
+    bool Widget_impl::isEditable() const
+    {
+        std::string tag = (*_dom)["tagName"].as<std::string>();
+        return (tag == "INPUT" || tag == "TEXTAREA");
+    }
+
+    bool Widget_impl::isOnelineEditable() const
+    {
+        std::string tag = (*_dom)["tagName"].as<std::string>();
+        return (tag == "INPUT");
+    }
+
+    bool Widget_impl::isMultilineEditable() const
+    {
+        std::string tag = (*_dom)["tagName"].as<std::string>();
+        return (tag == "TEXTAREA");
+    }
+
+    bool Widget_impl::focused() const
+    {
+        emval document = emval::global("document");
+        emval active = document["activeElement"];
+        return (*_dom == active);
+    }
+
+    bool Widget_impl::containsFocus() const
+    {
+        return _dom->call<bool>("contains", emval::global("document")["activeElement"]);
+    }
+
+    void Widget_impl::enable()
+    {
+        _enabled = true;
+        _dom->set("disabled", false);
+        this->removeCssClass("disabled");
+    }
+
+    void Widget_impl::disable()
+    {
+        _enabled = false;
+        _dom->set("disabled", true);
+        this->addCssClass("disabled");
+    }
+
+    bool Widget_impl::enabled() const
+    {
+        return _enabled;
+    }
+
     void Widget_impl::addEventListener(Event event, const std::function<void(EventInfos&)>& callback)
     {
         if (event == ml::Event::CLICK || 
@@ -299,14 +361,110 @@ namespace ml
             _addOnChange(event, callback);
 
         else if (event == ml::Event::VALID)
+            _addOnValid(event, callback);
+
+        else if (event == ml::Event::WHEEL)
+            _addOnWheel(event, callback);
+
+        else if (event == ml::Event::SHOWN)
+            _addOnShown(event, callback);
+
+        else if (event == ml::Event::HIDDEN)
+            _addOnHidden(event, callback);
+
+        else if (event == ml::Event::RESIZE)
+            _addOnResize(event, callback);
+
+        else if (event == ml::Event::FOCUS)
         {
-            auto f = [callback]()
+            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
             {
                 EventInfos infos;
+                infos.type = ml::Event::FOCUS;
                 callback(infos);
+                return false;
             };
-            em::addEventListener(*_dom, ml::Event::VALID, f);
+            em::addEventListener(*_dom, ml::Event::FOCUS, f);
         }
+
+        else if (event == ml::Event::UNFOCUS)
+        {
+            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
+            {
+                EventInfos infos;
+                infos.type = ml::Event::UNFOCUS;
+                callback(infos);
+                return false;
+            };
+            em::addEventListener(*_dom, ml::Event::UNFOCUS, f);
+        }
+    }
+
+    void Widget_impl::_addOnValid(Event event, const std::function<void(EventInfos&)>& callback)
+    {
+        auto f = [callback]()
+        {
+            EventInfos infos;
+            callback(infos);
+        };
+        em::addEventListener(*_dom, ml::Event::VALID, f);
+    }
+
+    void Widget_impl::_addOnWheel(Event event, const std::function<void(EventInfos&)>& callback)
+    {
+        auto f = [callback, this](const emval& dom, const EmscriptenMouseEvent* ev)
+        {
+            if (_hovered)
+            {
+                EventInfos infos;
+                infos.type = ml::Event::WHEEL;
+                infos.x = ev->clientX;
+                infos.y = ev->clientY;
+                callback(infos);
+                return infos.preventDefault;
+            }
+            return false;
+        };
+        em::addEventListener(*_dom, ml::Event::WHEEL, f);
+    }
+
+    void Widget_impl::_addOnShown(Event event, const std::function<void(EventInfos&)>& callback)
+    {
+        em::addEventListener(*_dom, ml::Event::SHOWN, [callback]()
+        {
+            EventInfos infos;
+            infos.type = ml::Event::SHOWN;
+            infos.visible = true;
+            callback(infos);
+        });
+    }
+
+    void Widget_impl::_addOnHidden(Event event, const std::function<void(EventInfos&)>& callback)
+    {
+        em::addEventListener(*_dom, ml::Event::HIDDEN, [callback]()
+        {
+            EventInfos infos;
+            infos.type = ml::Event::HIDDEN;
+            infos.visible = false;
+            callback(infos);
+        });
+    }
+
+    void Widget_impl::_addOnResize(Event event, const std::function<void(EventInfos&)>& callback)
+    {
+        em::addEventListener(*_dom, ml::Event::RESIZE, [this, callback, event]()
+        {
+            EventInfos e;
+            e.type = event;
+            e.width = em::width(*_dom);
+            e.height = em::height(*_dom);
+            if (_oldWidth == e.width && _oldHeight == e.height)
+                return;
+            e.visible = _visible;
+            callback(e);
+            _oldWidth = e.width;
+            _oldHeight = e.height;
+        });
     }
 
     void Widget_impl::_addOnLeftUp(Event event, const std::function<void(EventInfos&)>& callback)
@@ -444,12 +602,18 @@ namespace ml
 
     void Widget_impl::addOnXScroll(const std::function<void(double)>& cb)
     {
-        //TODO : need to check the event listener in dom
+        em::addEventListener(*_dom, std::string("scroll"), [this, cb]()
+        {
+            cb(em::scrollLeft(*_dom));
+        });
     }
 
     void Widget_impl::addOnYScroll(const std::function<void(double)>& cb)
     {
-        //TODO : need to check the event listener in dom
+        em::addEventListener(*_dom, std::string("scroll"), [this, cb]()
+        {
+            cb(em::scrollTop(*_dom));
+        });
     }
 
     double Widget_impl::scrollX() const

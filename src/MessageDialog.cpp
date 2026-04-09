@@ -8,6 +8,7 @@ namespace ml
     void MessageDialog::init()
     {
         Dialog::init();
+        this->setSize(640, 360);
         _onok = [this](EventInfos&e)
         {
             _events.emit("ok");
@@ -50,7 +51,6 @@ namespace ml
     void MessageDialog::setMessage(const std::string& message)
     {
         _message->setText(message);
-        this->fitToContent();
     }
 
     json MessageDialog::serialize() const
