@@ -4,6 +4,10 @@
 
 namespace ml
 {
+#ifdef __EMSCRIPTEN__
+    class VideoPlayer : public ComposedWidget
+    {};
+#else
     class Video;
     class Box;
     class TimeSliderInOut;
@@ -63,4 +67,5 @@ namespace ml
             void _setEvents();
             void _init(ml::Box* parent);
     };
+#endif
 }

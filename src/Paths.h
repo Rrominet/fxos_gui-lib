@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "files.2/files.h"
 
 #ifdef __EMSCRIPTEN__
 #include "./em/Paths_impl.h"

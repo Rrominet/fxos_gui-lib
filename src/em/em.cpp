@@ -267,9 +267,9 @@ namespace em
             dom["classList"].call<void>("add", c);
     }
 
-    void removeClasses(const emval& dom, const std::string& classes)
+    void removeClasses(const emval& dom, const std::string& classes_str)
     {
-        auto _tmp = str::split(classes, ",");
+        auto _tmp = str::split(classes_str, ",");
         for (auto& c : _tmp)
             dom["classList"].call<void>("remove", c);
     }
@@ -313,12 +313,14 @@ namespace em
 
     void clearClasses(const emval& dom)
     {
-        removeClasses(dom, classes(dom));
+        auto cls = classes(dom);
+        for (auto& c : cls)
+            dom["classList"].call<void>("remove", c);
     }
 
     void addCss(const emval& dom, const std::string& css)
     {
-        element["style"].set("cssText", val(css));
+        dom["style"].set("cssText", emval(css));
     }
 
     //set the css dynamicly, equivalent of js dom.style.attr = "value;"
@@ -332,23 +334,23 @@ namespace em
     {
         if (value)
         {
-            dom.call<void>("setAttribute", "tabindex", "1");
+            dom.call<void>("setAttribute", _S"tabindex", _S"1");
         }
         else
         {
-            dom.call<void>("removeAttribute", "tabindex");
+            dom.call<void>("removeAttribute", _S"tabindex");
         }
     }
 
     bool hovered(const emval& dom)
     {
-        return dom.call<bool>("matches", val(":hover"));
+        return dom.call<bool>("matches", emval(":hover"));
     }
 
     float fontSize(const emval& dom)
     {
-        val window = val::global("window");
-        val computedStyle = window.call<val>("getComputedStyle", dom);
+        emval window = emval::global("window");
+        emval computedStyle = window.call<emval>("getComputedStyle", dom);
         std::string fontSize = computedStyle["fontSize"].as<std::string>();
 
         return std::stof(fontSize);
@@ -356,7 +358,7 @@ namespace em
 
     void scrollBy(const emval& dom, int x, int y)
     {
-        dom.call<int, int>("scrollBy", x, y);
+        dom.call<void>("scrollBy", x, y);
     }
 
     int scrollTop(const emval& dom)
@@ -398,24 +400,24 @@ namespace em
         parent.call<void>("removeChild", child);
     }
 
-    emval& parent(const emval& dom)
+    emval parent(const emval& dom)
     {
         return dom["parentNode"];
     }
 
     void setCustomData(emval* dom, const std::any& data)
     {
-        _customData[dom] = data;    
+        _custom_datas[dom] = data;    
     }
 
     std::any& customData(emval* dom)
     {
-        if (_customData.find(dom) == _customData.end())
+        if (_custom_datas.find(dom) == _custom_datas.end())
         {
-            _customData[dom] = std::any();
+            _custom_datas[dom] = std::any();
             lg("The custom data asked was not found, returning an empty any");
         }
-        return _customData[dom];
+        return _custom_datas[dom];
     }
 
     void move(const emval& dom, double x, double y)
@@ -423,15 +425,15 @@ namespace em
         dom["style"].set("left", std::to_string(x) + "px");
         dom["style"].set("top", std::to_string(y) + "px");
 
-        setCusomData(&dom, geometry::Point<double>(x, y));
+        setCustomData(const_cast<emval*>(&dom), geometry::Point<double>(x, y));
     }
 
     geometry::Point<double> position(const emval& dom)
     {
-        geomtry::Point<double> _r(0, 0);
+        geometry::Point<double> _r(0, 0);
         try
         {
-            auto& any = getCusomData(&dom);
+            auto& any = customData(const_cast<emval*>(&dom));
             _r = std::any_cast<geometry::Point<double>>(any);
         }
         catch(const std::exception& e)
@@ -440,6 +442,28 @@ namespace em
         }
 
         return _r;    
+    }
+
+    long setTimeout(const std::function<void()>& callback, int ms)
+    {
+        auto* cb = new std::function<void()>(callback);
+
+        return emscripten_set_timeout([](void* userData) {
+            auto* f = static_cast<std::function<void()>*>(userData);
+            (*f)();
+            delete f;
+        }, ms, cb);
+    }
+
+    long setInterval(const std::function<void()>& callback, int ms)
+    {
+        auto* cb = new std::function<void()>(callback);
+
+        return emscripten_set_interval([](void* userData) {
+            auto* f = static_cast<std::function<void()>*>(userData);
+            (*f)();
+            delete f;
+        }, ms, cb);
     }
 }
 

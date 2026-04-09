@@ -19,6 +19,8 @@ namespace ml
             virtual void _createWidget() override;
 
             void setDraw(const std::function<void (int , int)>& callback);
+            void redraw();
+            emval& ctx();
 
             // Rectangle operations
             void fillRect(int x, int y, int w, int h, const Color<double>& color);
@@ -53,5 +55,9 @@ namespace ml
             TextMetrics textMetrics(const std::string& text, const TextStyle& style = {12.0, false, false, false, false, "sans-serif"});
 
             void drawImage(const std::string& path, int x, int y, int pivotx = 0, int pivoty = 0, float scaleX = 1.0, float scaleY = 1.0);
+
+        private:
+            std::shared_ptr<emval> _ctx;
+            std::function<void(int, int)> _draw;
     };
 }

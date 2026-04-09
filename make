@@ -187,6 +187,8 @@ if("clean" in sys.argv or "clear" in sys.argv):
     cpp.clean()
     exit()
 else:
+    #tmp
+    cpp.useThreads = False
     cpp.build()
 
 replaceCss()

@@ -2,6 +2,8 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+#ifdef __EMSCRIPTEN__
+#else
 #include "fmod.hpp"
 #include <boost/process/exception.hpp>
 #include <boost/process.hpp>
@@ -64,3 +66,4 @@ namespace ml
 #include "./VideoSound_gen.h"
     };
 }
+#endif

@@ -29,4 +29,10 @@ namespace ml
     {
         //TODO : need to check the behavior in GTK to copy it in the dom 
     }
+
+    void Popover_impl::setChild(std::shared_ptr<ml::Widget> child)
+    {
+        _dom->set("innerHTML", "");
+        _dom->call<void, emval&>("appendChild", *child->dom());
+    }
 }

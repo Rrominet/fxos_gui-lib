@@ -1,11 +1,16 @@
 #include "./GuiBackendCommand.h"
 #include "GuiCommand.h"
 #include "files.2/files.h"
-#include "ipc.h"
-#include "App.h"
-#include "mlprocess.h"
-#include "./Button.h"
+
+#ifdef __EMSCRIPTEN__
+#else
 #include <mutex>
+#include "ipc.h"
+#include "mlprocess.h"
+#endif
+
+#include "App.h"
+#include "./Button.h"
 
 namespace ml
 {
@@ -71,8 +76,12 @@ namespace ml
                 b->mkLoading();
             try
             {
+#ifdef __EMSCRIPTEN__
+                ml::app()->error("Process Command is not implemented yet in Emscripten");
+#else
                 ipc::call(_process, _function, _jsonArgs, _cb, _sync);
                 _waiting = true; //changed
+#endif
             }
             catch(const std::exception& e)
             {
@@ -110,8 +119,12 @@ namespace ml
                 b->mkLoading();
             try
             {
+#ifdef __EMSCRIPTEN__
+                ml::app()->error("Process Command is not implemented yet in Emscripten");
+#else
                 ipc::call(_process, _function, _jsonArgs, _cb);
                 _waiting = true; //changed
+#endif
             }
             catch(const std::exception& e)
             {
@@ -167,7 +180,10 @@ namespace ml
             b->stopLoading();
         app()->main()->setWorking(false);
         app()->main()->setInfos("");
+#ifdef __EMSCRIPTEN__
+#else
         ml::app()->error("Error in the process backend (" + _process->cmd_s() + ") :\n" + error);
+#endif
     }
 
     void GuiBackendCommand::setExec(const std::function<void(const std::any&)>& f)

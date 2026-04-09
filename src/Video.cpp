@@ -1,3 +1,5 @@
+#ifdef __EMSCRIPTEN__
+#else
 #include "./Video.h"
 #include "enums.h"
 #include "files.2/files.h"
@@ -621,3 +623,4 @@ namespace ml
         _currentFrameNotShown = true;
     }
 }
+#endif

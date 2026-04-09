@@ -3,6 +3,7 @@
 #include "../Widget.h"
 #include "./em.h"
 #include "../EventInfos.h"
+#include "Ret.h"
 #include "enums.h"
 
 namespace ml
@@ -29,17 +30,25 @@ namespace ml
     void Widget_impl::setCssClasses(const std::vector<std::string>& classes)
     {
         this->clearCssClasses();
-        em::addClasses(*_dom, classes); 
+        std::string classes_str = str::join(classes, " ");
+        em::addClasses(*_dom, classes_str); 
     }
+
 
     bool Widget_impl::hadCssClass(const std::string& cls)
     {
         return em::containsClasses(*_dom, cls);
     }
 
-    void Widget_impl::addCss(const std::string& css)
+    ml::Ret<> Widget_impl::addCss(const std::string& css)
     {
         em::addCss(*_dom, css); 
+        return ml::ret::success();
+    }
+
+    void Widget_impl::addCss(const std::string& attr, const std::string& value)
+    {
+        this->addCss(attr + ":" + value);
     }
 
     void Widget_impl::show()
@@ -194,14 +203,13 @@ namespace ml
 
     bool Widget_impl::focused() const
     {
-        emval document = emval::global("document");
-        emval active = document["activeElement"];
+        emval active = em::dom()["activeElement"];
         return (*_dom == active);
     }
 
     bool Widget_impl::containsFocus() const
     {
-        return _dom->call<bool>("contains", emval::global("document")["activeElement"]);
+        return _dom->call<bool>("contains", em::dom()["activeElement"]);
     }
 
     void Widget_impl::enable()
@@ -602,18 +610,16 @@ namespace ml
 
     void Widget_impl::addOnXScroll(const std::function<void(double)>& cb)
     {
-        em::addEventListener(*_dom, std::string("scroll"), [this, cb]()
-        {
-            cb(em::scrollLeft(*_dom));
-        });
+        //TODO : 
+        //To implement
+        lg("Widget_impl::addOnXScroll not implemented");
     }
 
     void Widget_impl::addOnYScroll(const std::function<void(double)>& cb)
     {
-        em::addEventListener(*_dom, std::string("scroll"), [this, cb]()
-        {
-            cb(em::scrollTop(*_dom));
-        });
+        //TODO : 
+        //To implement
+        lg("Widget_impl::addOnYScroll not implemented");
     }
 
     double Widget_impl::scrollX() const

@@ -1,4 +1,11 @@
 #pragma once
+#ifdef __EMSCRIPTEN__
+namespace ml
+{
+    class Video : public ComposedWidget
+    {};
+}
+#else
 #include "./ComposedWidget.h"
 #include "mlprocess.h"
 #include <boost/concept_check.hpp>
@@ -166,3 +173,4 @@ namespace ml
             VideoSound _sound;
     };
 }
+#endif
