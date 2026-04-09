@@ -144,6 +144,8 @@ namespace ml
             std::unordered_map<std::string, std::shared_ptr<ml::Window>>& windows(){return _windows;};
             const std::unordered_map<std::string, std::shared_ptr<ml::Window>>& windows() const {return _windows;};
 
+#ifdef __EMSCRIPTEN__
+#else
             // the callbacks will always be executed on the mainthread -- so you can call GUI stuff in them
             // the process* is own by the app, do not delete it yourself.
             Process* exec_async(ml::Vec<std::string> cmd, 
@@ -152,8 +154,10 @@ namespace ml
                     const std::function<void(const std::string&)> onlineout=0,
                     const std::function<void(const std::string&)> onlineerr=0);
 
+
             //FIXME : this should actually be wraped because ThreadPool won't work in emscripten
             th::ThreadPool& pool(){return _pool;}
+#endif
 
             void openFile(const std::string& title="Open File...", 
                     const std::string& initialDir="",
@@ -217,12 +221,15 @@ namespace ml
             
             Paths _paths; //bp cg
 
+            //FIXME : this should actually be wraped because ThreadPool won't work in emscripten
+#ifdef __EMSCRIPTEN__
+#else
             ml::Vec<std::unique_ptr<Process>> _processes;
+            th::ThreadPool _pool;
+#endif
 
             ml::Events _events; //bp cg
 
-            //FIXME : this should actually be wraped because ThreadPool won't work in emscripten
-            th::ThreadPool _pool;
 
             std::string _about;
 

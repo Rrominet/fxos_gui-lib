@@ -9,7 +9,11 @@
 #include "./GuiBackendCommand.h"
 #include "./WorkDialog.h"
 #include "./ProgressDialog.h"
+
+#ifdef __EMSCRIPTEN__
+#else
 #include "mlprocess.h"
+#endif
 
 namespace ml
 {
@@ -160,7 +164,11 @@ namespace ml
              };
              this->queue(_onfinished);
          };
+#ifdef __EMSCRIPTEN__
+         job();
+#else
         _pool.run(job);
+#endif
     }
 
     //same as the upper one but you can pass data from the torun function to the onfinished via a std::any object.
@@ -193,7 +201,10 @@ namespace ml
              };
              this->queue(_onfinished);
          };
+#ifdef __EMSCRIPTEN__
+#else
         _pool.run(job);
+#endif
     }
 
     void App::execAsync(const std::string& runningInfos, const std::function<void()>& torun, const std::string& finishedInfos, const std::function<void()>& onfinished)
@@ -233,7 +244,10 @@ namespace ml
              auto _onfinished = [onfinished, res, this, finishedInfos]{onfinished(res); this->main()->setWorking(false); this->main()->setInfos(finishedInfos);};
              this->queue(_onfinished);
          };
+#ifdef __EMSCRIPTEN__
+#else
         _pool.run(job);
+#endif
     }
 
     std::shared_ptr<AskPropertyDialog> App::ask(ml::Property* prop, const std::string& message, ml::Window* parent )
@@ -332,6 +346,8 @@ namespace ml
         return false;
     }
 
+#ifdef __EMSCRIPTEN__
+#else
     Process* App::exec_async(ml::Vec<std::string> cmd,
             const std::string& cwd,
             const std::function<void()>& ondone,
@@ -399,6 +415,7 @@ namespace ml
         p_ptr->start();
         return p_ptr;
     }
+#endif
 
     void App::_createBasicCommands()
     {

@@ -5,15 +5,17 @@
 namespace ml
 {
     class Box;
+    class AbsoluteBox;
     class AbsoluteBox_impl : public Widget_impl
     {
         public : 
-            AbsoluteBox_impl(Box* win);
+            AbsoluteBox_impl(AbsoluteBox* abstract);
             virtual ~AbsoluteBox_impl() = default;
 
             virtual void _createWidget() override;
 
             std::shared_ptr<emval> overlay(){assert(_dom); return _dom;}
+            std::shared_ptr<emval> overlay()const {assert(_dom); return _dom;}
 
             void append(std::shared_ptr<ml::Widget> c);
             void prepend(std::shared_ptr<ml::Widget> c);

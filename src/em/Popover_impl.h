@@ -17,5 +17,7 @@ namespace ml
 
             void setPosition(float x, float y);
             void setAutoHide(bool v=true);
+
+            void setChild(std::shared_ptr<ml::Widget> child);
     };
 }

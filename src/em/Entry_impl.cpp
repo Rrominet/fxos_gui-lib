@@ -47,5 +47,4 @@ namespace ml
     {
         return (*_dom)["selectionStart"].as<int>();
     }
-
 }

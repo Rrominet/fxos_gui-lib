@@ -1,3 +1,5 @@
+#ifdef __EMSCRIPTEN__
+#else
 #include "./VideoSound.h"
 #include "sound/mlSound.h"
 #include "ffmpeg.h"
@@ -204,3 +206,4 @@ namespace ml
         return _sound->speed();
     }
 }    
+#endif

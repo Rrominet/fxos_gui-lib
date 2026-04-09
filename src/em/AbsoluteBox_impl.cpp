@@ -4,7 +4,7 @@
 
 namespace ml
 {
-    AbsoluteBox_impl::AbsoluteBox_impl(Box* abstract) : Widget_impl((Widget*)abstract)
+    AbsoluteBox_impl::AbsoluteBox_impl(AbsoluteBox* abstract) : Widget_impl((Widget*)abstract)
     {
     }
 
@@ -18,14 +18,14 @@ namespace ml
     {
         _children.append(c->dom());  
         em::append(*_dom, *c->dom());
-        *(c->dom())["classList"].call<void, std::string>("add", "overlay-child");
+        (*(c->dom()))["classList"].call<void, std::string>("add", "overlay-child");
     }
 
     void AbsoluteBox_impl::prepend(std::shared_ptr<ml::Widget> c)
     {
         _children.prepend(c->dom());
         em::prepend(*_dom, *c->dom());
-        *(c->dom())["classList"].call<void, std::string>("add", "overlay-child");
+        (*(c->dom()))["classList"].call<void, std::string>("add", "overlay-child");
     }
 
     void AbsoluteBox_impl::remove(ml::Widget* c)

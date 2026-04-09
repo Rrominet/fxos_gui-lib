@@ -38,6 +38,7 @@ namespace ml
         if (!_drawn)
             return;
         em::hide(*_dom);
+        _onhide.exec();
     }
 
     void Window_impl::_draw()
@@ -137,12 +138,22 @@ namespace ml
 
     void Window_impl::_setBasicEvents()
     {
+        em::addEventListener(*_dom, ml::Event::MOUSE_MOVE, [this](const emval& dom, const EmscriptenMouseEvent* e)
+        {
+            em::window().set("_mlMouseX", e->clientX);
+            em::window().set("_mlMouseY", e->clientY);
+            return false;
+        });
+
         em::addEventListener(*_closeButton, ml::Event::CLICK, [this](const emval& dom, const EmscriptenMouseEvent* e)
                 {
-                    if (_win->hideOnClose())
+                    if (_hideOnClose)
                         _win->hide();
-                    else 
+                    else
+                    {
+                        _onclose.exec();
                         _win->destroy();
+                    }
                     return true;
                 });
 
@@ -207,5 +218,39 @@ namespace ml
             this->resetSize();
             this->resetPosition();
         }
+    }
+
+    math::vec2d Window_impl::mousePos()
+    {
+        auto rect = (*_dom).call<emval>("getBoundingClientRect");
+        double domX = rect["x"].as<double>();
+        double domY = rect["y"].as<double>();
+
+        auto mouseX = em::window()["_mlMouseX"].as<double>();
+        auto mouseY = em::window()["_mlMouseY"].as<double>();
+
+        return math::vec2d(mouseX - domX, mouseY - domY);
+    }
+
+    void Window_impl::addWheelEventListener(const std::function<void(EventInfos&)>& callback)
+    {
+        em::addEventListener(*_dom, "wheel", [callback](const emval& event)
+        {
+            EventInfos e;
+            e.dx = event["deltaX"].as<double>();
+            e.dy = event["deltaY"].as<double>();
+            callback(e);
+        });
+    }
+
+    void Window_impl::setResizeEventListener(const std::function<void(EventInfos&)>& callback)
+    {
+        em::addEventListener(em::window(), "resize", [this, callback](const emval& event)
+        {
+            EventInfos e;
+            e.width = _width;
+            e.height = _height;
+            callback(e);
+        });
     }
 }

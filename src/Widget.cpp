@@ -99,6 +99,7 @@ namespace ml
                 this->window()->addEventListener(RESIZE, callback);
                 break;
             }
+            case NONE : break;
         }
     }
 

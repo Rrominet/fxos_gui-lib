@@ -1,8 +1,8 @@
-
 #pragma once
 #include "./em.h"
 #include "../enums.h"
 #include <memory>
+#include "Ret.h"
 
 namespace ml
 {
@@ -23,7 +23,8 @@ namespace ml
             void setCssClasses(const std::vector<std::string>& classes);
             bool hadCssClass(const std::string& cls);
 
-            void addCss(const std::string& css);
+            ml::Ret<> addCss(const std::string& css);
+            void addCss(const std::string& attr, const std::string& value);
 
             virtual void show();
             virtual void hide();

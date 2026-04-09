@@ -20,6 +20,8 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+#include "mlMath.h"
+
 //this window has their personnal commands manager if you want to have commands that are specific to only one window.
 
 class Process;

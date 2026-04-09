@@ -23,8 +23,6 @@ namespace ml
             //this is sync
             void loadFromMemory(const std::vector<unsigned char>& buf, ImageFormat format);
 
-            ImageState state() const;
-
             virtual void setWidth(int w) override;
     };
 }

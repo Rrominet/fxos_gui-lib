@@ -75,7 +75,7 @@ namespace em
     void insertBefore(const emval& parent, const emval& child, const emval& ref);
 
     void remove(const emval& parent, const emval& child);
-    emval& parent(const emval& dom);
+    emval parent(const emval& dom);
 
     void setCustomData(emval* dom, const std::any& data);
 
@@ -87,4 +87,7 @@ namespace em
 
     //return (0, 0) if not founded.
     geometry::Point<double> position(const emval& dom);
+
+    long setTimeout(const std::function<void()>& callback, int ms);
+    long setInterval(const std::function<void()>& callback, int ms);
 }

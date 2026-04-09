@@ -2,6 +2,7 @@
 #include "./em.h"
 #include <memory>
 #include "../Widget.h"
+#include "mlMath.h"
 
 namespace ml
 {
@@ -54,6 +55,14 @@ namespace ml
             void addCssClass(const std::string& cls);
             void removeCssClass(const std::string& cls);
 
+            math::vec2d mousePos();
+            void addWheelEventListener(const std::function<void(EventInfos&)>& callback);
+            bool doHideOnClose() const {return _hideOnClose;}
+            void hideOnClose(bool val);
+            void addOnClose(const std::function<void()>& callback){_onclose.push_back(callback);}
+            void addOnHide(const std::function<void()>& callback){_onhide.push_back(callback);}
+            void setResizeEventListener(const std::function<void(EventInfos&)>& callback);
+
         protected : 
             Window* _win = nullptr;
 
@@ -77,6 +86,11 @@ namespace ml
             double _grabbOffsetY = 0; //bp g
 
             bool _main = false;
+
+            bool _hideOnClose = false;
+
+            ml::Vec<std::function<void()>> _onclose;
+            ml::Vec<std::function<void()>> _onhide;
 
         public : 
 #include "Window_impl_gen.h"

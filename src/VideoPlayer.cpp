@@ -1,3 +1,5 @@
+#ifdef __EMSCRIPTEN__
+#else
 #include "./VideoPlayer.h"
 #include "./Video.h"
 #include "./TimeSliderInOut.h"
@@ -193,3 +195,4 @@ namespace ml
         return _video->events();
     }
 }
+#endif
