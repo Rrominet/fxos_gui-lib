@@ -70,6 +70,7 @@ namespace ml
             int height() const{return _gtk->get_allocated_height();}
 
             geometry::Point<double> position() const;
+            geometry::Point<double> computedPosition(ml::Widget* coordonatesSrc) const;
 
             void setFocusable(bool value){_gtk->set_focusable(value);}
             bool hovered() const{return _hovered;}
@@ -100,6 +101,8 @@ namespace ml
             void enable(){_gtk->set_sensitive(true);}
             void disable(){_gtk->set_sensitive(false);}
             bool enabled() const {return _gtk->get_sensitive();}
+
+            void setOverflow(Overflow overflow){_gtk->set_overflow((Gtk::Overflow)overflow);}
 
         protected : 
             Widget* _abstract = nullptr;
@@ -154,8 +157,6 @@ namespace ml
 
             virtual void _addOnShown(Event event, const std::function<void (EventInfos&)>& callback);
             virtual void _addOnHidden(Event event, const std::function<void (EventInfos&)>& callback);
-
-            virtual void _addOnResize(Event event, const std::function<void (EventInfos&)>& callback);
 
             void _createCssProviderIfNeeded();
 

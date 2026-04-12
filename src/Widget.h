@@ -129,6 +129,9 @@ namespace ml
             double right() const {return _impl->position().x + this->width();}
             double bottom() const {return _impl->position().y + this->height();}
 
+            //return the position of this widget in the system coordonates of the coodonatesSrc one
+            geometry::Point<double> computedPosition(ml::Widget* coordonatesSrc) const{return _impl->computedPosition(coordonatesSrc);}
+
             void setFocusable(bool value){_impl->setFocusable(value);}
             bool hovered() const{return _impl->hovered();}
 
@@ -165,6 +168,8 @@ namespace ml
             void enable(){_impl->enable();}
             void disable(){_impl->disable();}
             bool enabled() const {return _impl->enabled();}
+
+            void setOverflow(Overflow overflow){_impl->setOverflow(overflow);};
 
         protected : 
             std::shared_ptr<Widget_impl> _impl;

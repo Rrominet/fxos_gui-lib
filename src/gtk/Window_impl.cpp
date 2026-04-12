@@ -76,18 +76,32 @@ namespace ml
 
     void Window_impl::setResizeEventListener(const std::function<void(EventInfos&)>& callback)
     {
-        if (!_window->get_surface())
-        {
-            lg("GTKWindow surface is null. Try again when the window is visible.");
-            return;
-        }
+        // directly from gtk doc
+// The ::size-allocate signal has been removed, since it is easy to misuse. If you need to learn about sizing changes of custom drawing widgets, use the GtkDrawingArea::resize or GtkGLArea::resize signals. If you want to track the size of toplevel windows, use property notification for GtkWindow:default-width and GtkWindow:default-height.
+        auto lastWidth = std::make_shared<int>(-1);
+        auto lastHeight = std::make_shared<int>(-1);
 
-        _window->get_surface()->property_width().signal_changed().connect([callback, this](){
-                    EventInfos e;
-                    e.width = _window->get_width();
-                    e.height = _window->get_height();
-                    callback(e);
-                });
+        auto emitResize = [this, callback, lastWidth, lastHeight]()
+        {
+            int w = _window->get_width();
+            int h = _window->get_height();
+
+            if (w == *lastWidth && h == *lastHeight)
+                return;
+
+            *lastWidth = w;
+            *lastHeight = h;
+
+            EventInfos e;
+            e.width = w;
+            e.height = h;
+            callback(e);
+        };
+
+        _window->property_default_width().signal_changed().connect(emitResize);
+        _window->property_default_height().signal_changed().connect(emitResize);
+        _window->property_maximized().signal_changed().connect(emitResize);
+        _window->property_fullscreened().signal_changed().connect(emitResize);
     }
 
     void Window_impl::_createControllerScroll()

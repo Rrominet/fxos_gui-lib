@@ -50,7 +50,8 @@ namespace ml
 
     enum VAlignment
     {
-        TOP=1,
+        VFILL,
+        TOP,
         BOTTOM,
         VCENTER,
     };
@@ -103,5 +104,11 @@ namespace ml
        ELLIPSIZE_START,
        ELLIPSIZE_MIDDLE,
        ELLIPSIZE_END
+    };
+
+    enum Overflow
+    {
+        OVERFLOW_VISIBLE,
+        OVERFLOW_HIDDEN,
     };
 }
