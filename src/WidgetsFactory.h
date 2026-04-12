@@ -36,6 +36,9 @@ namespace ml
             template <typename W=ml::Canvas, typename... Args>
                 std::shared_ptr<W> createCanvas(ml::Scrollable* parent, Args&&... args);
 
+            template <typename W=ml::Canvas, typename... Args>
+                std::shared_ptr<W> createCanvas(ml::Fixed* parent, Args&&... args);
+
         public : 
 #include "./WidgetsFactory_types_gen.h"
 

@@ -16,6 +16,7 @@ namespace ml
     class AbsoluteBox;
     class Scrollable;
     class Popover;
+    class Canvas;
 
 #include "./Widget_types_widgets_classes_gen.h"
     class Fixed : public Widget
@@ -47,6 +48,9 @@ namespace ml
 
             void moveChild(ml::Widget* w, double x, double y){this->fixed()->move(w,x,y);}
             geometry::Point<double> widgetPos(ml::Widget* w){return this->fixed()->widgetPos(w);}
+
+            template <typename W=ml::Canvas, typename... Args>
+                std::shared_ptr<W> createCanvas(Args&&... args);
 
         protected : 
             ml::Vec<std::shared_ptr<ml::Widget>> _children; //bp cg

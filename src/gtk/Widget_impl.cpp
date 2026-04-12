@@ -1,4 +1,3 @@
-
 #include "./Widget_impl.h"
 #include "../Widget.h"
 #include "../EventInfos.h"
@@ -9,6 +8,7 @@
 #include <gtkmm/editable.h>
 #include <gtkmm/eventcontroller.h>
 #include <gtkmm/textview.h>
+#include <gdkmm/graphene_point.h>
 #include "../App.h"
 
 namespace ml
@@ -150,10 +150,6 @@ namespace ml
 
             case HIDDEN : 
                 _addOnHidden(event, callback);
-                break;
-
-            case RESIZE : 
-                _addOnResize(event, callback);
                 break;
 
             default:
@@ -439,24 +435,6 @@ namespace ml
         });
     }
 
-    void Widget_impl::_addOnResize(Event event, const std::function<void (EventInfos&)>& callback)
-    {
-            _gtk->add_tick_callback([this,callback, event](const Glib::RefPtr<Gdk::FrameClock>&){
-                EventInfos e; 
-                e.type = event;
-                e.width = _gtk->get_width();
-                e.height = _gtk->get_height();
-                if (_oldWidth == e.width && _oldHeight == e.height)
-                    return true;
-
-                e.visible = _gtk->is_visible();
-                callback(e);
-                _oldWidth = e.width;
-                _oldHeight = e.height;
-                return true;
-            });
-    }
-
     void Widget_impl::setCursor(const std::string& name)
     {
         auto cursor = Gdk::Cursor::create(name);
@@ -569,6 +547,25 @@ namespace ml
     {
         auto alloc = _gtk->get_allocation();
         return geometry::Point<double>(alloc.get_x(), alloc.get_y());
+    }
+
+    geometry::Point<double> Widget_impl::computedPosition(ml::Widget* coordonatesSrc) const
+    {
+        // 0,0 = top-left of THIS widget in ITS OWN space
+        Gdk::Graphene::Point pos(0.0f, 0.0f);
+
+        auto absolute = _gtk->compute_point(*coordonatesSrc->gtk(), pos);
+        if (absolute.has_value())
+        {
+            return geometry::Point<double>(absolute.value().get_x(), absolute.value().get_y());
+        }
+        else
+        {
+            lg("Error : widget position computation failed - They don't share common ancerstors.");
+        }
+
+        // fallback, shouldn't happen if widgets share a common ancestor
+        return this->position();
     }
 
     bool Widget_impl::isEditable() const

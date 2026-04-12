@@ -18,25 +18,48 @@ namespace ml
     {
         c->setHAlign(LEFT);
         c->setVAlign(TOP);
-        this->overlay()->add_overlay(*c->gtk());
+        if (!this->overlay()->get_child())
+            this->overlay()->set_child(*c->gtk());
+        else 
+            this->overlay()->add_overlay(*c->gtk());
         _children.append(c->gtk().get());
     }
 
     void AbsoluteBox_impl::prepend(std::shared_ptr<ml::Widget> c)
     {
-        for (auto c : _children)
-            this->overlay()->remove_overlay(*c);
-
-        this->overlay()->add_overlay(*c->gtk());
-        for (auto c : _children)
-            this->overlay()->add_overlay(*c);
-
+        c->setHAlign(LEFT);
+        c->setVAlign(TOP);
+        
+        // Remove all overlays temporarily
+        std::vector<Gtk::Widget*> temp_children;
+        for (auto child : _children)
+        {
+            temp_children.push_back(child);
+            this->overlay()->remove_overlay(*child);
+        }
+        
+        // Set new widget as first overlay
+        if (!this->overlay()->get_child())
+            this->overlay()->set_child(*c->gtk());
+        else
+            this->overlay()->add_overlay(*c->gtk());
+        
+        // Re-add all previous overlays
+        for (auto child : temp_children)
+        {
+            this->overlay()->add_overlay(*child);
+        }
+        
+        // Prepend to children list
         _children.prepend(c->gtk().get());
     }
 
     void AbsoluteBox_impl::remove(ml::Widget* c)
     {
-        _children.remove(c->gtk().get());
+        if (this->overlay()->get_child() == c->gtk().get())
+            this->overlay()->unset_child();
+        else 
+            _children.remove(c->gtk().get());
         this->overlay()->remove_overlay(*c->gtk());
     }
 
