@@ -174,7 +174,7 @@ namespace ml
 
             // to create the commander system automatcly if needed
             ml::Popover* _commanderPopover = nullptr;
-            ml::Commander* _commander = nullptr;
+            ml::Commander* _commander = nullptr; //bp cgs
 
             // the function return true if it consider the keybind "treated"
             // behind the scene, it will cut the event propagation if return true.

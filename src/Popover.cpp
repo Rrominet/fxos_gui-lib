@@ -25,6 +25,16 @@ namespace ml
         child->setParent(&_content->content());
     }
 
+    void Popover::showAtMouseCoord()
+    {
+        this->show();
+        if (this->hasWindow())
+        {
+            auto mpos = this->window()->mousePos();
+            this->setPosition(mpos.x(), mpos.y());
+        }
+    }
+
 }
 
 #include "./creators_implpopover_gen.h"

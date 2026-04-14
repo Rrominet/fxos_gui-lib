@@ -149,28 +149,31 @@ namespace ml
             scoreContained = true;
             multiplier = _commandsScores[cmd->id()].get<float>() + multiplier;
         }
-
+        
+        auto aliases = cmd->aliases();
+        aliases.push_back(cmd->id());
+        
         for (auto& alias : cmd->aliases())
         {
             if (alias == searched)
-                return multiplier * 100;
+                return multiplier * 1000;
             else if (str::lower(alias) == str::lower(searched))
-                return multiplier * 50;
+                return multiplier * 500;
             else if (str::contains(str::lower(alias), str::lower(searched)))
-                return multiplier * 25;
+                return multiplier * 250;
             else if (str::contains(str::lower(alias), str::clean(searched, true)))
-                return multiplier * 15;
+                return multiplier * 150;
         }
         
         if (str::contains(str::lower(cmd->name()), str::lower(searched)))
-            return multiplier * 10;
+            return multiplier * 100;
         else if (str::contains(str::lower(cmd->name()), str::clean(searched, true)))
-            return multiplier * 5;
+            return multiplier * 50;
 
         if (str::contains(str::lower(cmd->help()), str::lower(searched)))
-            return multiplier * 2;
+            return multiplier * 20;
         else if (str::contains(str::lower(cmd->help()), str::clean(searched, true)))
-            return multiplier * 1.5;
+            return multiplier * 10;
 
         if (scoreContained)
             return multiplier * 0.5;

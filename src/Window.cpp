@@ -382,9 +382,7 @@ namespace ml
             return;
         }
 
-        _commanderPopover->show();
-        auto mpos = this->mousePos();
-        _commanderPopover->setPosition(mpos.x(), mpos.y());
+        _commanderPopover->showAtMouseCoord();
     }
 
     void Window::addKeybind(const std::string& keybind, const std::function<bool()>& callback)

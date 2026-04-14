@@ -83,7 +83,7 @@ namespace ml
             std::shared_ptr<AskPropertyDialog> ask(ml::Property* prop, std::function<void()> onvalid, std::function<void()> oncancel=0 ,const std::string& message="", ml::Window* parent = nullptr);
 
             //TODO : add a DrawType
-            std::shared_ptr<AskPropertyDialog> ask(Property::PropertyType type, const std::string& propname="Value", const std::string& message="", ml::Window* parent = nullptr);
+            std::shared_ptr<AskPropertyDialog> ask(Property::PropertyType type, const std::string& propname="Value", const std::string& message="", const std::any& defaultValue={}, ml::Window* parent = nullptr);
 
             std::shared_ptr<AskPropertyGroupDialog> ask(ml::PropertyGroup* prop, const std::string& message="", ml::Window* parent = nullptr);
 

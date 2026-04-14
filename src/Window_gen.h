@@ -44,6 +44,10 @@ bool stayHiddenFirstRun(){return _stayHiddenFirstRun;}
 const bool stayHiddenFirstRun() const {return _stayHiddenFirstRun;}
 void setStayHiddenFirstRun(bool stayHiddenFirstRun){_stayHiddenFirstRun = stayHiddenFirstRun;}
 
+ml::Commander* commander(){return _commander;}
+const ml::Commander* commander() const {return _commander;}
+void setCommander(ml::Commander* commander){_commander = commander;}
+
 ml::Vec<std::function<void (EventInfos &)>>& resize(){return _resize;}
 const ml::Vec<std::function<void (EventInfos &)>>& resize() const {return _resize;}
 
