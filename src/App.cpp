@@ -269,10 +269,21 @@ namespace ml
             dg->events().add("cancel", oncancel);
         return dg;
     }
-    std::shared_ptr<AskPropertyDialog> App::ask(Property::PropertyType type, const std::string& propname, const std::string& message, ml::Window* parent )
+    std::shared_ptr<AskPropertyDialog> App::ask(Property::PropertyType type, const std::string& propname, const std::string& message, const std::any& defaultValue, ml::Window* parent)
     {
         auto dg = this->message<AskPropertyDialog>(message, parent);
         dg->set(type, propname);
+        if (defaultValue.has_value())
+        {
+            try
+            {
+                dg->prop()->set(defaultValue);
+            }
+            catch(const std::exception& e)
+            {
+                this->error("Error in setting the default value in the dialog : " + std::string(e.what()));
+            }
+        }
         dg->drawProp();
         return dg;
     }

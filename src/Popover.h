@@ -32,6 +32,8 @@ namespace ml
             void setAutoHide(bool v=true){this->popover()->setAutoHide(v);}
             void setModal(bool v=true){this->popover()->setAutoHide(v);}
 
+            void showAtMouseCoord();
+
         private : 
             std::shared_ptr<ml::Scrollable> _content; //bp cg
 
