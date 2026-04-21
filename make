@@ -11,7 +11,12 @@ sys.path.append("../")
 from scripts import widgets
 from scripts import widgets_events
 from scripts import props
+from scripts import css
 
+
+platform = "gtk"
+if ("wasm" in sys.argv):
+    platform = "wasm"
 
 def replaceCss() : 
     #building css file
@@ -29,8 +34,8 @@ def replaceCss() :
     if not os.path.exists(cssEmPath):
         log.print("em css not found.", "red")
 
-    css = ""
-    css = ft.read(cssPath)
+    _css = ""
+    _css = ft.read(cssPath)
 
     cssGtk = ""
     cssGtk = ft.read(cssGtkPath)
@@ -38,9 +43,10 @@ def replaceCss() :
     cssEm = ""
     cssEm = ft.read(cssEmPath)
 
-    finalGtk = css + cssGtk
-    finalEm = css + cssEm
+    finalGtk = _css + cssGtk
+    finalEm = _css + cssEm
 
+    finalGtk = css.transform_std_to_gtk(finalGtk)
     finalGtk = finalGtk.replace("\n", "")
     finalGtk = finalGtk.replace("  ", "")
     finalGtk = finalGtk.replace("\t", "")
@@ -52,22 +58,23 @@ def replaceCss() :
     ft.write(finalGtk, gtkdest)
     ft.write(finalEm, emdest)
 
-    if (os.path.exists("../src/mlgui_dark.css")) : 
-        shutil.copyfile("../src/mlgui_dark.css", "./mlgui_dark.css")
-        log.print("Dark theme variable copied.", "green")
+    dtheme = css.css_vars("../src/dark-theme.json", platform)
+    dtheme += ft.read("../src/mlgui_dark.css")
+    ft.write(dtheme, "./mlgui_dark.css")
 
-    if (os.path.exists("../src/mlgui_light.css")) : 
-        shutil.copyfile("../src/mlgui_light.css", "./mlgui_light.css")
-        log.print("Light theme variable copied.", "green")
+    ltheme = css.css_vars("../src/light-theme.json", platform)
+    ltheme += ft.read("../src/mlgui_light.css")
+    ft.write(ltheme, "./mlgui_light.css")
 
+    log.print("CSS Theme variables compiled", "green")
     log.print("Css replaced.", "green")
 
 if (sys.argv[1] == "css"):
     replaceCss()
     exit()
 
-fm = "/media/romain/Donnees/Programmation/cpp/frameworks"
-libs = "/media/romain/Donnees/Programmation/cpp/libs"
+fm = "../../../frameworks"
+libs = "../../../libs"
 
 for arg in sys.argv:
     if "libs=" in arg:
@@ -165,23 +172,15 @@ if ("wasm" not in sys.argv):
         "pthread",
         "stdc++fs",
         "X11",
-        "fmod",
-        "fmodL",
+        "libfmod.so",
+        "libfmodL.so",
+        fm + "/build/libmlapi.a",
         ])
 
-    #should add a way to add the version of mlapi in dependencies here.
-    if not cpp.release : 
-        cpp.addToLibs([
-            fm + "/build/libmlapi.so",
-            ])
-        #cpp.flags += ["-fsanitize=thread"]
-
-    else : 
-        #add the version dependencis for it
-        cpp.addProject("/opt/mlapi/lib")
-
 if ("shared" in sys.argv):
-    cpp.shared = True
+    cpp.outputType = build.SHARED_LIB
+elif ("static" in sys.argv):
+    cpp.outputType = build.STATIC_LIB
 
 if("clean" in sys.argv or "clear" in sys.argv):
     cpp.clean()

@@ -48,7 +48,7 @@ def main():
 
     # install deps
     from ml import packages
-    packages.install(["libgtkmm-4.0-dev", "pkg-config"])
+    packages.install(["libgtkmm-4.0-dev", "pkg-config", "libwebkitgtk-6.0-dev"])
 
     os.chdir("build")
     run("chmod +x ../make")

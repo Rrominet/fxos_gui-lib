@@ -173,7 +173,7 @@
 .panel-header
 {
     padding : 3px;
-    background : var(--list-background-color)
+    background : var(--list-background-color);
 }
 
 .panel-title

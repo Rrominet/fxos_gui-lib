@@ -8,7 +8,6 @@
 #include <gtkmm/editable.h>
 #include <gtkmm/eventcontroller.h>
 #include <gtkmm/textview.h>
-#include <gdkmm/graphene_point.h>
 #include "../App.h"
 
 namespace ml
@@ -512,7 +511,7 @@ namespace ml
     void Widget_impl::_updateCssProvider()
     {
         std::string gcss = "*{" + _generatedCss() + ";}";
-        _cssProvider->load_from_string(gcss);
+        _cssProvider->load_from_data(gcss);
     }
 
     ml::Ret<> Widget_impl::addCss(const std::string& css)
@@ -551,20 +550,18 @@ namespace ml
 
     geometry::Point<double> Widget_impl::computedPosition(ml::Widget* coordonatesSrc) const
     {
-        // 0,0 = top-left of THIS widget in ITS OWN space
-        Gdk::Graphene::Point pos(0.0f, 0.0f);
+        double x = 0.0;
+        double y = 0.0;
 
-        auto absolute = _gtk->compute_point(*coordonatesSrc->gtk(), pos);
-        if (absolute.has_value())
+        if (_gtk->translate_coordinates(*coordonatesSrc->gtk(), 0.0, 0.0, x, y))
         {
-            return geometry::Point<double>(absolute.value().get_x(), absolute.value().get_y());
+            return geometry::Point<double>(x, y);
         }
         else
         {
-            lg("Error : widget position computation failed - They don't share common ancerstors.");
+            lg("Error : widget position computation failed - They don't share common ancestors.");
         }
 
-        // fallback, shouldn't happen if widgets share a common ancestor
         return this->position();
     }
 
