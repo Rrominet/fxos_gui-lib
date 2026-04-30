@@ -154,6 +154,8 @@ if ("gtk" not in sys.argv):
 if ("wasm" not in sys.argv):
     #build with gtkmm (gtk4 c++ binding)
     cpp = build.create("mlgui", sys.argv)
+    if not "release" in sys.argv:
+        cpp.name = "mlgui_debug"
     cpp.static = False
 
     cpp.includes = includes
@@ -174,8 +176,11 @@ if ("wasm" not in sys.argv):
         "X11",
         "libfmod.so",
         "libfmodL.so",
-        fm + "/build/libmlapi.a",
         ])
+    if "release" in sys.argv : 
+        cpp.addToLibs(fm + "/build/libmlapi.a")
+    else : 
+        cpp.addToLibs(fm + "/build/libmlapi_debug.a")
 
 if ("shared" in sys.argv):
     cpp.outputType = build.SHARED_LIB
