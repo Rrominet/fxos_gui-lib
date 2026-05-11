@@ -111,7 +111,7 @@ namespace ml
 
         label->addEventListener(LEFT_UP, [this, label](auto& e){
             _headerLabelDragged = nullptr; 
-            if (!_headerRow->window()->state().ctrl)
+            if (!ml::app()->ctrlDown())
                 _events.emit("header-clicked", label);
         });
 
@@ -125,7 +125,7 @@ namespace ml
 
         auto mmove = [this](auto& e)
         {
-            if(!_headerRow->window()->state().ctrl)
+            if(!ml::app()->ctrlDown())
                 return;
             if (!_headerLabelDragged)    
                 return;

@@ -60,59 +60,11 @@ namespace ml
     void Window::setBasicEvents()
     {
         lg("Window::setBasicEvents()");
-        this->addEventListener(Event::MOUSE_MOVE, [this](EventInfos& event) {
-                _state.x = event.x;
-                _state.y = event.y;
-                event.preventDefault = false;
-        });
 
         this->addEventListener(Event::FOCUS, [this](EventInfos& event) {
-                _state.alt = false;
-                _state.ctrl = false;
-                _state.shift = false;
-                _state.meta = false;
-                _state.key = "";
                 ml::app()->setFocused(this);
                 event.preventDefault = false;
         });
-
-        this->addEventListener(Event::UNFOCUS, [this](EventInfos& event) {
-                _state.alt = false;
-                _state.ctrl = false;
-                _state.shift = false;
-                _state.meta = false;
-                _state.key = "";
-                event.preventDefault = false;
-        });
-
-        this->addEventListener(Event::KEY_UP, [this](EventInfos& event) {
-                if (event.key == "Alt_L" || event.key == "Alt_R" || event.key == "ISO_Level3_Shift")
-                    _state.alt = false;
-                else if (event.key == "Control_L" || event.key == "Control_R")
-                    _state.ctrl = false;
-                else if (event.key == "Shift_L" || event.key == "Shift_R")
-                    _state.shift = false;
-                else if (event.key == "Super_L" || event.key == "Super_R")
-                    _state.meta = false;
-                else 
-                    _state.key = "";
-                event.preventDefault = false;
-        });
-
-        this->addEventListener(Event::KEY_DOWN, [this](EventInfos& event) {
-                if (event.key == "Alt_L" || event.key == "Alt_R" || event.key == "ISO_Level3_Shift")
-                    _state.alt = true;
-                else if (event.key == "Control_L" || event.key == "Control_R")
-                    _state.ctrl = true;
-                else if (event.key == "Shift_L" || event.key == "Shift_R")
-                    _state.shift = true;
-                else if (event.key == "Super_L" || event.key == "Super_R")
-                    _state.meta = true;
-                else 
-                    _state.key = event.key;
-                event.preventDefault = false;
-        });
-
 
         //note this is important to know : 
         //the priority of the keybinds arelike this : 
@@ -139,11 +91,9 @@ namespace ml
             {
                 if (keybinds::match(kb.first, event, focusedType))
                 {
+                    lg("matched keybind : " << kb.first);
                     if (kb.second())
-                    {
-                        event.preventDefault = true;
                         return;
-                    }
                 }
             }
 
@@ -151,8 +101,8 @@ namespace ml
             {
                 if (keybinds::match(cmd.second->keybind(), event, focusedType))
                 {
+                    lg("matched keybind : " << cmd.second->keybind() << " (" << cmd.second->name() << ")");
                     cmd.second->exec();
-                    event.preventDefault = true;
                     return;
                 }
             }
@@ -161,11 +111,13 @@ namespace ml
             {
                 if (keybinds::match(cmd.second->keybind(), event, focusedType))
                 {
+                    lg("matched keybind : " << cmd.second->keybind() << " (" << cmd.second->name() << ")");
                     cmd.second->exec();
-                    event.preventDefault = true;
                     return;
                 }
             }
+
+            event.preventDefault = false;
         };
 
         this->addEventListener(Event::KEY_DOWN, keyevents);

@@ -200,6 +200,11 @@ namespace ml
             ml::MenusFactory& menus() {return _menusFactory;}
             const ml::MenusFactory& menus() const {return _menusFactory;}
 
+            bool ctrlDown()const {return _impl.ctrlDown();}
+            bool shiftDown()const {return _impl.shiftDown();}
+            bool altDown()const {return _impl.altDown();}
+            bool metaDown()const {return _impl.metaDown();}
+            bool superDown()const {return _impl.superDown();}
 
         protected : 
             bool _setIdCalled = false;

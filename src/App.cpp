@@ -19,7 +19,7 @@ namespace ml
 {
     App* _app = nullptr;
 
-    App::App() : _windows(), _windowsFactory(), _impl(this), _argv(_impl.argv())
+    App::App() : _cmds(), _windows(), _windowsFactory(), _impl(this), _argv(_impl.argv())
     {
         _app = this;
         _init();
@@ -318,13 +318,30 @@ namespace ml
 
     void App::executeBackendCommand(Process* p, const std::string &function, const json& args, const std::function<void(const json& response)>& cb)
     {
-        auto cmd = this->createBackendCommand(p, function, args, cb, true); 
+        auto id = str::random(10);
+        auto cmd = _cmds.createCommand<GuiBackendCommand>(function, id);
+
+        auto _cb = [this, cmd, cb, id](const json& res)
+        {
+            if (cb)
+                cb(res);
+            _cmds.removeCommand(id);
+        };
+        cmd->setProcessCommand(p, function, args, _cb);
         cmd->exec();
     }
 
     void App::executeBackendCommand(Process* p, const std::string& name, const std::string& id, const std::string &function, const json& args, const std::function<void(const json& response)>& cb)
     {
-        auto cmd = this->createBackendCommand(p, name, id, function, args, cb, true); 
+        auto cmd_id = str::random(10);
+        auto cmd = _cmds.createCommand<GuiBackendCommand>(name, id);
+        auto _cb = [this, cmd, cb, cmd_id](const json& res)
+        {
+            if (cb)
+                cb(res);
+            _cmds.removeCommand(cmd_id);
+        };
+        cmd->setProcessCommand(p, function, args, _cb);
         cmd->exec();
     }
 

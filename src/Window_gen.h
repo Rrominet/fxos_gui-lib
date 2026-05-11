@@ -24,10 +24,6 @@ std::shared_ptr<Spinner> footSpinner(){return _footSpinner;}
 bool visible(){return _visible;}
 
 
-WindowEventState& state(){return _state;}
-const WindowEventState& state() const {return _state;}
-
-
 std::shared_ptr<MenuBar> menuBar(){return _menuBar;}
 const std::shared_ptr<MenuBar> menuBar() const {return _menuBar;}
 

@@ -57,10 +57,10 @@ def widget_cpp(event) :
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _*event_l*)
                     f(e);

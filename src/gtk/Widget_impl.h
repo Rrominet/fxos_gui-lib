@@ -104,6 +104,8 @@ namespace ml
 
             void setOverflow(Overflow overflow){_gtk->set_overflow((Gtk::Overflow)overflow);}
 
+            std::weak_ptr<bool> alive() const{return _alive;}
+
         protected : 
             Widget* _abstract = nullptr;
             std::shared_ptr<Gtk::Widget> _gtk;
@@ -163,5 +165,7 @@ namespace ml
             std::unordered_map<std::string, std::string>_css;
             std::string _generatedCss() const;
             void _updateCssProvider();
+
+            std::shared_ptr<bool> _alive;
     };
 }

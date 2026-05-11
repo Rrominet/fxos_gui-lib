@@ -96,17 +96,17 @@ namespace ml
                 return;
             auto row = std::any_cast<VerticalRow*>(_events.data());
 
-            if (!_tablebox->window()->state().shift && !_tablebox->window()->state().ctrl)
+            if (!ml::app()->shiftDown() && !ml::app()->ctrlDown())
             {
                 selmodel->clearSelection();
                 selmodel->select(row->model_index);
             }
 
-            else if (!_tablebox->window()->state().shift && _tablebox->window()->state().ctrl)
+            else if (!ml::app()->shiftDown() && ml::app()->ctrlDown())
                 selmodel->select(row->model_index);
-            else if (_tablebox->window()->state().shift && !_tablebox->window()->state().ctrl)
+            else if (ml::app()->shiftDown() && !ml::app()->ctrlDown())
                 selmodel->selectRangeFromLastSelected(row->model_index);
-            else if (_tablebox->window()->state().shift && _tablebox->window()->state().ctrl)
+            else if (ml::app()->shiftDown() && ml::app()->ctrlDown())
                 selmodel->unselect(row->model_index);
 
         };

@@ -14,7 +14,6 @@
 #endif
 
 #include "./Scrollable.h"
-#include "./WindowEventState.h"
 #include "commands/CommandsManager.h"
 
 #include <nlohmann/json.hpp>
@@ -164,7 +163,6 @@ namespace ml
 
             bool _visible = false; //bp g
                                    //
-            WindowEventState _state; //bp cg
             std::shared_ptr<MenuBar> _menuBar; //bp cg
             ml::CommandsManager _cmds; //bp cg
 

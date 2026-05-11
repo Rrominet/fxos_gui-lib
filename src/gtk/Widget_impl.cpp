@@ -14,6 +14,7 @@ namespace ml
 {
     Widget_impl::Widget_impl(Widget* abstract) : _abstract(abstract)
     {
+        _alive = std::make_shared<bool>(true);
     }
 
     void Widget_impl::remove()
@@ -381,8 +382,11 @@ namespace ml
     void Widget_impl::_addOnWheel(Event event, const std::function<void (EventInfos&)>& callback)
     {
         auto window = _abstract->window()->impl();
-        auto f = [callback, this, event](EventInfos& e)
+        auto alive = this->alive();
+        auto f = [callback, this, event, alive](EventInfos& e)
         {
+            if (!alive.lock())
+                return;
             e.type = event;
             if (this->hovered() && callback && !ml::app()->stopEventPropagationMap()[event])
                 callback(e); 

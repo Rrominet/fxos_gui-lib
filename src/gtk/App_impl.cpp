@@ -7,6 +7,9 @@
 #include "gtkmm/filedialog.h"
 #include "mlprocess.h"
 #include <gdkmm/clipboard.h>
+#include <gdkmm/display.h>
+#include <gdkmm/seat.h>
+#include <gdkmm/device.h>
 
 namespace ml
 {
@@ -328,5 +331,49 @@ namespace ml
 
         // Default to light if nothing told us otherwise
         return false;
+    }
+
+    bool is_modifier_down(Gdk::ModifierType mask)
+    {
+        auto display = Gdk::Display::get_default();
+        if (!display)
+            return false;
+
+        auto seat = display->get_default_seat();
+        if (!seat)
+            return false;
+
+        auto keyboard = seat->get_keyboard();
+        if (!keyboard)
+            return false;
+
+        auto state = keyboard->get_modifier_state();
+
+        return (state & mask) == mask;
+    }
+
+    bool App_impl::ctrlDown() const
+    {
+        return is_modifier_down(Gdk::ModifierType::CONTROL_MASK);
+    }
+
+    bool App_impl::shiftDown() const
+    {
+        return is_modifier_down(Gdk::ModifierType::SHIFT_MASK);
+    }
+
+    bool App_impl::altDown() const
+    {
+        return is_modifier_down(Gdk::ModifierType::ALT_MASK);
+    }
+
+    bool App_impl::metaDown() const
+    {
+        return is_modifier_down(Gdk::ModifierType::META_MASK);
+    }
+
+    bool App_impl::superDown() const
+    {
+        return is_modifier_down(Gdk::ModifierType::SUPER_MASK);
     }
 }

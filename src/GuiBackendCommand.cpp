@@ -158,6 +158,13 @@ namespace ml
         _callbacks.data().push_back({cb, onetime});
     }
 
+    void GuiBackendCommand::replaceCallback(const std::function<void(const json& response)>& cb, bool onetime)
+    {
+        std::lock_guard l(_callbacks);
+        _callbacks.data().clear();
+        _callbacks.data().push_back({cb, onetime});
+    }
+
     void GuiBackendCommand::execCallbacks(const json& response)
     {
         ml::Vec<GuiCallback> callbacks;

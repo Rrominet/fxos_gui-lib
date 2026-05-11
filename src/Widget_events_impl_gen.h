@@ -12,10 +12,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _mouse_enter)
                     f(e);
@@ -37,10 +37,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _mouse_leave)
                     f(e);
@@ -62,10 +62,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _mouse_move)
                     f(e);
@@ -87,10 +87,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _mouse_up)
                     f(e);
@@ -112,10 +112,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _mouse_down)
                     f(e);
@@ -137,10 +137,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _left_up)
                     f(e);
@@ -162,10 +162,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _left_down)
                     f(e);
@@ -187,10 +187,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _right_up)
                     f(e);
@@ -212,10 +212,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _right_down)
                     f(e);
@@ -237,10 +237,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _middle_up)
                     f(e);
@@ -262,10 +262,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _middle_down)
                     f(e);
@@ -287,10 +287,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _key_down)
                     f(e);
@@ -312,10 +312,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _key_up)
                     f(e);
@@ -337,10 +337,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _wheel)
                     f(e);
@@ -362,10 +362,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _focus)
                     f(e);
@@ -387,10 +387,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _unfocus)
                     f(e);
@@ -412,10 +412,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _change)
                     f(e);
@@ -437,10 +437,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _valid)
                     f(e);
@@ -462,10 +462,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _shown)
                     f(e);
@@ -487,10 +487,10 @@
                     return;
                 if (this->hasWindow())
                 {
-                    e.ctrl = this->window()->state().ctrl;
-                    e.shift = this->window()->state().shift;
-                    e.alt = this->window()->state().alt;
-                    e.super = this->window()->state().meta;
+                    e.ctrl = ml::app()->ctrlDown();
+                    e.shift = ml::app()->shiftDown();
+                    e.alt = ml::app()->altDown();
+                    e.super = ml::app()->superDown();
                 }
                 for (auto& f : _hidden)
                     f(e);

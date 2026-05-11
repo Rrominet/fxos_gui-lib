@@ -69,6 +69,11 @@ namespace ml
                     const std::function<void(const std::string&)>& callback = nullptr);
 
             bool isDarkTheme() const;
+            bool ctrlDown()const;
+            bool shiftDown()const;
+            bool altDown()const;
+            bool metaDown()const;
+            bool superDown()const;
 
         private : 
             Glib::RefPtr<Gtk::Application> _gtkapp;

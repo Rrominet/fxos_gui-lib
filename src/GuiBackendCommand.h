@@ -27,6 +27,7 @@ namespace ml
             void setProcessCommand(Process* process, const std::string &function, const json& args, const std::function<void(const json& response)>& cb=0, bool onetime=false);
             void setProcessCommand(Process* process, const std::string &function, const std::function<json()>& getjsonArgs, const std::function<void(const json& response)>& cb=0, bool onetime=false);
             void addCallback(const std::function<void(const json& response)>& cb, bool onetime = false);
+            void replaceCallback(const std::function<void(const json& response)>& cb, bool onetime = false);
 
             //need to be executed on the mainthread !
             void execCallbacks(const json& response);
