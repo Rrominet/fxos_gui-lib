@@ -43,7 +43,7 @@ namespace ml
                 _value = std::any(std::any_cast<double>(value));
         }
 
-        if (!preventUpdate)
+        if (!preventUpdate || !_sendEvents)
         {
             lg("Property notify");
             this->notify("value", value, observer);
@@ -81,6 +81,16 @@ namespace ml
                 }
             }
         }
+    }
+
+    void Property::blockEvents()
+    {
+        _sendEvents = false;	
+    }
+
+    void Property::unblockEvents()
+    {
+        _sendEvents = true;	
     }
 
     bool Property::visible() const{return _visible;}

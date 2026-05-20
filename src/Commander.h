@@ -52,6 +52,7 @@ namespace ml
             int activeButtonCommandIdx() const;
 
             ml::Command* activeCommand() const;
+            void addArgument(const std::string& arg){_arguments.push(arg);}
 
         protected : 
             std::shared_ptr<Box> _box;
@@ -78,6 +79,8 @@ namespace ml
             // if true, the app will not launch any process
             // could be util, if you just want to react to fxhub event and manage the event with another app.
             bool _doNothing = false; //bp cgs
+            ml::Vec<std::string> _arguments; //bp cgs
+
         public :
             #include "./Commander_gen.h"
     };

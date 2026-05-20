@@ -74,11 +74,16 @@ namespace ml
 
             void focus();
 
+            //note the argument preventUpdate does the same thing in the method set.
+            void blockEvents();
+            void unblockEvents();
+
         protected : 
             std::string _name;//bp cgs
             std::string _description;//bp cgs
             std::any _value;
             bool _visible = true;
+            bool _sendEvents = true; //bp cg
 
             ml::Vec<std::function<void()>> _onUpdate; //bp cg
             ml::Vec<std::function<void()>> _onValid; //bp cg

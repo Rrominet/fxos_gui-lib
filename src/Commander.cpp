@@ -135,7 +135,12 @@ namespace ml
         if (!cmd)
             return;
         if (!_doNothing)
+        {
+            auto pcmd = dynamic_cast<ProcessCommand*>(cmd);
+            if (pcmd)
+                pcmd->setProcessArgs(_arguments);
             cmd->exec();
+        }
         _search->setValue("");
         _events.emit("valid", cmd);
     }
