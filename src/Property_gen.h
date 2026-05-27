@@ -8,6 +8,10 @@ std::string description(){return _description;}
 const std::string& description() const {return _description;}
 void setDescription(const std::string& description){_description = description;}
 
+bool sendEvents(){return _sendEvents;}
+const bool sendEvents() const {return _sendEvents;}
+
+
 ml::Vec<std::function<void()>>& onUpdate(){return _onUpdate;}
 const ml::Vec<std::function<void()>>& onUpdate() const {return _onUpdate;}
 

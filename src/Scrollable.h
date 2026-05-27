@@ -72,6 +72,8 @@ namespace ml
             double scrollX()const {return scrollable()->scrollX();}
             double scrollY()const {return scrollable()->scrollY();}
 
+            std::shared_ptr<ml::LabelValue> labelValue(const std::string& label="", const std::string& value="");
+
         protected : 
             ml::Vec<std::function<void(double)>> _onXScroll;
             ml::Vec<std::function<void(double)>> _onYScroll;

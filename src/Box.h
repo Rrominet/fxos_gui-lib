@@ -35,6 +35,7 @@ namespace ml
     class Popover;
     class AbsoluteBox;
     class Fixed;
+    class LabelValue;
 #include "./Widget_types_widgets_classes_gen.h"
 
     class Box : public Widget
@@ -117,6 +118,8 @@ namespace ml
             std::shared_ptr<ComposedPropertyWidget<ColorProperty>> appendColorProp(ColorProperty* prop, DrawType type=COLOR_BUTTON);
 
             virtual std::string searchStr() override; 
+
+            std::shared_ptr<ml::LabelValue> labelValue(const std::string& label="", const std::string& value="");
 
         protected : 
             ml::Vec<std::shared_ptr<ml::Widget>> _children; //bp cg

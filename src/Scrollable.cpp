@@ -34,6 +34,8 @@ namespace ml
         this->scrollable()->setChild(child);
     }
 
+    std::shared_ptr<ml::LabelValue> Scrollable::labelValue(const std::string& label, const std::string& value){return _box.labelValue(label, value);}
+
 #include "./Widget_creators_implsc_gen.h"
 #include "./Container_creators_implsc_gen.h"
 }

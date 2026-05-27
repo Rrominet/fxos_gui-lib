@@ -434,3 +434,8 @@ button.dialog-cancel
 {
     margin:0;
 }
+
+label.value
+{
+    font-weight : bold;
+}

@@ -11,6 +11,7 @@
 #include "./props_utils.h"
 #include "AsyncGuiCommand.h"
 #include <memory>
+#include "./LabelValue.h"
 
 namespace ml
 {
@@ -321,6 +322,12 @@ namespace ml
     {
         std::string res = ::ml::searchStr(this);
         return str::clean(res, true);
+    }
+
+    std::shared_ptr<ml::LabelValue> Box::labelValue(const std::string& label,const std::string& value)
+    {
+        auto lv = this->createComposedWidget<LabelValue>(this, label, value) ;
+        return lv;
     }
 
 
