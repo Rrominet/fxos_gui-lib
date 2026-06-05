@@ -439,3 +439,19 @@ label.value
 {
     font-weight : bold;
 }
+
+.plugin-list-elmt
+{
+    padding : 0.5em 1em;
+}
+
+.plugin-list-elmt .name
+{
+    font-weight : bold;
+}
+
+.plugin-list-elmt .event
+{
+    color : grey;
+    font-style : italic;
+}

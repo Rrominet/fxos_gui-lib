@@ -51,8 +51,6 @@
 #include <any>
 #include <memory>
 
-//this changed again !
-
 namespace ml
 {
     class ListElementExample
@@ -98,6 +96,7 @@ namespace ml
         _commands = _tabs->createTab("Commands")->body();
         _cursors = _tabs->createTab("Cursors")->body();
         _browser = _tabs->createTab("HTML Browser")->body();
+        _gl = _tabs->createTab("Open GL")->body();
         _tabs->show(0);
 
         this->createCommands();
@@ -111,6 +110,7 @@ namespace ml
         this->createCursors();
         this->createExampleMenu();
         this->createHtmlExample();
+        this->createOpenGLExample();
     }
 
     void ExampleWindow::createBasicsWidgets()
@@ -559,7 +559,7 @@ namespace ml
         auto edit = ml::app()->menusFactory().create("edit", "Edit");
         ml::app()->menusFactory().create("view", "View");
         ml::app()->menusFactory().create("tools", "Tools");
-        ml::app()->menusFactory().create("windows", "Windows");
+        auto windows = ml::app()->menusFactory().create("windows", "Windows");
 
         file->addCommand(ml::app()->cmds().command("testlog1").get());
         file->addButton("Open", 0, "Ctrl O");
@@ -570,6 +570,9 @@ namespace ml
         edit->addButton("Open", 0, "Ctrl O");
         edit->addButton("Save");
         edit->addButton("Save as");
+
+        windows->addCommand("about");
+        windows->addCommand("show-plugin-manager");
 
         _menuBar->addMenu("file");
         _menuBar->addMenu("edit");
@@ -582,6 +585,127 @@ namespace ml
     {
         auto wv = _browser->createWebView();
         wv->setURI("https://motion-live.com");
+    }
+
+    void ExampleWindow::createOpenGLExample()
+    {
+        auto gl = _gl->createGLArea();        
+        auto compile_shader = [](const char* src, GLenum type)
+        {
+            GLuint shader = glCreateShader(type);
+            glShaderSource(shader, 1, &src, nullptr);
+            glCompileShader(shader);
+
+            // Check for errors
+            int ok;
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &ok);
+            if (!ok) {
+                char log[512];
+                glGetShaderInfoLog(shader, 512, nullptr, log);
+                std::cerr << "Shader compile error: " << log << std::endl;
+            }
+            return shader;
+        };
+
+        auto init_shaders = [this, compile_shader]
+        {
+            const char* vert_src = R"(
+        #version 320 es
+        layout(location = 0) in vec2 aPos;
+        layout(location = 1) in vec2 aUV;
+
+        out vec2 uv;
+
+        void main() {
+            uv = aUV;
+            gl_Position = vec4(aPos, 0.0, 1.0);
+        }
+    )";
+
+            const char* frag_src = R"(
+        #version 320 es
+        precision mediump float;
+        in vec2 uv;
+        out vec4 FragColor;
+
+        void main() {
+            FragColor = vec4(1.0, 0.0, 0.0, 1.0); // RED
+        }
+    )";
+            GLuint vert = compile_shader(vert_src, GL_VERTEX_SHADER);
+            GLuint frag = compile_shader(frag_src, GL_FRAGMENT_SHADER);
+
+            shader_program = glCreateProgram();
+            glAttachShader(shader_program, vert);
+            glAttachShader(shader_program, frag);
+            glLinkProgram(shader_program);
+
+            // Check link errors
+            int ok;
+            glGetProgramiv(shader_program, GL_LINK_STATUS, &ok);
+            if (!ok) {
+                char log[512];
+                glGetProgramInfoLog(shader_program, 512, nullptr, log);
+                std::cerr << "Program link error: " << log << std::endl;
+            } 
+            // Once linked, individual shaders are useless
+            glDeleteShader(vert);
+            glDeleteShader(frag);
+
+        };
+        auto oninit = [this, init_shaders]
+        {
+            float vertices[] = {
+                //   X      Y     U     V
+                -1.0f,  1.0f, 0.0f, 1.0f,  // top-left
+                -1.0f, -1.0f, 0.0f, 0.0f,  // bottom-left
+                1.0f, -1.0f, 1.0f, 0.0f,  // bottom-right
+
+                -1.0f,  1.0f, 0.0f, 1.0f,  // top-left
+                1.0f, -1.0f, 1.0f, 0.0f,  // bottom-right
+                1.0f,  1.0f, 1.0f, 1.0f,  // top-right
+            };
+
+            glGenVertexArrays(1, &vao);
+            glGenBuffers(1, &vbo);
+
+            glBindVertexArray(vao);
+
+            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+            // Position attribute (location = 0)
+            glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(0);
+
+            // UV attribute (location = 1)
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+
+            glBindVertexArray(0);
+            init_shaders();
+        };
+        gl->addOnOpenGLReady(oninit);
+
+        auto onrender = [this]
+        {
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            glUseProgram(shader_program);
+            glBindVertexArray(vao);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            glBindVertexArray(0);
+        };
+        gl->addOnRender(onrender);
+
+        auto onunrealize = [this]
+        {
+            glDeleteVertexArrays(1, &vao);
+            glDeleteBuffers(1, &vbo);
+            glDeleteProgram(shader_program);
+        };
+        gl->addOnOpenGLDestroyed(onunrealize);
     }
 
     void ExampleWindow::createCursors()

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <unordered_map>
+#include "PluginWindow.h"
 #include "vec.h"
 #include "./Window.h"
 #include "./Checker.h"
@@ -15,6 +16,7 @@
 #include "./AsyncGuiCommand.h"
 #include "./Events.h"
 #include "thread.h"
+#include "PluginManager.h"
 
 #ifdef __EMSCRIPTEN__
 #include "./em/App_impl.h"
@@ -38,6 +40,7 @@ namespace ml
     class GuiBackendCommand;
     class WorkDialog;
     class ProgressDialog;
+    class PluginWindow;
     class App    
     {
         public : 
@@ -242,12 +245,12 @@ namespace ml
             void _createBasicCommands();
             void _createAboutCommand();
             void _createQuitCommand();
+            void _createPluginWindowCommand();
             //...
 
-            //FIXME :
-            //need to make it per event type ! 
-            //use a map instead !
             std::unordered_map<Event, bool> _stopEventPropagationMap; //bp cg
+            ml::PluginManager _pluginManager; //bp cg
+            ml::PluginWindow* _pluginsWin = nullptr; //bp cg
 
         private : 
             void _init();

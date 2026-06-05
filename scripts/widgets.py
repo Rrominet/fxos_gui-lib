@@ -13,6 +13,7 @@ widgets = (
         "Image",
         "MultilineEntry",
         "WebView",
+        "GLArea",
         )
 
 

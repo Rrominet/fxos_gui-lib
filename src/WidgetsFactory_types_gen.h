@@ -125,6 +125,12 @@ std::shared_ptr<ml::WebView> createWebView(ml::Scrollable * parent, const std::s
 std::shared_ptr<ml::WebView> createWebView(ml::Popover * parent, const std::string& text = "");
 std::shared_ptr<ml::WebView> createWebView(ml::AbsoluteBox * parent, const std::string& text = "");
 std::shared_ptr<ml::WebView> createWebView(ml::Fixed * parent, const std::string& text = "");
+std::shared_ptr<ml::GLArea> createGLArea();
+std::shared_ptr<ml::GLArea> createGLArea(ml::Box * parent, const std::string& text = "");
+std::shared_ptr<ml::GLArea> createGLArea(ml::Scrollable * parent, const std::string& text = "");
+std::shared_ptr<ml::GLArea> createGLArea(ml::Popover * parent, const std::string& text = "");
+std::shared_ptr<ml::GLArea> createGLArea(ml::AbsoluteBox * parent, const std::string& text = "");
+std::shared_ptr<ml::GLArea> createGLArea(ml::Fixed * parent, const std::string& text = "");
 std::shared_ptr<ml::DateEntry> createDateEntry();
 std::shared_ptr<ml::DateEntry> createDateEntry(ml::Box * parent, const std::string& text = "");
 std::shared_ptr<ml::DateEntry> createDateEntry(ml::Scrollable * parent, const std::string& text = "");

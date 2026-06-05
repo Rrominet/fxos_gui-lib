@@ -3,6 +3,11 @@
 #include "./Tabs.h"
 #include "./TabButton.h"
 
+#ifdef __EMSCRIPTEN__
+#else
+#include <epoxy/gl.h>
+#endif
+
 namespace ml
 {
     class Tabs;
@@ -28,6 +33,7 @@ namespace ml
             void createCursors();
             void createExampleMenu();
             void createHtmlExample();
+            void createOpenGLExample();
 
         protected : 
             std::shared_ptr<Box> _basicsWidgets = nullptr;
@@ -40,6 +46,9 @@ namespace ml
             std::shared_ptr<Box> _commands = nullptr;
             std::shared_ptr<Box> _cursors = nullptr;
             std::shared_ptr<Box> _browser = nullptr;
+            std::shared_ptr<Box> _gl = nullptr;
+            GLuint vao, vbo;
+            GLuint shader_program;
 
             std::unique_ptr<Tabs> _tabs;
     };

@@ -52,7 +52,7 @@ namespace ml
             virtual void setVAlign(VAlignment align){_gtk->set_valign((Gtk::Align)align);}
 
             virtual void setHExpand(bool value=true){_gtk->set_hexpand(value);}
-            virtual void setVExpand(bool value=true){_gtk->set_vexpand(value);} //changed
+            virtual void setVExpand(bool value=true){_gtk->set_vexpand(value);} 
 
             void setHExpandSet(bool value=true){_gtk->set_hexpand_set(value);}
             void setVExpandSet(bool value=true){_gtk->set_vexpand_set(value);}

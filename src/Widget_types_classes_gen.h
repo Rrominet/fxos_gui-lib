@@ -14,6 +14,7 @@ class Spinner;
 class Image;
 class MultilineEntry;
 class WebView;
+class GLArea;
 class Box;
 class Scrollable;
 class Popover;

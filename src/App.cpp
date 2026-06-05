@@ -9,6 +9,7 @@
 #include "./GuiBackendCommand.h"
 #include "./WorkDialog.h"
 #include "./ProgressDialog.h"
+#include "./PluginWindow.h"
 
 #ifdef __EMSCRIPTEN__
 #else
@@ -19,7 +20,13 @@ namespace ml
 {
     App* _app = nullptr;
 
-    App::App() : _cmds(), _windows(), _windowsFactory(), _impl(this), _argv(_impl.argv())
+    App::App() : _cmds(), _windows(), _windowsFactory(), _impl(this), _argv(_impl.argv()), _pluginManager(files::execDir() + files::sep() + "plugins")
+    {
+        _app = this;
+        _init();
+    }
+
+    App::App(int argc, char *argv[]) : _windows(), _windowsFactory(), _impl(this, argc, argv), _argv(_impl.argv()), _pluginManager(files::execDir() + files::sep() + "plugins")
     {
         _app = this;
         _init();
@@ -30,11 +37,6 @@ namespace ml
         lg("App::~App");
     }
 
-    App::App(int argc, char *argv[]) : _windows(), _windowsFactory(), _impl(this, argc, argv), _argv(_impl.argv())
-    {
-        _app = this;
-        _init();
-    }
 
     void App::_init()
     {
@@ -71,6 +73,7 @@ namespace ml
         _checker.init("can-set-window", "The setWindow method can't be called by you. Use append, prepend or setChild to trigger it from its logic.");
 
         _createBasicCommands();
+        _pluginManager.load_async();
     }
 
     void App::run()
@@ -449,6 +452,7 @@ namespace ml
     {
         _createAboutCommand();
         _createQuitCommand();
+        _createPluginWindowCommand();
     }
 
     void App::_createAboutCommand()
@@ -470,6 +474,14 @@ namespace ml
                     this->quit();
                 });
         ab->setKeybind("ctrl q");
+    }
+
+    void App::_createPluginWindowCommand()
+    {
+        auto cmd = _cmds.createCommand<GuiCommand>("Plugin Manager", "show-plugin-manager");
+        cmd->setExec([this](const std::any& args){
+                    this->createOrShowWindow(&_pluginsWin);
+                });
     }
 
     int App::setInterval(const std::function<void()>& callback, int ms, int nb, const std::function<void()>& onfinished)

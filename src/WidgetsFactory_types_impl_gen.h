@@ -2478,6 +2478,135 @@
     }
 
 
+    std::shared_ptr<ml::GLArea> WidgetsFactory::createGLArea()
+    {
+        
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::GLArea>();
+        widget->_impl = std::make_shared<ml::GLArea_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        widget->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+    
+        
+        widget->init();
+        widget->setEvents();
+    
+        return widget;
+    }
+
+    std::shared_ptr<ml::GLArea> WidgetsFactory::createGLArea(ml::Box* parent,const std::string& text)
+    {
+        
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::GLArea>();
+        widget->_impl = std::make_shared<ml::GLArea_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        widget->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+    
+        widget->setParent(parent);
+        parent->append(widget);
+        
+        widget->init();
+        widget->setEvents();
+    
+        if (!text.empty())
+            widget->setText(text);
+        return widget;
+    }
+
+    std::shared_ptr<ml::GLArea> WidgetsFactory::createGLArea(ml::Fixed* parent,const std::string& text)
+    {
+        
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::GLArea>();
+        widget->_impl = std::make_shared<ml::GLArea_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        widget->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+    
+        widget->setParent(parent);
+        parent->append(widget);
+        
+        widget->init();
+        widget->setEvents();
+    
+        if (!text.empty())
+            widget->setText(text);
+        return widget;
+    }
+
+    std::shared_ptr<ml::GLArea> WidgetsFactory::createGLArea(ml::AbsoluteBox* parent,const std::string& text)
+    {
+        
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::GLArea>();
+        widget->_impl = std::make_shared<ml::GLArea_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        widget->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+    
+        widget->setParent(parent);
+        parent->append(widget);
+        
+        widget->init();
+        widget->setEvents();
+    
+        if (!text.empty())
+            widget->setText(text);
+        return widget;
+    }
+
+    std::shared_ptr<ml::GLArea> WidgetsFactory::createGLArea(ml::Scrollable* parent,const std::string& text)
+    {
+        
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::GLArea>();
+        widget->_impl = std::make_shared<ml::GLArea_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        widget->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+    
+        widget->setParent(parent);
+        parent->append(widget);
+        
+        widget->init();
+        widget->setEvents();
+    
+        if (!text.empty())
+            widget->setText(text);
+        return widget;
+    }
+
+    std::shared_ptr<ml::GLArea> WidgetsFactory::createGLArea(ml::Popover* parent,const std::string& text)
+    {
+        
+        ml::app()->checker().set("can-construct-widget", true);
+        auto widget = std::make_shared<ml::GLArea>();
+        widget->_impl = std::make_shared<ml::GLArea_impl>(widget.get());
+        widget->_impl->_createWidget();
+        widget->_impl->_createBasicEvents();
+        widget->_createBasicEvents();
+        ml::app()->checker().set("can-construct-widget", false);
+    
+        widget->setParent(parent);
+        parent->content()->append(widget);
+        
+        widget->init();
+        widget->setEvents();
+    
+        if (!text.empty())
+            widget->setText(text);
+        return widget;
+    }
+
+
     std::shared_ptr<ml::DateEntry> WidgetsFactory::createDateEntry()
     {
         

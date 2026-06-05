@@ -14,6 +14,7 @@ std::shared_ptr<ml::Spinner> Box::createSpinner(const std::string& text){return 
 std::shared_ptr<ml::Image> Box::createImage(const std::string& text){return ml::app()->widgetsFactory().createImage(this, text);}
 std::shared_ptr<ml::MultilineEntry> Box::createMultilineEntry(const std::string& text){return ml::app()->widgetsFactory().createMultilineEntry(this, text);}
 std::shared_ptr<ml::WebView> Box::createWebView(const std::string& text){return ml::app()->widgetsFactory().createWebView(this, text);}
+std::shared_ptr<ml::GLArea> Box::createGLArea(const std::string& text){return ml::app()->widgetsFactory().createGLArea(this, text);}
 std::shared_ptr<ml::DateEntry> Box::createDateEntry(const std::string& text){return ml::app()->widgetsFactory().createDateEntry(this, text);}
 std::shared_ptr<ml::TimeEntry> Box::createTimeEntry(const std::string& text){return ml::app()->widgetsFactory().createTimeEntry(this, text);}
 std::shared_ptr<ml::DateTimeEntry> Box::createDateTimeEntry(const std::string& text){return ml::app()->widgetsFactory().createDateTimeEntry(this, text);}

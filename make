@@ -166,6 +166,7 @@ if ("wasm" not in sys.argv):
     cpp.addToLibs(libs)
     cpp.definitions += defs
     cpp.addInstalledLibrary("gtkmm-4.0")
+    cpp.addInstalledLibrary("epoxy")
 
     # sudo apt install libwebkitgtk-6.0-dev
     cpp.addInstalledLibrary("webkitgtk-6.0")
@@ -176,6 +177,7 @@ if ("wasm" not in sys.argv):
         "X11",
         "libfmod.so",
         "libfmodL.so",
+        "boost_filesystem",
         ])
     if "release" in sys.argv : 
         cpp.addToLibs(fm + "/build/libmlapi.a")
