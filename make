@@ -100,6 +100,7 @@ libs = [
         ]
 
 defs = ["NO_LOG"]
+#defs.append("NO_ASYNC") #make the async calls sync to check multithreaded errors.
 
 gbl = build.create("mlgui", sys.argv)
 gbl.flags = ["-std=c++17"]

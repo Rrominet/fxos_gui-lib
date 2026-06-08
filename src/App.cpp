@@ -169,6 +169,8 @@ namespace ml
          };
 #ifdef __EMSCRIPTEN__
          job();
+#elif NO_ASYNC
+         job();
 #else
         _pool.run(job);
 #endif
@@ -205,6 +207,9 @@ namespace ml
              this->queue(_onfinished);
          };
 #ifdef __EMSCRIPTEN__
+         job();
+#elif NO_ASYNC
+         job();
 #else
         _pool.run(job);
 #endif
@@ -248,9 +253,13 @@ namespace ml
              this->queue(_onfinished);
          };
 #ifdef __EMSCRIPTEN__
+         job();
+#elif NO_ASYNC
+         job();
 #else
         _pool.run(job);
 #endif
+
     }
 
     std::shared_ptr<AskPropertyDialog> App::ask(ml::Property* prop, const std::string& message, ml::Window* parent )
