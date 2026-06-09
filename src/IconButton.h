@@ -44,8 +44,6 @@ namespace ml
                          _icon->invert();
 
                      _composed.push_back(_btn.get());
-                     _composed.push_back(_icon.get());
-                     _composed.push_back(_label.get());
                 }
 
 

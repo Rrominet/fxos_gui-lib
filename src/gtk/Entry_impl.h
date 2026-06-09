@@ -1,9 +1,10 @@
-
 #pragma once
 #include <gtkmm/entry.h>
 #include <memory>
 #include "./Widget_impl.h"
 #include "../entries_macros.h"
+
+#include "str.h"
 
 namespace ml
 {
@@ -19,7 +20,7 @@ namespace ml
             std::shared_ptr<Gtk::Entry> entry() const{return std::static_pointer_cast<Gtk::Entry>(_gtk);}
 
             std::string placeholder(){return entry()->get_placeholder_text();}
-            void setPlaceholder(const std::string& placeholder){entry()->set_placeholder_text(placeholder);}
+            void setPlaceholder(const std::string& placeholder){entry()->set_placeholder_text(str::split(placeholder, "\n")[0]);}
 
             void insertText(const std::string& text, int position);
             void deleteText(unsigned int start, unsigned int end);

@@ -24,6 +24,8 @@ namespace ml
             virtual json serialize() const override;
             virtual void deserialize(const json& j) override;
 
+            void setSelectable(bool selectable);
+
         protected : 
             std::shared_ptr<Label> _message = nullptr;
 

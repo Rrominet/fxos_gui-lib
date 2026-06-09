@@ -66,4 +66,9 @@ namespace ml
         if (j.contains("message"))
             this->setMessage(j["message"].get<std::string>());
     }
+
+    void MessageDialog::setSelectable(bool selectable)
+    {
+        _message->setSelectable(selectable);        
+    }
 }

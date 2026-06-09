@@ -25,11 +25,11 @@ namespace ml
             void allowEvents(){this->unblockEvents();}
 
             virtual void setHelp(const std::string& help);
-            virtual void setHAlign(HAlignment align){}
-            virtual void setVAlign(VAlignment align){}
+            virtual void setHAlign(HAlignment align);
+            virtual void setVAlign(VAlignment align);
 
-            virtual void setHExpand(bool value=true){}
-            virtual void setVExpand(bool value=true){}
+            virtual void setHExpand(bool value=true);
+            virtual void setVExpand(bool value=true);
 
             const ml::Vec<std::variant<Widget*, ComposedWidget*>>& composed() const{return _composed;}
             ml::Vec<std::variant<Widget*, ComposedWidget*>>& composed() {return _composed;}
@@ -41,6 +41,9 @@ namespace ml
             void show();
             void hide();
             void toggle();
+
+            void enable();
+            void disable();
 
         protected : 
             //only the top hierarchy widgets that compose this widget should be added.

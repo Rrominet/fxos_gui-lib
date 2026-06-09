@@ -137,7 +137,7 @@ namespace ml
         if (!_doNothing)
         {
             auto pcmd = dynamic_cast<ProcessCommand*>(cmd);
-            if (pcmd)
+            if (pcmd && _arguments.size() > 0)
                 pcmd->setProcessArgs(_arguments);
             cmd->exec();
         }

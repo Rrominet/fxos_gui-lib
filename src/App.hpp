@@ -27,10 +27,10 @@ namespace ml
         template<typename T>
             void App::createOrShowWindow(T** winPointer, ml::Window* parent, const std::string& id)
         {
-
             if (!*winPointer)
                 *winPointer = this->createWindow<T>(parent, id).get();
-            (*winPointer)->show();
+            if (*winPointer)
+                (*winPointer)->show();
         }
 
     template<typename T>
@@ -49,7 +49,8 @@ namespace ml
                 {
                     if (!*winptr)
                         *winptr = this->createWindow<W>().get();
-                    (*winptr)->show();
+                    if (*winptr)
+                        (*winptr)->show();
                 };
 
                 auto c = this->cmds().createCommand<GuiCommand>(cmdName, id);

@@ -47,6 +47,7 @@
 #include "./WebView.h"
 #include "./ColorPicker.h"
 #include "./ColorButton.h"
+#include "./ComposedButton.h"
 
 #include <any>
 #include <memory>
@@ -249,6 +250,8 @@ namespace ml
 //         md->setMdText(files::read("/media/romain/Donnees/Brain/Dev/Config/Installer pycurl.md"));
 
         bx1->setOrient(Orient::HORIZONTAL);
+        auto btn = (ComposedButton*)bx1->createComposedWidget<ComposedButton>(bx1.get(), "Composed Button").get();
+        btn->addEventListener(ml::LEFT_UP, [btn](auto& e){btn->toggleLoading();});
 
         auto iconbutton = (IconButton*)bx1->createComposedWidget<IconButton>(bx1.get(), "down-arrow", "Icon Button").get();
         iconbutton = (IconButton*)bx1->createComposedWidget<IconButton>(bx1.get(), "down-arrow", "Icon Button (inverted)", true).get();
