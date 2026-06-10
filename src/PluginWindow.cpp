@@ -1,3 +1,6 @@
+#ifdef __EMSCRIPTEN__
+#else 
+
 #include "./PluginWindow.h"
 #include "enums.h"
 #include "./Switch.h"
@@ -82,3 +85,5 @@ namespace ml
         }
     }
 }
+
+#endif

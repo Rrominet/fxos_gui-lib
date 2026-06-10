@@ -147,7 +147,7 @@ namespace ml
 
         em::addEventListener(*_closeButton, ml::Event::CLICK, [this](const emval& dom, const EmscriptenMouseEvent* e)
                 {
-                    if (_hideOnClose)
+                    if (_win->doHideOnClose())
                         _win->hide();
                     else
                     {

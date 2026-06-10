@@ -97,77 +97,89 @@ namespace em
 
     void addEventListener(const emval& dom, ml::Event event, const std::function<bool(const emval&, const EmscriptenMouseEvent*)>& callback, bool useCapture)
     {
-        auto id = dom["id"].as<std::string>();
-        id = "#" + id;
-        if (event == ml::Event::CLICK || 
-                event == ml::Event::DOUBLE_CLICK || 
-                event == ml::Event::MOUSE_DOWN ||
-                event == ml::Event::MOUSE_UP ||
-                event == ml::Event::MOUSE_MOVE ||
-                event == ml::Event::MOUSE_ENTER ||
-                event == ml::Event::MOUSE_LEAVE)
+        auto later = [dom, event, callback, useCapture]()
         {
-            if (event == ml::Event::CLICK)
+            auto id = dom["id"].as<std::string>();
+            id = "#" + id;
+            if (event == ml::Event::CLICK || 
+                    event == ml::Event::DOUBLE_CLICK || 
+                    event == ml::Event::MOUSE_DOWN ||
+                    event == ml::Event::MOUSE_UP ||
+                    event == ml::Event::MOUSE_MOVE ||
+                    event == ml::Event::MOUSE_ENTER ||
+                    event == ml::Event::MOUSE_LEAVE)
             {
-                mouse_click[id] = callback;
-                emscripten_set_click_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_click_cb);
+                if (event == ml::Event::CLICK)
+                {
+                    mouse_click[id] = callback;
+                    emscripten_set_click_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_click_cb);
+                }
+                else if (event == ml::Event::MOUSE_DOWN)
+                {
+                    mouse_down[id] = callback;
+                    emscripten_set_mousedown_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_down_cb);
+                }
+                else if (event == ml::Event::MOUSE_UP)
+                {
+                    mouse_up[id] = callback;
+                    emscripten_set_mouseup_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_up_cb);
+                }
+                else if (event == ml::Event::MOUSE_MOVE)
+                {
+                    mouse_move[id] = callback;
+                    emscripten_set_mousemove_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_move_cb);
+                }
+                else if (event == ml::Event::MOUSE_ENTER)
+                {
+                    mouse_enter[id] = callback;
+                    emscripten_set_mouseenter_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_enter_cb);
+                }
+                else if (event == ml::Event::MOUSE_LEAVE)
+                {
+                    mouse_leave[id] = callback;
+                    emscripten_set_mouseleave_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_leave_cb);
+                }
             }
-            else if (event == ml::Event::MOUSE_DOWN)
-            {
-                mouse_down[id] = callback;
-                emscripten_set_mousedown_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_down_cb);
-            }
-            else if (event == ml::Event::MOUSE_UP)
-            {
-                mouse_up[id] = callback;
-                emscripten_set_mouseup_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_up_cb);
-            }
-            else if (event == ml::Event::MOUSE_MOVE)
-            {
-                mouse_move[id] = callback;
-                emscripten_set_mousemove_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_move_cb);
-            }
-            else if (event == ml::Event::MOUSE_ENTER)
-            {
-                mouse_enter[id] = callback;
-                emscripten_set_mouseenter_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_enter_cb);
-            }
-            else if (event == ml::Event::MOUSE_LEAVE)
-            {
-                mouse_leave[id] = callback;
-                emscripten_set_mouseleave_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_leave_cb);
-            }
-        }
+        };
+
+        setTimeout(later, 0);
     }
 
     void addEventListener(const emval& dom, ml::Event event, const std::function<bool(const emval&, const EmscriptenKeyboardEvent*)>& callback, bool useCapture)
     {
-        auto id = dom["id"].as<std::string>();
-        id = "#" + id;
+        auto later = [dom, event, callback, useCapture](){
+            auto id = dom["id"].as<std::string>();
+            id = "#" + id;
 
-        switch(event)
-        {
-            case ml::Event::KEY_DOWN:
-                key_down[id] = callback;
-                emscripten_set_keydown_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_key_down_cb);
-                break;
-            case ml::Event::KEY_UP:
-                key_up[id] = callback;
-                emscripten_set_keyup_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_key_up_cb);
-                break;
-        }
+            switch(event)
+            {
+                case ml::Event::KEY_DOWN:
+                    key_down[id] = callback;
+                    emscripten_set_keydown_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_key_down_cb);
+                    break;
+                case ml::Event::KEY_UP:
+                    key_up[id] = callback;
+                    emscripten_set_keyup_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_key_up_cb);
+                    break;
+            }
+        };
+
+        setTimeout(later, 0);
     }
 
     void addEventListener(const emval& elmt, 
             const std::string& event,
             const std::function<void(const emval& event)>& callback) 
     {
-        auto key = registerCb(callback);
-        // Create a JavaScript function that wraps the triggerCallback with the key
-        emval jsFunc = emscripten::val::global("Function").new_((std::string)"key", (std::string)"event",
-                (std::string)"Module.triggerCb(key, event);"
-                ).call<emval>("bind", emval::global(), key); 
-        elmt.call<void>("addEventListener", event, jsFunc);
+        auto later = [elmt, event, callback](){
+            auto key = registerCb(callback);
+            // Create a JavaScript function that wraps the triggerCallback with the key
+            emval jsFunc = emscripten::val::global("Function").new_((std::string)"key", (std::string)"event",
+                    (std::string)"Module.triggerCb(key, event);"
+                    ).call<emval>("bind", emval::global(), key); 
+            elmt.call<void>("addEventListener", event, jsFunc);
+        };
+        setTimeout(later, 0);
     }
 
     void addEventListener(const emval& dom, ml::Event event, const std::function<void()>& callback, bool useCapture )
@@ -447,7 +459,6 @@ namespace em
     long setTimeout(const std::function<void()>& callback, int ms)
     {
         auto* cb = new std::function<void()>(callback);
-
         return emscripten_set_timeout([](void* userData) {
             auto* f = static_cast<std::function<void()>*>(userData);
             (*f)();
@@ -458,7 +469,6 @@ namespace em
     long setInterval(const std::function<void()>& callback, int ms)
     {
         auto* cb = new std::function<void()>(callback);
-
         return emscripten_set_interval([](void* userData) {
             auto* f = static_cast<std::function<void()>*>(userData);
             (*f)();

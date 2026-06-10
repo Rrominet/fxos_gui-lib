@@ -136,9 +136,12 @@ namespace ml
             return;
         if (!_doNothing)
         {
+#ifdef __EMSCRIPTEN__
+#else
             auto pcmd = dynamic_cast<ProcessCommand*>(cmd);
             if (pcmd && _arguments.size() > 0)
                 pcmd->setProcessArgs(_arguments);
+#endif
             cmd->exec();
         }
         _search->setValue("");

@@ -118,7 +118,7 @@ namespace ml
     {
         _window->signal_close_request().connect([this]
                 {
-                    if (_hideOnClose)
+                    if (_win->doHideOnClose())
                     {
                         _window->hide();
                         lg("GTK Window hidden from close request.");
@@ -131,10 +131,5 @@ namespace ml
                         return false;
                     }
                 }, true);
-    }
-
-    void Window_impl::hideOnClose(bool val)
-    {
-        _hideOnClose = val; 
     }
 }

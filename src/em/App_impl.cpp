@@ -16,6 +16,25 @@ namespace ml
 
     void App_impl::setEvents()
     {
+        // Track modifier keys globally
+        // TODO : test if it works correctly...
+        em::addEventListener(em::body(), ml::Event::KEY_DOWN, [](const emval& dom, const EmscriptenKeyboardEvent* e) -> bool
+        {
+            em::window().set("mlguiCtrlDown",  emval(e->ctrlKey));
+            em::window().set("mlguiShiftDown", emval(e->shiftKey));
+            em::window().set("mlguiAltDown",   emval(e->altKey));
+            em::window().set("mlguiMetaDown",  emval(e->metaKey));
+            return false;
+        });
+        em::addEventListener(em::body(), ml::Event::KEY_UP, [](const emval& dom, const EmscriptenKeyboardEvent* e) -> bool
+        {
+            em::window().set("mlguiCtrlDown",  emval(e->ctrlKey));
+            em::window().set("mlguiShiftDown", emval(e->shiftKey));
+            em::window().set("mlguiAltDown",   emval(e->altKey));
+            em::window().set("mlguiMetaDown",  emval(e->metaKey));
+            return false;
+        });
+
         em::addEventListener(em::body(), ml::Event::MOUSE_UP, [this](const emval& dom, const EmscriptenMouseEvent* e)
                 {
                     _grabbed = nullptr;
@@ -255,5 +274,30 @@ namespace ml
                     callback(name);
             }
         }
+    }
+
+    bool App_impl::ctrlDown() const
+    {
+        return em::window()["mlguiCtrlDown"].isTrue();
+    }
+
+    bool App_impl::shiftDown() const
+    {
+        return em::window()["mlguiShiftDown"].isTrue();
+    }
+
+    bool App_impl::altDown() const
+    {
+        return em::window()["mlguiAltDown"].isTrue();
+    }
+
+    bool App_impl::metaDown() const
+    {
+        return em::window()["mlguiMetaDown"].isTrue();
+    }
+
+    bool App_impl::superDown() const
+    {
+        return em::window()["mlguiMetaDown"].isTrue();
     }
 }

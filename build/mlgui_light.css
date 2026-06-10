@@ -1,15 +1,16 @@
-@define-color hover-background-color #DDDDDD;
-@define-color active-background-color #CCCCCC;
-@define-color slider-background #256699;
-@define-color slider-cursor-color black;
-@define-color list-background-color #EEEEEE;
-@define-color separator-color #555555;
-@define-color dialog-cancel-color #FF4444;
-@define-color dialog-ok-color #22AA66;
-@define-color code-block-background-color #CCCCCC;
-@define-color selected-color #2299dd;
-@define-color active-color #2299dd;
-.confirm .dialog-cancel, 
+:root{
+--hover-background-color:#DDDDDD;
+--active-background-color:#CCCCCC;
+--slider-background:#256699;
+--slider-cursor-color:black;
+--list-background-color:#EEEEEE;
+--separator-color:#555555;
+--dialog-cancel-color:#FF4444;
+--dialog-ok-color:#22AA66;
+--code-block-background-color:#CCCCCC;
+--selected-color:#2299dd;
+--active-color:#2299dd;
+}.confirm .dialog-cancel, 
 .confirm .dialog-ok
 {
     color : black;

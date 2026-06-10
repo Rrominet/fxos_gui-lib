@@ -56,11 +56,3 @@ std::unordered_map<Event,bool>& stopEventPropagationMap(){return _stopEventPropa
 const std::unordered_map<Event,bool>& stopEventPropagationMap() const {return _stopEventPropagationMap;}
 
 
-ml::PluginManager& pluginManager(){return _pluginManager;}
-const ml::PluginManager& pluginManager() const {return _pluginManager;}
-
-
-ml::PluginWindow* pluginsWin(){return _pluginsWin;}
-const ml::PluginWindow* pluginsWin() const {return _pluginsWin;}
-
-

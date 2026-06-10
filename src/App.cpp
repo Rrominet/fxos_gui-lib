@@ -20,13 +20,21 @@ namespace ml
 {
     App* _app = nullptr;
 
-    App::App() : _cmds(), _windows(), _windowsFactory(), _impl(this), _argv(_impl.argv()), _pluginManager(files::execDir() + files::sep() + "plugins")
+    App::App() : _cmds(), _windows(), _windowsFactory(), _impl(this), _argv(_impl.argv())
+#ifdef __EMSCRIPTEN__
+#else
+                 , _pluginManager(files::execDir() + files::sep() + "plugins")
+#endif
     {
         _app = this;
         _init();
     }
 
-    App::App(int argc, char *argv[]) : _windows(), _windowsFactory(), _impl(this, argc, argv), _argv(_impl.argv()), _pluginManager(files::execDir() + files::sep() + "plugins")
+    App::App(int argc, char *argv[]) : _windows(), _windowsFactory(), _impl(this, argc, argv), _argv(_impl.argv())
+#ifdef __EMSCRIPTEN__
+#else
+                 , _pluginManager(files::execDir() + files::sep() + "plugins")
+#endif
     {
         _app = this;
         _init();
@@ -73,7 +81,10 @@ namespace ml
         _checker.init("can-set-window", "The setWindow method can't be called by you. Use append, prepend or setChild to trigger it from its logic.");
 
         _createBasicCommands();
+#ifdef __EMSCRIPTEN__
+#else
         _pluginManager.load_async();
+#endif
     }
 
     void App::run()
@@ -487,10 +498,13 @@ namespace ml
 
     void App::_createPluginWindowCommand()
     {
+#ifdef __EMSCRIPTEN__
+#else
         auto cmd = _cmds.createCommand<GuiCommand>("Plugin Manager", "show-plugin-manager");
         cmd->setExec([this](const std::any& args){
                     this->createOrShowWindow(&_pluginsWin);
                 });
+#endif
     }
 
     int App::setInterval(const std::function<void()>& callback, int ms, int nb, const std::function<void()>& onfinished)

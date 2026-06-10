@@ -117,6 +117,10 @@ namespace ml
 
             void _createBasicEvents();
 
+            geometry::Point<double> computedPosition(ml::Widget* coordonatesSrc) const;
+
+            void setOverflow(Overflow overflow);
+
         protected : 
             Widget* _abstract = nullptr;
 

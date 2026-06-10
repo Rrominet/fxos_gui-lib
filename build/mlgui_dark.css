@@ -1,16 +1,17 @@
-@define-color hover-background-color #222222;
-@define-color active-background-color #202020;
-@define-color slider-background #256699;
-@define-color slider-cursor-color white;
-@define-color list-background-color #303030;
-@define-color button-background-color #303030;
-@define-color separator-color #555555;
-@define-color dialog-cancel-color #700000;
-@define-color dialog-ok-color #005030;
-@define-color code-block-background-color #202020;
-@define-color selected-color #116699;
-@define-color active-color #116699;
-.confirm .dialog-cancel, 
+:root{
+--hover-background-color:#222222;
+--active-background-color:#202020;
+--slider-background:#256699;
+--slider-cursor-color:white;
+--list-background-color:#303030;
+--button-background-color:#303030;
+--separator-color:#555555;
+--dialog-cancel-color:#700000;
+--dialog-ok-color:#005030;
+--code-block-background-color:#202020;
+--selected-color:#116699;
+--active-color:#116699;
+}.confirm .dialog-cancel, 
 .confirm .dialog-ok
 {
     color : white;

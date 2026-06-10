@@ -57,8 +57,6 @@ namespace ml
 
             math::vec2d mousePos();
             void addWheelEventListener(const std::function<void(EventInfos&)>& callback);
-            bool doHideOnClose() const {return _hideOnClose;}
-            void hideOnClose(bool val);
             void addOnClose(const std::function<void()>& callback){_onclose.push_back(callback);}
             void addOnHide(const std::function<void()>& callback){_onhide.push_back(callback);}
             void setResizeEventListener(const std::function<void(EventInfos&)>& callback);
@@ -86,8 +84,6 @@ namespace ml
             double _grabbOffsetY = 0; //bp g
 
             bool _main = false;
-
-            bool _hideOnClose = false;
 
             ml::Vec<std::function<void()>> _onclose;
             ml::Vec<std::function<void()>> _onhide;

@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include <unordered_map>
-#include "PluginWindow.h"
 #include "vec.h"
 #include "./Window.h"
 #include "./Checker.h"
@@ -16,12 +15,13 @@
 #include "./AsyncGuiCommand.h"
 #include "./Events.h"
 #include "thread.h"
-#include "PluginManager.h"
 
 #ifdef __EMSCRIPTEN__
 #include "./em/App_impl.h"
 #else
 #include "./gtk/App_impl.h"
+#include "PluginManager.h"
+#include "PluginWindow.h"
 #endif
 
 class Process;
@@ -40,7 +40,10 @@ namespace ml
     class GuiBackendCommand;
     class WorkDialog;
     class ProgressDialog;
+#ifdef __EMSCRIPTEN__
+#else 
     class PluginWindow;
+#endif
     class App    
     {
         public : 
@@ -209,6 +212,15 @@ namespace ml
             bool metaDown()const {return _impl.metaDown();}
             bool superDown()const {return _impl.superDown();}
 
+
+#ifdef __EMSCRIPTEN__
+#else
+            ml::PluginManager& pluginManager(){return _pluginManager;}
+            const ml::PluginManager& pluginManager() const {return _pluginManager;}
+            ml::PluginWindow* pluginsWin(){return _pluginsWin;}
+            const ml::PluginWindow* pluginsWin() const {return _pluginsWin;}
+#endif
+
         protected : 
             bool _setIdCalled = false;
             std::unordered_map<std::string, std::shared_ptr<ml::Window>> _windows;
@@ -249,8 +261,12 @@ namespace ml
             //...
 
             std::unordered_map<Event, bool> _stopEventPropagationMap; //bp cg
-            ml::PluginManager _pluginManager; //bp cg
-            ml::PluginWindow* _pluginsWin = nullptr; //bp cg
+
+#ifdef __EMSCRIPTEN__
+#else
+            ml::PluginManager _pluginManager;
+            ml::PluginWindow* _pluginsWin = nullptr;
+#endif
 
         private : 
             void _init();

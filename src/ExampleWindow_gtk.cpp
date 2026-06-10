@@ -1,4 +1,4 @@
-#include "./ExampleWindow.h"
+#include "./ExampleWindow_gtk.h"
 #include "./Box.h"
 #include "./Scrollable.h"
 #include "./Label.h"
@@ -592,6 +592,9 @@ namespace ml
 
     void ExampleWindow::createOpenGLExample()
     {
+#ifdef __EMSCRIPTEN__
+        //FIXME : This should works with emscripten too... but I certainly needs other stuff to do the opengl binding to webgl.
+#else 
         auto gl = _gl->createGLArea();        
         auto compile_shader = [](const char* src, GLenum type)
         {
@@ -709,6 +712,7 @@ namespace ml
             glDeleteProgram(shader_program);
         };
         gl->addOnOpenGLDestroyed(onunrealize);
+#endif
     }
 
     void ExampleWindow::createCursors()

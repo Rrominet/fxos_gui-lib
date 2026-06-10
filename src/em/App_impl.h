@@ -63,6 +63,12 @@ namespace ml
 
             std::map<std::string, std::string> argv()const {return {};}
 
+            bool ctrlDown()const;
+            bool shiftDown()const;
+            bool altDown()const;
+            bool metaDown()const;
+            bool superDown()const;
+
         private : 
             App* _app = nullptr;
             Window_impl* _grabbed = nullptr; //bp gs

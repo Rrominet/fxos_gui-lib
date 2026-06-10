@@ -1,7 +1,11 @@
 #include <iostream>
 #include "./App.h"
 #include "debug.h"
-#include "./ExampleWindow.h"
+#ifdef __EMSCRIPTEN__
+#include "./ExampleWindow_em.h"
+#else
+#include "./ExampleWindow_gtk.h"
+#endif
 #include <thread>
 #include "./App.hpp"
 

@@ -140,6 +140,20 @@ log.print("props generated.", "green")
 
 if ("gtk" not in sys.argv):
     #build for wasm
+    srcs.append(fm + "/str.cpp")
+    srcs.append(fm + "/vec.cpp")
+    srcs.append(fm + "/Events.cpp")
+    srcs.append(fm + "/debug.cpp")
+    srcs.append(fm + "/mlTime.cpp")
+    srcs.append(fm + "/Checker.cpp")
+    srcs.append(fm + "/files.2/files.cpp")
+    srcs.append(fm + "/Ret.cpp")
+    srcs.append(fm + "/observers")
+    srcs.append(fm + "/commands/Command.cpp")
+    srcs.append(fm + "/commands/CommandsManager.cpp")
+    srcs.append(fm + "/commands/JsonCommand.cpp")
+    srcs.append(fm + "/commands/MacroCommand.cpp")
+
     cpp = build.create("mlgui", sys.argv, "em++")
     cpp.static = False
 
@@ -148,6 +162,7 @@ if ("gtk" not in sys.argv):
     cpp.addToSrcs([
         "../src/em",
         ])
+    cpp.srcs_exclude.append("ExampleWindow_gtk.cpp")
     cpp.addEmiscriptenFlags()
     cpp.addToLibs(libs)
     cpp.definitions += defs
@@ -164,6 +179,8 @@ if ("wasm" not in sys.argv):
     cpp.addToSrcs([
         "../src/gtk",
         ])
+
+    cpp.srcs_exclude = ["ExampleWindow_em.cpp"]
     cpp.addToLibs(libs)
     cpp.definitions += defs
     cpp.addInstalledLibrary("gtkmm-4.0")

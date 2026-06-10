@@ -3,10 +3,7 @@
 #include "./Tabs.h"
 #include "./TabButton.h"
 
-#ifdef __EMSCRIPTEN__
-#else
 #include <epoxy/gl.h>
-#endif
 
 namespace ml
 {
@@ -49,7 +46,6 @@ namespace ml
             std::shared_ptr<Box> _gl = nullptr;
             GLuint vao, vbo;
             GLuint shader_program;
-
             std::unique_ptr<Tabs> _tabs;
     };
 }

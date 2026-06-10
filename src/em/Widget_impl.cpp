@@ -631,4 +631,25 @@ namespace ml
     {
         return em::scrollTop(*_dom);
     }
+
+    geometry::Point<double> Widget_impl::computedPosition(ml::Widget* coordonatesSrc) const
+    {
+        //TODO :         
+        lg("Widget_impl::computedPosition not implemented");
+        return geometry::Point<double>(0, 0);
+    }
+
+    void Widget_impl::setOverflow(Overflow overflow)
+    {
+        if (overflow == OVERFLOW_HIDDEN)
+        {
+            em::setCss(*_dom, "overflow-x", "hidden");
+            em::setCss(*_dom, "overflow-y", "hidden");
+        }
+        else if (overflow == OVERFLOW_VISIBLE)
+        {
+            em::setCss(*_dom, "overflow-x", "auto");
+            em::setCss(*_dom, "overflow-y", "auto");
+        }
+    }
 }

@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __EMSCRIPTEN__
+#else
+
 #include "./Window.h"
 
 //TODO
@@ -47,3 +50,4 @@ namespace ml
             ml::List<PluginListElmt, false, false>* _list = nullptr;
     };
 }
+#endif

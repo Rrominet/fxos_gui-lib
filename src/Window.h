@@ -111,8 +111,8 @@ namespace ml
             // the callback will always be executed on the mainthread
             std::shared_ptr<GuiBackendCommand> createBackendCommand(Process* p, const std::string &function, const json& args={}, const std::function<void(const json& response)>& cb=0);
 
-            void hideOnClose(bool val=true){this->impl()->hideOnClose(val);}
-            bool doHideOnClose() const {return this->impl()->doHideOnClose();}
+            void hideOnClose(bool val=true){_hideOnClose = val;}
+            bool doHideOnClose() const {return _hideOnClose;}
 
             virtual json serialize() const;
             virtual void deserialize(const json& j);
@@ -179,6 +179,7 @@ namespace ml
             std::unordered_map<std::string, std::function<bool()>> _windowKeyBinds;
 
             ml::Vec<std::function<void (EventInfos &)>> _resize; //bp cg
+            bool _hideOnClose = false;
 
         public : 
 #include "Window_gen.h"
