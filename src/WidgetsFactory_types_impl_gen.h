@@ -4,16 +4,27 @@
     std::shared_ptr<ml::Box> WidgetsFactory::createBox()
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Box>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Box_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -21,18 +32,29 @@
     std::shared_ptr<ml::Box> WidgetsFactory::createBox(ml::Window* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Box>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Box_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -40,18 +62,29 @@
     std::shared_ptr<ml::Box> WidgetsFactory::createBox(ml::Popover* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Box>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Box_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -59,18 +92,29 @@
     std::shared_ptr<ml::Box> WidgetsFactory::createBox(ml::Box* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Box>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Box_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -78,18 +122,29 @@
     std::shared_ptr<ml::Box> WidgetsFactory::createBox(ml::AbsoluteBox* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Box>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Box_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -97,18 +152,29 @@
     std::shared_ptr<ml::Box> WidgetsFactory::createBox(ml::Fixed* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Box>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Box_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -116,19 +182,32 @@
     std::shared_ptr<ml::Box> WidgetsFactory::createBox(ml::Scrollable* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Box>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Box_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         widget->setParent(&parent->content());
+        lg("a");
         parent->append(widget);
+        lg("a");
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -138,16 +217,27 @@
     std::shared_ptr<ml::Scrollable> WidgetsFactory::createScrollable()
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Scrollable>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Scrollable_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -155,18 +245,29 @@
     std::shared_ptr<ml::Scrollable> WidgetsFactory::createScrollable(ml::Window* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Scrollable>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Scrollable_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -174,18 +275,29 @@
     std::shared_ptr<ml::Scrollable> WidgetsFactory::createScrollable(ml::Popover* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Scrollable>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Scrollable_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -193,18 +305,29 @@
     std::shared_ptr<ml::Scrollable> WidgetsFactory::createScrollable(ml::Box* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Scrollable>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Scrollable_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -212,18 +335,29 @@
     std::shared_ptr<ml::Scrollable> WidgetsFactory::createScrollable(ml::AbsoluteBox* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Scrollable>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Scrollable_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -231,18 +365,29 @@
     std::shared_ptr<ml::Scrollable> WidgetsFactory::createScrollable(ml::Fixed* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Scrollable>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Scrollable_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -250,19 +395,32 @@
     std::shared_ptr<ml::Scrollable> WidgetsFactory::createScrollable(ml::Scrollable* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Scrollable>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Scrollable_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         widget->setParent(&parent->content());
+        lg("a");
         parent->append(widget);
+        lg("a");
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -272,16 +430,27 @@
     std::shared_ptr<ml::Popover> WidgetsFactory::createPopover()
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Popover>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Popover_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -289,18 +458,29 @@
     std::shared_ptr<ml::Popover> WidgetsFactory::createPopover(ml::Window* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Popover>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Popover_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -308,18 +488,29 @@
     std::shared_ptr<ml::Popover> WidgetsFactory::createPopover(ml::Popover* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Popover>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Popover_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -327,18 +518,29 @@
     std::shared_ptr<ml::Popover> WidgetsFactory::createPopover(ml::Box* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Popover>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Popover_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -346,18 +548,29 @@
     std::shared_ptr<ml::Popover> WidgetsFactory::createPopover(ml::AbsoluteBox* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Popover>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Popover_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -365,18 +578,29 @@
     std::shared_ptr<ml::Popover> WidgetsFactory::createPopover(ml::Fixed* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Popover>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Popover_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -384,19 +608,32 @@
     std::shared_ptr<ml::Popover> WidgetsFactory::createPopover(ml::Scrollable* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Popover>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Popover_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         widget->setParent(&parent->content());
+        lg("a");
         parent->append(widget);
+        lg("a");
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -406,16 +643,27 @@
     std::shared_ptr<ml::AbsoluteBox> WidgetsFactory::createAbsoluteBox()
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::AbsoluteBox>();
+    lg("a");
         widget->_impl = std::make_shared<ml::AbsoluteBox_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -423,18 +671,29 @@
     std::shared_ptr<ml::AbsoluteBox> WidgetsFactory::createAbsoluteBox(ml::Window* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::AbsoluteBox>();
+    lg("a");
         widget->_impl = std::make_shared<ml::AbsoluteBox_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -442,18 +701,29 @@
     std::shared_ptr<ml::AbsoluteBox> WidgetsFactory::createAbsoluteBox(ml::Popover* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::AbsoluteBox>();
+    lg("a");
         widget->_impl = std::make_shared<ml::AbsoluteBox_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -461,18 +731,29 @@
     std::shared_ptr<ml::AbsoluteBox> WidgetsFactory::createAbsoluteBox(ml::Box* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::AbsoluteBox>();
+    lg("a");
         widget->_impl = std::make_shared<ml::AbsoluteBox_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -480,18 +761,29 @@
     std::shared_ptr<ml::AbsoluteBox> WidgetsFactory::createAbsoluteBox(ml::AbsoluteBox* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::AbsoluteBox>();
+    lg("a");
         widget->_impl = std::make_shared<ml::AbsoluteBox_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -499,18 +791,29 @@
     std::shared_ptr<ml::AbsoluteBox> WidgetsFactory::createAbsoluteBox(ml::Fixed* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::AbsoluteBox>();
+    lg("a");
         widget->_impl = std::make_shared<ml::AbsoluteBox_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -518,19 +821,32 @@
     std::shared_ptr<ml::AbsoluteBox> WidgetsFactory::createAbsoluteBox(ml::Scrollable* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::AbsoluteBox>();
+    lg("a");
         widget->_impl = std::make_shared<ml::AbsoluteBox_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         widget->setParent(&parent->content());
+        lg("a");
         parent->append(widget);
+        lg("a");
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -540,16 +856,27 @@
     std::shared_ptr<ml::Fixed> WidgetsFactory::createFixed()
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Fixed>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Fixed_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -557,18 +884,29 @@
     std::shared_ptr<ml::Fixed> WidgetsFactory::createFixed(ml::Window* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Fixed>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Fixed_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -576,18 +914,29 @@
     std::shared_ptr<ml::Fixed> WidgetsFactory::createFixed(ml::Popover* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Fixed>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Fixed_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->setChild(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -595,18 +944,29 @@
     std::shared_ptr<ml::Fixed> WidgetsFactory::createFixed(ml::Box* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Fixed>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Fixed_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -614,18 +974,29 @@
     std::shared_ptr<ml::Fixed> WidgetsFactory::createFixed(ml::AbsoluteBox* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Fixed>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Fixed_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -633,18 +1004,29 @@
     std::shared_ptr<ml::Fixed> WidgetsFactory::createFixed(ml::Fixed* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Fixed>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Fixed_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         parent->append(widget);
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }
@@ -652,19 +1034,32 @@
     std::shared_ptr<ml::Fixed> WidgetsFactory::createFixed(ml::Scrollable* parent)
     {
         
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::Fixed>();
+    lg("a");
         widget->_impl = std::make_shared<ml::Fixed_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     
         widget->setParent(&parent->content());
+        lg("a");
         parent->append(widget);
+        lg("a");
         
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     
         return widget;
     }

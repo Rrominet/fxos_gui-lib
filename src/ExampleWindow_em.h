@@ -25,6 +25,7 @@ namespace ml
         protected : 
             std::shared_ptr<Box> _basicsWidgets = nullptr;
             std::shared_ptr<Box> _composedWidgets = nullptr;
+            std::shared_ptr<Box> _commands = nullptr;
             std::unique_ptr<Tabs> _tabs;
     };
 }

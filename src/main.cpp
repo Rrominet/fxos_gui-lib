@@ -9,18 +9,27 @@
 #include <thread>
 #include "./App.hpp"
 
+
+#ifdef __EMSCRIPTEN__
+std::unique_ptr<ml::App> app_ptr;
+#endif
+
 int main(int argc, char *argv[])
 {
-    ml::App* app = new ml::App(argc, argv);
-    auto w = app->createMainWindow<ml::ExampleWindow>();
+#ifdef __EMSCRIPTEN__
+    app_ptr = std::make_unique<ml::App>(argc, argv);
+    ml::App& app = *app_ptr;
+#else
+    ml::App app(argc, argv);
+#endif
+
+    auto w = app.createMainWindow<ml::ExampleWindow>();
     w->setTitle("My first Window");
-    app->run();
+    app.run();
     lg("runned.");
 
-// we do not delete the app to keep the widgets alive and to not execute their remove methods after main is finished (because in emscripten, App::run() is not blocking !)
 #ifdef __EMSCRIPTEN__
-#else 
-    delete app; 
+    emscripten_exit_with_live_runtime();
 #endif
     return 0;
 }

@@ -19,5 +19,11 @@ namespace ml
             void setAutoHide(bool v=true);
 
             void setChild(std::shared_ptr<ml::Widget> child);
+
+        protected : 
+            bool _autoHide = true; //bp cg
+
+        public : 
+            #include "./Popover_impl_gen.h"
     };
 }

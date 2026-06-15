@@ -1,12 +1,13 @@
 #include "./AbsoluteBox.h"
 
+#include <variant>
 #include "./Scrollable.h"
 #include "./App.h"
 #include "./Button.h"
 #include "./Box.hpp"
 #include "./enums.h"
 #include "./ComposedWidget.h"
-#include <variant>
+#include "./containers.h"
 
 namespace ml
 {
@@ -27,27 +28,12 @@ namespace ml
 
     void AbsoluteBox::append(std::shared_ptr<ml::Widget> child)
     {
-        child->removeWindow();
-        child->unparent();
-        ml::app()->checker().set("can-set-window", true);
-        if (this->hasWindow())
-            child->setWindow(this->window());
-        ml::app()->checker().set("can-set-window", false);
-        this->absolute_box()->append(child);
-        child->setParent(this);
-        _children.push_back(child);
+        containers::append(*this, child);
     }
 
     void AbsoluteBox::prepend(std::shared_ptr<ml::Widget> child)
     {
-        child->removeWindow();
-        child->unparent();
-        ml::app()->checker().set("can-set-window", true);
-        if (this->hasWindow())
-            child->setWindow(this->window());
-        ml::app()->checker().set("can-set-window", false);
-        this->absolute_box()->prepend(child);
-        _children.prepend(child);
+        containers::append(*this, child, true);
     }
 
     void AbsoluteBox::removeChild(std::shared_ptr<ml::Widget> child)

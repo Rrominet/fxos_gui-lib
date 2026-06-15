@@ -1,6 +1,7 @@
-
 #include "./Popover_impl.h"
 #include "../Popover.h"
+#include "./App.h"
+#include "./App_impl.h"
 
 namespace ml
 {
@@ -17,6 +18,8 @@ namespace ml
         auto domWidget = em::createElement("popover");
         _dom = std::make_shared<emval>(domWidget);
         (*_dom)["classList"].call<void, std::string>("add", "popover");
+
+        ml::app()->impl().popovers().push_back(this);
     }
 
     void Popover_impl::setPosition(float x,float y)
@@ -27,7 +30,7 @@ namespace ml
 
     void Popover_impl::setAutoHide(bool v)
     {
-        //TODO : need to check the behavior in GTK to copy it in the dom 
+        _autoHide = v;
     }
 
     void Popover_impl::setChild(std::shared_ptr<ml::Widget> child)

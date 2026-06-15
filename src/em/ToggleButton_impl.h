@@ -22,7 +22,7 @@ namespace ml
             bool value();
 
         protected : 
-            std::function<void(EventInfos&)> _onChange = 0;
-            virtual void _addOnChange(Event event, const std::function<void(EventInfos&)>& callback) override;
+            ml::Vec<std::function<void(EventInfos&)>> _onChange;
+            virtual void _addOnChange(const std::function<void(EventInfos&)>& callback) override;
     };
 }

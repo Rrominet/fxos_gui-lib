@@ -25,16 +25,13 @@ namespace ml
 
     void Switch_impl::setEvents()
     {
-        em::addEventListener(*_dom, ml::Event::CLICK, [this](const emval& dom, const EmscriptenMouseEvent* event)
-                {
-                    this->setValue(!this->value());
-                    if (_onChange)
+        this->addEventListener(ml::Event::CLICK, [this](EventInfos& e)
                     {
-                        EventInfos e;
-                        _onChange(e);
+                        this->setValue(!this->value());
+                        for(auto& callback : _onChange)
+                            callback(e);
+                        return true;
                     }
-                    return true;
-                }
                 );
     }
 
@@ -52,9 +49,9 @@ namespace ml
         return em::containsClasses(*_dom, "active"); 
     }
 
-    void Switch_impl::_addOnChange(Event event, const std::function<void(EventInfos&)>& callback)
+    void Switch_impl::_addOnChange(const std::function<void(EventInfos&)>& callback)
     {
-        _onChange = callback;
+        _onChange.push(callback);
     }
 
 }

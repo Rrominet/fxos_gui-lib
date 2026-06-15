@@ -20,21 +20,8 @@ namespace ml
         (*_dom)["classList"].call<void, std::string>("add", "button");
     }
 
-    void Button_impl::_addOnLeftUp(Event event, const std::function<void(EventInfos&)>& callback)
+    void Button_impl::_addOnLeftUp(const std::function<void(EventInfos&)>& callback)
     {
-        auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-        {
-            lg(event->button);
-            if (event->button == 0)
-            {
-                EventInfos infos;
-                infos.x = event->clientX;
-                infos.y = event->clientY;
-                callback(infos);
-                return infos.preventDefault;
-            }
-            return false;
-        };
-        em::addEventListener(*_dom, ml::Event::CLICK, f);
+        this->addEventListener(ml::Event::CLICK, callback);
     }
 }

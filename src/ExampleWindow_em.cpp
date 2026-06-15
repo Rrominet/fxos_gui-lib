@@ -62,11 +62,12 @@ namespace ml
         _tabs = std::make_unique<Tabs>(_main.get());
         _basicsWidgets = _tabs->createTab("Basics Widgets")->body();
         _composedWidgets = _tabs->createTab("Composed Widgets")->body();
+        _commands = _tabs->createTab("Commands")->body();
         _tabs->show(0);
 
-        //this->createCommands();
+        this->createCommands();
         this->createBasicsWidgets();
-        this->createComposedWidgets();
+        //this->createComposedWidgets();
         //this->createExampleMenu();
     }
 
@@ -74,6 +75,7 @@ namespace ml
     {
         auto lbl = _basicsWidgets->createLabel("This is a label.");
         auto btn = _basicsWidgets->createButton("Click Me !");
+        btn->addEventListener(Event::LEFT_UP, [](EventInfos& e){lg("Clicked !");});
         _basicsWidgets->createButton("Click Me !");
         auto emptyEntry = _basicsWidgets->createEntry();
         emptyEntry->setHelp("Please, enter some text.");
@@ -215,10 +217,7 @@ namespace ml
         edit->addButton("Save");
         edit->addButton("Save as");
 
-
-        //lkj
-//         windows->addCommand("about");
-//         windows->addCommand("show-plugin-manager");
+        windows->addCommand("about");
 
         _menuBar->addMenu("file");
         _menuBar->addMenu("edit");
@@ -229,70 +228,71 @@ namespace ml
 
     void ExampleWindow::createCommands()
     {
-//         auto testlog1 = _app->cmds().createCommand<GuiCommand>("Test Log", "testlog1");
-//         testlog1->setHelp("This is a test log (1)");
-// 
-//         auto tlf = [](const std::any& args)
-//         {
-//             lg("testlog1");
-//         };
-// 
-//         testlog1->setExec(tlf);
-//         testlog1->setKeybind("ctrl a");
-// 
-//         auto testlog2 = _app->cmds().createCommand<GuiCommand>("Test Log", "testlog2");
-// 
-//         auto tlf2 = [](const std::any& args)
-//         {
-//             lg("testlog2");
-//         };
-// 
-//         testlog2->setExec(tlf2);
-//         testlog2->setKeybind("ctrl b");
-// 
-//         testlog2->setHelp("This is a test log (2nd version)");
-// 
-//         auto ctx = _app->menusFactory().create("Commands Example Menu");
-//         auto showMenu = _app->cmds().createCommand<GuiCommand>("Show Menu", "show_cmds_menu");
-//         auto showMenuf = [ctx, this](const std::any& args)
-//         {
-//             this->showMenu(ctx->id());
-//         };
-// 
-//         showMenu->setExec(showMenuf);
-// 
-//         auto longsync = _app->cmds().createCommand<GuiCommand>("Long Sync", "longsync");
-//         auto longsyncf = [](const std::any& args)
-//         {
-//             std::this_thread::sleep_for(std::chrono::seconds(5));
-//         };
-// 
-//         longsync->setExec(longsyncf);
-// 
-//         auto longasync = _app->cmds().createCommand<AsyncGuiCommand>("Wait 5 seconds Async", "longasync");
-//         auto longasyncf = [](const std::any& args)
-//         {
-//             std::this_thread::sleep_for(std::chrono::seconds(5));
-//         };
-// 
-//         longasync->setExec(longasyncf);
-// 
-//         auto confirm = _app->cmds().createCommand<GuiCommand>("Ask confirmation before", "confirm");
-//         auto confirmf = [](const std::any& args)
-//         {
-//             std::this_thread::sleep_for(std::chrono::seconds(2));
-//         };
-// 
-//         confirm->setConfirm(true);
-//         confirm->setExec(confirmf);
-// 
-//         for (auto& c : _app->cmds().commands())
-//         {
-//             _commands->appendCommand(c.second.get());
-//             ctx->addCommand(c.second.get());
-//         }
-// 
-//         _commands->setContextMenu(ctx->id());
+        auto testlog1 = _app->cmds().createCommand<GuiCommand>("Test Log", "testlog1");
+        testlog1->setHelp("This is a test log (1)");
+
+        auto tlf = [](const std::any& args)
+        {
+            lg("testlog1");
+        };
+
+        testlog1->setExec(tlf);
+        testlog1->setKeybind("ctrl a");
+
+        auto testlog2 = _app->cmds().createCommand<GuiCommand>("Test Log", "testlog2");
+
+        auto tlf2 = [](const std::any& args)
+        {
+            lg("testlog2");
+        };
+
+        testlog2->setExec(tlf2);
+        testlog2->setKeybind("ctrl b");
+
+        testlog2->setHelp("This is a test log (2nd version)");
+
+        auto ctx = _app->menusFactory().create("Commands Example Menu");
+        auto showMenu = _app->cmds().createCommand<GuiCommand>("Show Menu", "show_cmds_menu");
+        auto showMenuf = [ctx, this](const std::any& args)
+        {
+            this->showMenu(ctx->id());
+        };
+
+        showMenu->setExec(showMenuf);
+
+        auto longsync = _app->cmds().createCommand<GuiCommand>("Long Sync", "longsync");
+        auto longsyncf = [](const std::any& args)
+        {
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+        };
+
+        longsync->setExec(longsyncf);
+
+        auto longasync = _app->cmds().createCommand<AsyncGuiCommand>("Wait 5 seconds Async", "longasync");
+        auto longasyncf = [](const std::any& args)
+        {
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+        };
+
+        longasync->setExec(longasyncf);
+
+        auto confirm = _app->cmds().createCommand<GuiCommand>("Ask confirmation before", "confirm");
+        auto confirmf = [](const std::any& args)
+        {
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        };
+
+        confirm->setConfirm(true);
+        confirm->setExec(confirmf);
+
+        for (auto& c : _app->cmds().commands())
+        {
+            lg("Adding " << c.second->name() << " in command widget.");
+            _commands->appendCommand(c.second.get());
+            ctx->addCommand(c.second.get());
+        }
+
+        _commands->setContextMenu(ctx->id());
     }
 
     void ExampleWindow::createComposedWidgets()

@@ -35,19 +35,22 @@ namespace ml
     void Box_impl::append(std::shared_ptr<ml::Widget> child)
     {
         _dom->call<void, emval&>("appendChild", *child->dom());
-        _abstract->window()->impl()->setMainHeight();
+        if (_abstract->hasWindow())
+            _abstract->window()->impl()->setMainHeight();
     }
 
     void Box_impl::prepend(std::shared_ptr<ml::Widget> child)
     {
         _dom->call<void, emval&>("prepend", *child->dom());
-        _abstract->window()->impl()->setMainHeight();
+        if (_abstract->hasWindow())
+            _abstract->window()->impl()->setMainHeight();
     }
 
     void Box_impl::remove(ml::Widget* child)
     {
         em::remove(*child->dom());
-        _abstract->window()->impl()->setMainHeight();
+        if (_abstract->hasWindow())
+            _abstract->window()->impl()->setMainHeight();
     }
 
     void Box_impl::moveChild(size_t from,size_t to)

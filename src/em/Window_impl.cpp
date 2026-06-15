@@ -16,8 +16,12 @@ namespace ml
     void Window_impl::_createWindow()
     {
         _draw();
-        this->setSize(640, 380);
-        this->center();
+        auto later = [this]
+        {
+            this->setSize(640, 380);
+            this->center();
+        };
+        em::setTimeout(later, 0);
         _setBasicEvents();
     }
 

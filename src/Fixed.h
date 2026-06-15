@@ -30,6 +30,7 @@ namespace ml
             std::shared_ptr<ml::Fixed_impl> fixed() const{return std::static_pointer_cast<Fixed_impl>(_impl);}
 
             void append(std::shared_ptr<ml::Widget> child);
+            void prepend(std::shared_ptr<ml::Widget> child){this->append(child);}
             void removeChild(std::shared_ptr<ml::Widget> child);
             void removeChild(ml::Widget* child);
             void removeChild(ml::ComposedWidget* child);

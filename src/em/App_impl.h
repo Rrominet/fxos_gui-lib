@@ -1,5 +1,6 @@
 #pragma once
 #include "./em.h"
+#include "Popover_impl.h"
 #include <map>
 #include <unordered_map>
 
@@ -77,6 +78,8 @@ namespace ml
             // timeout/interval tracking
             std::unordered_map<size_t, int> _jsIntervalIds;
             int _lastId = -1;
+
+            ml::Vec<ml::Popover_impl*> _popovers; //bp cg
 
         public:
             #include "./App_impl_gen.h"

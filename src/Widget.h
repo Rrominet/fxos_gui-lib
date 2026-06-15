@@ -20,6 +20,7 @@
 #include "Ret.h"
 #include "str.h"
 #include "AnyData.h"
+#include "Events.h"
 #ifdef __EMSCRIPTEN__
 #include "./em/Widget_impl.h"
 #else
@@ -68,7 +69,7 @@ namespace ml
             // canot be used to unparent, use unparent instead to avoid confusion
             void setParent(ml::Widget* w){assert(w); _parent = w;}
 
-            void unparent(){_parent = nullptr;}
+            void unparent(){_parent = nullptr; this->removeWindow();}
 
             virtual void init() {}
 
@@ -190,6 +191,7 @@ namespace ml
             void _createBasicEvents();
 
             ml::AnyData _data; //bp cg
+            ml::Events _events; //bp cg
 
 #include "./Widget_events_gen.h"
 

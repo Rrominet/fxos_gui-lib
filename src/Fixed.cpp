@@ -1,6 +1,7 @@
 #include "./Fixed.h"
 #include "./App.h"
 #include "./ComposedWidget.h"
+#include "./containers.h"
 
 namespace ml
 {
@@ -15,15 +16,7 @@ namespace ml
 
     void Fixed::append(std::shared_ptr<ml::Widget> child)
     {
-        child->removeWindow();
-        child->unparent();
-        ml::app()->checker().set("can-set-window", true);
-        if (this->hasWindow())
-            child->setWindow(this->window());
-        ml::app()->checker().set("can-set-window", false);
-        this->fixed()->append(child);
-        child->setParent(this);
-        _children.push_back(child);
+        containers::append(*this, child);
     }
 
     void Fixed::removeChild(std::shared_ptr<ml::Widget> child)

@@ -88,6 +88,8 @@ namespace ml
             ml::Vec<std::function<void()>> _onclose;
             ml::Vec<std::function<void()>> _onhide;
 
+            bool _being_created = true;
+
         public : 
 #include "Window_impl_gen.h"
     };

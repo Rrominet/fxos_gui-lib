@@ -357,3 +357,17 @@ input[type=checkbox]
     position: absolute;
     pointer-events: auto; /* Or 'none' for pass-through */
 }
+
+label
+{
+    cursor: inherit;
+}
+
+.popover
+{
+    position: absolute;
+    padding: 1em;
+    border-radius: 5px;
+    background: #282828;
+    box-shadow: 0 0 23px 0 #00000047;
+}

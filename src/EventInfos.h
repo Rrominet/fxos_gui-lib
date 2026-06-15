@@ -11,7 +11,11 @@ namespace ml
         unsigned int  keyval;
         unsigned int  keycode;
         std::string key;
+#ifdef __EMSCRIPTEN__
+        bool preventDefault = false; // this is for JS (works a bit in gtk actually)
+#else
         bool preventDefault = true; // this is for JS (works a bit in gtk actually)
+#endif
         bool ctrl = false, alt = false, shift = false, super = false;
         bool visible = true;
         double width = 0, height = 0;

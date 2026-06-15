@@ -36,9 +36,12 @@ namespace ml
                 }); 
 
         this->addEventListener(MOUSE_DOWN, [this](EventInfos& e){
+                //FIXME : not implemented for emscripten
             if (e.click_numbers >= 2) 
+            {
                 for (auto& f : _double_click)
                     f(e);
+            }
         });
     }
 

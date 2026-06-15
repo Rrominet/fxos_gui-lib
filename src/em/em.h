@@ -90,4 +90,6 @@ namespace em
 
     long setTimeout(const std::function<void()>& callback, int ms);
     long setInterval(const std::function<void()>& callback, int ms);
+
+    bool isInDom(const emval& elmt);
 }

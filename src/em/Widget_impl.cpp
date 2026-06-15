@@ -1,15 +1,13 @@
-
 #include "./Widget_impl.h"
 #include "../Widget.h"
 #include "./em.h"
 #include "../EventInfos.h"
-#include "Ret.h"
-#include "enums.h"
 
 namespace ml
 {
     Widget_impl::Widget_impl(Widget* abstract) : _abstract(abstract)
     {
+        _abstract->events().add("appended", [this]{this->_onAppended();});
     }
 
     void Widget_impl::addCssClass(const std::string& cls)
@@ -55,12 +53,27 @@ namespace ml
     {
         em::show(*_dom);
         _visible = true;
+
+        for (const auto& cb : _onShown)
+        {
+            EventInfos infos;
+            infos.type = SHOWN;
+            infos.visible = true;
+            cb.callback(infos);
+        }
     }
 
     void Widget_impl::hide()
     {
         em::hide(*_dom);
         _visible = false;
+        for (const auto& cb : _onHidden)
+        {
+            EventInfos infos;
+            infos.type = HIDDEN;
+            infos.visible = false;
+            cb.callback(infos);
+        }
     }
 
     bool Widget_impl::isVisible()
@@ -233,273 +246,52 @@ namespace ml
 
     void Widget_impl::addEventListener(Event event, const std::function<void(EventInfos&)>& callback)
     {
-        if (event == ml::Event::CLICK || 
+        EventCallback ec;
+        ec.event.type = event;
+        ec.callback = callback;
+
+        if (event == ml::Event::CLICK ||
                 event == ml::Event::DOUBLE_CLICK || 
                 event == ml::Event::MOUSE_DOWN ||
                 event == ml::Event::MOUSE_UP ||
+                event == ml::Event::LEFT_DOWN ||
+                event == ml::Event::RIGHT_UP ||
+                event == ml::Event::RIGHT_DOWN || 
+                event == ml::Event::MIDDLE_UP ||
+                event == ml::Event::MIDDLE_DOWN || 
                 event == ml::Event::MOUSE_MOVE ||
                 event == ml::Event::MOUSE_ENTER ||
-                event == ml::Event::MOUSE_LEAVE)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-            {
-                EventInfos infos;
-                infos.x = event->clientX;
-                infos.y = event->clientY;
-                callback(infos);
-                return infos.preventDefault;
-            };
-            em::addEventListener(*_dom, event, f);
-        }
+                event == ml::Event::MOUSE_LEAVE || 
+                event == ml::Event::WHEEL)
+            _onMouseEvent.push(ec);
 
-        else if (event == ml::Event::LEFT_DOWN)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-            {
-                lg(event->button);
-                if (event->button == 0)
-                {
-                    EventInfos infos;
-                    infos.x = event->clientX;
-                    infos.y = event->clientY;
-                    callback(infos);
-                    return infos.preventDefault;
-                }
-                return false;
-            };
-            em::addEventListener(*_dom, ml::Event::MOUSE_DOWN, f);
-        }
-
-        else if (event == ml::Event::RIGHT_DOWN)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-            {
-                if (event->button == 2)
-                {
-                    EventInfos infos;
-                    infos.x = event->clientX;
-                    infos.y = event->clientY;
-                    callback(infos);
-                    return infos.preventDefault;
-                }
-                return false;
-            };
-            em::addEventListener(*_dom, ml::Event::MOUSE_DOWN, f);
-        }
-
-        else if (event == ml::Event::MIDDLE_DOWN)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-            {
-                if (event->button == 1)
-                {
-                    EventInfos infos;
-                    infos.x = event->clientX;
-                    infos.y = event->clientY;
-                    callback(infos);
-                    return infos.preventDefault;
-                }
-                return false;
-            };
-            em::addEventListener(*_dom, ml::Event::MOUSE_DOWN, f);
-        }
-
+        //necessary for the Button_impl override because of how works the button elmt in the dom.
         else if (event == ml::Event::LEFT_UP)
-            _addOnLeftUp(event, callback);
+            _addOnLeftUp(callback);
 
-        else if (event == ml::Event::RIGHT_UP)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-            {
-                if (event->button == 2)
-                {
-                    EventInfos infos;
-                    infos.x = event->clientX;
-                    infos.y = event->clientY;
-                    callback(infos);
-                    return infos.preventDefault;
-                }
-                return false;
-            };
-            em::addEventListener(*_dom, ml::Event::MOUSE_UP, f);
-        }
-
-        else if (event == ml::Event::MIDDLE_UP)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-            {
-                if (event->button == 1)
-                {
-                    EventInfos infos;
-                    infos.x = event->clientX;
-                    infos.y = event->clientY;
-                    callback(infos);
-                    return infos.preventDefault;
-                }
-                return false;
-            };
-            em::addEventListener(*_dom, ml::Event::MOUSE_UP, f);
-        }
-
-        else if (event == ml::Event::KEY_DOWN)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenKeyboardEvent* event)
-            {
-                EventInfos infos;
-                infos.key = event->key;
-                callback(infos);
-                return infos.preventDefault;
-            };
-            em::addEventListener(*_dom, ml::Event::KEY_DOWN, f);
-        }
-
-        else if (event == ml::Event::KEY_UP)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenKeyboardEvent* event)
-            {
-                EventInfos infos;
-                infos.key = event->key;
-                callback(infos);
-                return infos.preventDefault;
-            };
-            em::addEventListener(*_dom, ml::Event::KEY_UP, f);
-        }
-
-        else if (event == ml::Event::CHANGE)
-            _addOnChange(event, callback);
-
-        else if (event == ml::Event::VALID)
-            _addOnValid(event, callback);
-
-        else if (event == ml::Event::WHEEL)
-            _addOnWheel(event, callback);
+        else if (event == ml::Event::KEY_DOWN || event == ml::Event::KEY_UP)
+            _onKeyEvent.push(ec);
 
         else if (event == ml::Event::SHOWN)
-            _addOnShown(event, callback);
+            _onShown.push(ec);
 
         else if (event == ml::Event::HIDDEN)
-            _addOnHidden(event, callback);
+            _onHidden.push(ec);
 
         else if (event == ml::Event::RESIZE)
-            _addOnResize(event, callback);
+            _onResize.push(ec);
 
-        else if (event == ml::Event::FOCUS)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-            {
-                EventInfos infos;
-                infos.type = ml::Event::FOCUS;
-                callback(infos);
-                return false;
-            };
-            em::addEventListener(*_dom, ml::Event::FOCUS, f);
-        }
+        else if (event == ml::Event::FOCUS || 
+                event == ml::Event::UNFOCUS || 
+                event == ml::Event::VALID)
+            _onGeneralEvents.push(ec);
 
-        else if (event == ml::Event::UNFOCUS)
-        {
-            auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-            {
-                EventInfos infos;
-                infos.type = ml::Event::UNFOCUS;
-                callback(infos);
-                return false;
-            };
-            em::addEventListener(*_dom, ml::Event::UNFOCUS, f);
-        }
-    }
+        //necessary for the Swicth_impl and ToggleButton_impl override.
+        else if (event == ml::Event::CHANGE)
+            _addOnChange(callback);
 
-    void Widget_impl::_addOnValid(Event event, const std::function<void(EventInfos&)>& callback)
-    {
-        auto f = [callback]()
-        {
-            EventInfos infos;
-            callback(infos);
-        };
-        em::addEventListener(*_dom, ml::Event::VALID, f);
-    }
-
-    void Widget_impl::_addOnWheel(Event event, const std::function<void(EventInfos&)>& callback)
-    {
-        auto f = [callback, this](const emval& dom, const EmscriptenMouseEvent* ev)
-        {
-            if (_hovered)
-            {
-                EventInfos infos;
-                infos.type = ml::Event::WHEEL;
-                infos.x = ev->clientX;
-                infos.y = ev->clientY;
-                callback(infos);
-                return infos.preventDefault;
-            }
-            return false;
-        };
-        em::addEventListener(*_dom, ml::Event::WHEEL, f);
-    }
-
-    void Widget_impl::_addOnShown(Event event, const std::function<void(EventInfos&)>& callback)
-    {
-        em::addEventListener(*_dom, ml::Event::SHOWN, [callback]()
-        {
-            EventInfos infos;
-            infos.type = ml::Event::SHOWN;
-            infos.visible = true;
-            callback(infos);
-        });
-    }
-
-    void Widget_impl::_addOnHidden(Event event, const std::function<void(EventInfos&)>& callback)
-    {
-        em::addEventListener(*_dom, ml::Event::HIDDEN, [callback]()
-        {
-            EventInfos infos;
-            infos.type = ml::Event::HIDDEN;
-            infos.visible = false;
-            callback(infos);
-        });
-    }
-
-    void Widget_impl::_addOnResize(Event event, const std::function<void(EventInfos&)>& callback)
-    {
-        em::addEventListener(*_dom, ml::Event::RESIZE, [this, callback, event]()
-        {
-            EventInfos e;
-            e.type = event;
-            e.width = em::width(*_dom);
-            e.height = em::height(*_dom);
-            if (_oldWidth == e.width && _oldHeight == e.height)
-                return;
-            e.visible = _visible;
-            callback(e);
-            _oldWidth = e.width;
-            _oldHeight = e.height;
-        });
-    }
-
-    void Widget_impl::_addOnLeftUp(Event event, const std::function<void(EventInfos&)>& callback)
-    {
-        auto f = [callback](const emval& dom, const EmscriptenMouseEvent* event)
-        {
-            if (event->button == 0)
-            {
-                EventInfos infos;
-                infos.x = event->clientX;
-                infos.y = event->clientY;
-                callback(infos);
-                return infos.preventDefault;
-            }
-            return false;
-        };
-        em::addEventListener(*_dom, ml::Event::MOUSE_UP, f);
-    }
-
-    void Widget_impl::_addOnChange(Event event, const std::function<void(EventInfos&)>& callback)
-    {
-        auto f = [callback]()
-        {
-            EventInfos infos;
-            callback(infos);
-        };
-        em::addEventListener(*_dom, ml::Event::CHANGE, f);
+        if (_wasOneTimeInDom)
+            _addEventToDOMElement();
     }
 
     void Widget_impl::setWidth(int w)
@@ -600,12 +392,12 @@ namespace ml
 
     void Widget_impl::scrollLeft(double amount)
     {
-        em::scrollBy(*_dom, amount, 0);
+        em::scrollBy(*_dom, -amount, 0);
     }
 
     void Widget_impl::scrollRight(double amount)
     {
-        em::scrollBy(*_dom, -amount, 0);
+        em::scrollBy(*_dom, amount, 0);
     }
 
     void Widget_impl::addOnXScroll(const std::function<void(double)>& cb)
@@ -651,5 +443,118 @@ namespace ml
             em::setCss(*_dom, "overflow-x", "auto");
             em::setCss(*_dom, "overflow-y", "auto");
         }
+    }
+
+    void Widget_impl::_onAppended()
+    {
+        if (_wasOneTimeInDom)        
+            return;
+        _wasOneTimeInDom = true;
+        _addEventToDOMElement();
+    }
+
+    void Widget_impl::_addMouseEvent(bool clear)
+    {
+        for (auto& cb : _onMouseEvent)
+        {
+            auto mouse_cb = [cb](const emval& dom, const EmscriptenMouseEvent* event)
+            {
+                EventInfos infos;
+                infos.x = event->clientX;
+                infos.y = event->clientY;
+                infos.type = cb.event.type;
+                cb.callback(infos);
+                return infos.preventDefault;
+            };
+
+            em::addEventListener(*_dom, cb.event.type, mouse_cb);
+        }
+
+        if (clear) _onMouseEvent.clear();
+    }
+
+    void Widget_impl::_addKeyEvent(bool clear)
+    {
+        for (auto& cb : _onKeyEvent)
+        {
+            auto key_cb = [cb](const emval& dom, const EmscriptenKeyboardEvent* event)
+            {
+                EventInfos infos;
+                infos.key = event->key;
+                infos.type = cb.event.type;
+                cb.callback(infos);
+                return infos.preventDefault;
+            };
+
+            em::addEventListener(*_dom, cb.event.type, key_cb);
+        }
+
+        if (clear) _onKeyEvent.clear();
+    }
+
+    void Widget_impl::_addResizeEvent(bool clear)
+    {
+        //TODO !
+        lg("Warning : _addResizeEvent not implemented yet.");
+//         for (auto& cb : _onResize)
+//         {
+//             auto f = [cb, this](const emval& dom, const EmscriptenUiEvent* event)
+//             {
+//                 EventInfos infos;
+//                 infos.type = cb.event.type;
+//                 infos.width = em::width(*_dom);
+//                 infos.height = em::height(*_dom);
+//                 if (_oldWidth == infos.width && _oldHeight == infos.height)
+//                     return;
+//                 infos.visible = _visible;
+//                 cb.callback(infos);
+//                 _oldWidth = infos.width;
+//                 _oldHeight = infos.height;
+//             };
+//             em::addEventListener(*_dom, cb.event.type, f);
+//         }
+// 
+//         if (clear) _onResize.clear();
+    }
+
+    void Widget_impl::_addGeneralEvent(bool clear)
+    {
+        for (auto & ec : _onGeneralEvents)
+        {
+            auto f = [ec]()
+            {
+                EventInfos infos;
+                infos.type = ec.event.type;
+                ec.callback(infos);
+                return false;
+            };
+            em::addEventListener(*_dom, ec.event.type, f);
+        }
+
+        if (clear) _onGeneralEvents.clear();
+    }
+
+    void Widget_impl::_addOnChange(const std::function<void(EventInfos&)>& callback)
+    {
+        EventCallback ec;
+        ec.event.type = ml::Event::CHANGE;
+        ec.callback = callback;
+        _onGeneralEvents.push(ec);
+    }
+
+    void Widget_impl::_addOnLeftUp(const std::function<void(EventInfos&)>& callback)
+    {
+        EventCallback ec;
+        ec.event.type = ml::Event::LEFT_UP;
+        ec.callback = callback;
+        _onMouseEvent.push(ec);
+    }
+
+    void Widget_impl::_addEventToDOMElement(bool clear)
+    {
+        _addMouseEvent(clear);
+        _addKeyEvent(clear);
+        _addResizeEvent(clear);
+        _addGeneralEvent(clear);
     }
 }

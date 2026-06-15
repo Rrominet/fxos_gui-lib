@@ -26,12 +26,17 @@ namespace ml
             em::window().set("mlguiMetaDown",  emval(e->metaKey));
             return false;
         });
-        em::addEventListener(em::body(), ml::Event::KEY_UP, [](const emval& dom, const EmscriptenKeyboardEvent* e) -> bool
+        em::addEventListener(em::body(), ml::Event::KEY_UP, [this](const emval& dom, const EmscriptenKeyboardEvent* e) -> bool
         {
             em::window().set("mlguiCtrlDown",  emval(e->ctrlKey));
             em::window().set("mlguiShiftDown", emval(e->shiftKey));
             em::window().set("mlguiAltDown",   emval(e->altKey));
             em::window().set("mlguiMetaDown",  emval(e->metaKey));
+            if (std::string(e->key) == "Escape")
+            {
+                for (auto& p : _popovers)
+                p->hide();
+            }
             return false;
         });
 
@@ -39,6 +44,11 @@ namespace ml
                 {
                     _grabbed = nullptr;
                     _scaleGrabbed = nullptr;
+                    for (auto& p : _popovers)
+                    {
+                        if(p->autoHide())
+                            p->hide();
+                    }
                     return false;
                 });
 

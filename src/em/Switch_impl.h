@@ -1,4 +1,3 @@
-
 #pragma once
 #include "./em.h"
 #include <memory>
@@ -22,8 +21,8 @@ namespace ml
 
         private : 
             std::shared_ptr<emval> _switchButton = nullptr;
-            std::function<void(EventInfos&)> _onChange = 0;
+            ml::Vec<std::function<void(EventInfos&)>> _onChange;
 
-            virtual void _addOnChange(Event event, const std::function<void(EventInfos&)>& callback) override;
+            virtual void _addOnChange(const std::function<void(EventInfos&)>& callback) override;
     };
 }

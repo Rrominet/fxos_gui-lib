@@ -46,17 +46,28 @@ def containerCode(cType) :
         factoryH += "std::shared_ptr<ml::*type*> create*type*(ml::*ContainerType** parent);\n".replace("*ContainerType*", c)
 
     create = """
+    lg("a");
         ml::app()->checker().set("can-construct-widget", true);
+    lg("a");
         auto widget = std::make_shared<ml::*type*>();
+    lg("a");
         widget->_impl = std::make_shared<ml::*type*_impl>(widget.get());
+    lg("a");
         widget->_impl->_createWidget();
+    lg("a");
         widget->_impl->_createBasicEvents();
+    lg("a");
         widget->_createBasicEvents();
+    lg("a");
         ml::app()->checker().set("can-construct-widget", false);
+    lg("a");
     """
     init_events = """
+    lg("a");
         widget->init();
+    lg("a");
         widget->setEvents();
+    lg("a");
     """
     factoryCpp = """
     std::shared_ptr<ml::*type*> WidgetsFactory::create*type*()
@@ -109,7 +120,9 @@ def containerCode(cType) :
     {
         """ + create + """
         widget->setParent(&parent->content());
+        lg("a");
         parent->append(widget);
+        lg("a");
         """ + init_events + """
         return widget;
     }

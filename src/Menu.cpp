@@ -28,9 +28,13 @@ namespace ml
                 onClick();
             _popover->hide();
         };
+        lg("a");
         auto _r = std::make_shared<ml::MenuButton>(_popover->content().get(), text, _onclick, keybind);
+        lg("a");
         _r->button()->setHAlign(HAlignment::FILL);
+        lg("a");
         _buttons.push_back(_r);
+        lg("a");
         return _r;
     }
 
@@ -57,21 +61,31 @@ namespace ml
 
     std::shared_ptr<ml::MenuButton> Menu::addCommand(Command* cmd, const std::any& overrideArgs, const std::string& overrideText)
     {
+        lg("a");
         auto id = cmd->id();
+        lg("a");
         if (!_cmdsIds.contains(id))
             _cmdsIds.push_back(id);
+        lg("a");
         auto _onclick = [cmd, overrideArgs]()
         {
+        lg("a");
             if (overrideArgs.has_value())
                 cmd->exec(overrideArgs);
             else
                 cmd->exec();
+        lg("a");
         };
+        lg("a");
         auto txt = cmd->name();
+        lg("a");
         if (overrideText != "")
             txt = overrideText;
+        lg("a");
         auto btn = this->addButton(txt, _onclick, keybinds::label(cmd->keybind()));
+        lg("a");
         btn->button()->setHelp(cmd->help());
+        lg("a");
         return btn;
     }
 

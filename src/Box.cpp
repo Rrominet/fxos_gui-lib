@@ -12,6 +12,7 @@
 #include "AsyncGuiCommand.h"
 #include <memory>
 #include "./LabelValue.h"
+#include "./containers.h"
 
 namespace ml
 {
@@ -37,27 +38,12 @@ namespace ml
 
     void Box::append(std::shared_ptr<ml::Widget> child)
     {
-        child->removeWindow();
-        child->unparent();
-        ml::app()->checker().set("can-set-window", true);
-        if (this->hasWindow())
-            child->setWindow(this->window());
-        ml::app()->checker().set("can-set-window", false);
-        this->box()->append(child);
-        child->setParent(this);
-        _children.push_back(child);
+        containers::append<Box>(*this, child);
     }
 
     void Box::prepend(std::shared_ptr<ml::Widget> child)
     {
-        child->removeWindow();
-        child->unparent();
-        ml::app()->checker().set("can-set-window", true);
-        if (this->hasWindow())
-            child->setWindow(this->window());
-        ml::app()->checker().set("can-set-window", false);
-        this->box()->prepend(child);
-        _children.prepend(child);
+        containers::append<Box>(*this, child, true);
     }
 
     void Box::removeChild(std::shared_ptr<ml::Widget> child)

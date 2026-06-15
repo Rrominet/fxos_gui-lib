@@ -166,6 +166,7 @@ if ("gtk" not in sys.argv):
     cpp.addEmiscriptenFlags()
     cpp.addToLibs(libs)
     cpp.definitions += defs
+    cpp.flags.append("sEXIT_RUNTIME=0")
 
 if ("wasm" not in sys.argv):
     #build with gtkmm (gtk4 c++ binding)

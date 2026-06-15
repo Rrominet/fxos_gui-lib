@@ -20,7 +20,7 @@ namespace ml
             void stopLoading(){}
 
         protected:
-            virtual void _addOnLeftUp(Event event, const std::function<void(EventInfos&)>& callback) override ;
+            virtual void _addOnLeftUp(const std::function<void(EventInfos&)>& callback) override ;
     };
 }
 
