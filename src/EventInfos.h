@@ -8,8 +8,8 @@ namespace ml
     {
         double x, y, dx, dy, mvtx, mvty;
         int click_numbers = -1;
-        unsigned int  keyval;
-        unsigned int  keycode;
+        unsigned int keyval;
+        unsigned int keycode;
         std::string key;
 #ifdef __EMSCRIPTEN__
         bool preventDefault = false; // this is for JS (works a bit in gtk actually)

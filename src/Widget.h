@@ -172,6 +172,8 @@ namespace ml
 
             void setOverflow(Overflow overflow){_impl->setOverflow(overflow);};
 
+            std::string id() const {return _impl->id();}
+
         protected : 
             std::shared_ptr<Widget_impl> _impl;
             ml::Widget* _parent = nullptr;
@@ -192,6 +194,7 @@ namespace ml
 
             ml::AnyData _data; //bp cg
             ml::Events _events; //bp cg
+            ContainerType _containerType = CONTAINER_NONE; //bp cg
 
 #include "./Widget_events_gen.h"
 

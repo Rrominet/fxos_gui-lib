@@ -596,4 +596,9 @@ namespace ml
             return true;
         return false;
     }
+
+    std::string Widget_impl::id() const
+    {
+        return _gtk->name();            
+    }
 }

@@ -106,6 +106,8 @@ namespace ml
 
             std::weak_ptr<bool> alive() const{return _alive;}
 
+            std::string id() const;
+
         protected : 
             Widget* _abstract = nullptr;
             std::shared_ptr<Gtk::Widget> _gtk;

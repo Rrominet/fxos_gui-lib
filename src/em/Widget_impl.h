@@ -129,6 +129,7 @@ namespace ml
             geometry::Point<double> computedPosition(ml::Widget* coordonatesSrc) const;
 
             void setOverflow(Overflow overflow);
+            std::string id() const;
 
         protected : 
             Widget* _abstract = nullptr;

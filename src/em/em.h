@@ -59,7 +59,6 @@ namespace em
     void clearClasses(const emval& dom);
 
     void setCss(const emval& dom, const std::string& attr, const std::string& value);
-    void addCss(const emval& dom, const std::string& css);
     void setFocusable(const emval& dom, bool value);
 
     bool hovered(const emval& dom);

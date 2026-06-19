@@ -1,6 +1,7 @@
 #include "./Window_impl.h"
 #include "../Window.h"
 #include "../App.h"
+#include "em.h"
 
 namespace ml
 {
@@ -18,8 +19,10 @@ namespace ml
         _draw();
         auto later = [this]
         {
+            // FIXME : This is a problem because It's gonna be final even if overriden in a child class.
             this->setSize(640, 380);
             this->center();
+            this->focus();
         };
         em::setTimeout(later, 0);
         _setBasicEvents();
@@ -70,6 +73,8 @@ namespace ml
 
     void Window_impl::setSize(unsigned int w, unsigned int h)
     {
+        if (_main)
+            return;
         _width = w;
         _height = h;
         (*_dom)["style"].set("width", std::to_string(w) + "px");
@@ -78,12 +83,16 @@ namespace ml
 
     void Window_impl::setWidth(unsigned int w)
     {
+        if (_main)
+            return;
         _width = w;
         (*_dom)["style"].set("width", std::to_string(w) + "px");
     }
 
     void Window_impl::setHeight(unsigned int h)
     {
+        if (_main)
+            return;
         _height = h;
         (*_dom)["style"].set("height", std::to_string(h) + "px");
     }
@@ -96,6 +105,8 @@ namespace ml
 
     void Window_impl::setPosition(double x,double y)
     {
+        if (_main)
+            return;
         _x = x;
         _y = y;
         (*_dom)["style"].set("left", std::to_string(x) + "px");
@@ -104,6 +115,8 @@ namespace ml
 
     void Window_impl::move(double x,double y)
     {
+        if (_main)
+            return;
         _x += x;
         _y += y;
         (*_dom)["style"].set("left", std::to_string(x) + "px");
@@ -118,6 +131,8 @@ namespace ml
 
     void Window_impl::center()
     {
+        if (_main)
+            return;
         auto dw = em::innerWidth();
         auto dh = em::innerHeight();
         this->setPosition((dw - _width) / 2, (dh - _height) / 2);
@@ -132,23 +147,33 @@ namespace ml
 
     void Window_impl::setTitle(const std::string& title)
     {
-        _titlelabel->set<std::string>("innerText", title);
+        if (_main)
+            emscripten_set_window_title(title.c_str());
+        else
+            _titlelabel->set<std::string>("innerText", title);
     }
 
     std::string Window_impl::title()
     {
-        return (*_titlelabel)["innerText"].as<std::string>();
+        if(_main)
+            return std::string(emscripten_get_window_title());
+        else
+            return (*_titlelabel)["innerText"].as<std::string>();
     }
 
     void Window_impl::_setBasicEvents()
     {
-        em::addEventListener(*_dom, ml::Event::MOUSE_MOVE, [this](const emval& dom, const EmscriptenMouseEvent* e)
+        auto onmm = [this](const emval& dom, const EmscriptenMouseEvent* e)
         {
             em::window().set("_mlMouseX", e->clientX);
             em::window().set("_mlMouseY", e->clientY);
             return false;
-        });
+        };
 
+        em::addEventListener(*_dom, ml::Event::MOUSE_MOVE, onmm);
+ 
+        if (_main)
+            return;
         em::addEventListener(*_closeButton, ml::Event::CLICK, [this](const emval& dom, const EmscriptenMouseEvent* e)
                 {
                     if (_win->doHideOnClose())
@@ -184,13 +209,19 @@ namespace ml
     void Window_impl::focus()
     {
         ml::app()->impl().unfocusAll();
-        (*_dom)["style"].set<std::string>("zIndex", "100");
+        if (!_main)
+            (*_dom)["style"].set<std::string>("zIndex", "100");
+        else 
+            (*_dom)["style"].set<std::string>("zIndex", "0");
         (*_dom)["classList"].call<void, std::string>("add", "focused");
     }
 
     void Window_impl::unfocus()
     {
-        (*_dom)["style"].set<std::string>("zIndex", "1");
+        if (_main)
+            (*_dom)["style"].set<std::string>("zIndex", "0");
+        else 
+            (*_dom)["style"].set<std::string>("zIndex", "1");
         (*_dom)["classList"].call<void, std::string>("remove", "focused");
     }
 
@@ -209,6 +240,7 @@ namespace ml
         }
 
         h -= (em::y(*(_win->main()->scrollable()->widget())) - _y);
+        h -= em::height(*_titlebar);
         h -= em::height(*(_win->foot()->box()->widget()));
         (*(_win->main()->scrollable()->widget()))["style"].set("height", std::to_string(h) + "px");
     }

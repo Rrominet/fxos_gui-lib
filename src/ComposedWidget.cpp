@@ -35,8 +35,19 @@ namespace ml
 
     void ComposedWidget::addEventListener(Event event, const std::function<void(EventInfos&)>& callback)
     {
+        lg("ComposedWidget::addEventListener (" << event << ", " << &callback << ") - ID : " << this->id());
         for (auto w : _composed)
             std::visit([&event, &callback](auto& w){w->addEventListener(event, callback);}, w);
+    }
+
+    std::string ComposedWidget::id() const
+    {
+        std::string id;        
+        for (auto w : _composed)
+            std::visit([&id](auto& w){id += w->id() + "-";}, w);
+        if (id.size() > 0)
+            return id.substr(0, id.size()-1);
+        return "unknown";
     }
 
     void ComposedWidget::show()

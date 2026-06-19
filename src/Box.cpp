@@ -18,7 +18,7 @@ namespace ml
 {
     Box::Box() : Widget()
     {
-
+        _containerType = CONTAINER_BOX;
     }
 
     void Box::init(ml::Scrollable* scrollable)
@@ -316,6 +316,10 @@ namespace ml
         return lv;
     }
 
+    ml::Vec<std::shared_ptr<Widget>> Box::deepChildren() const
+    {
+        return containers::deepChildren<ml::Box>(*this);
+    }
 
 #include "./Widget_creators_impl_gen.h"
 #include "./Container_creators_impl_gen.h"

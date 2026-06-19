@@ -45,6 +45,8 @@ namespace ml
             void enable();
             void disable();
 
+            std::string id() const;
+
         protected : 
             //only the top hierarchy widgets that compose this widget should be added.
             //do not forget to add any of your created widget to this list

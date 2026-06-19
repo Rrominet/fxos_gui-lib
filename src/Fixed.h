@@ -53,6 +53,8 @@ namespace ml
             template <typename W=ml::Canvas, typename... Args>
                 std::shared_ptr<W> createCanvas(Args&&... args);
 
+            ml::Vec<std::shared_ptr<Widget>> deepChildren() const;
+
         protected : 
             ml::Vec<std::shared_ptr<ml::Widget>> _children; //bp cg
             ml::Vec<std::shared_ptr<ml::ComposedWidget>> _composedChildren; //bp cg

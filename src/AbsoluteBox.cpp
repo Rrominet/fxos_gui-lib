@@ -135,6 +135,11 @@ namespace ml
         _composedChildren.clear();
     }
 
+    ml::Vec<std::shared_ptr<Widget>> AbsoluteBox::deepChildren() const
+    {
+        return containers::deepChildren<ml::AbsoluteBox>(*this);
+    }
+
 #include "./Widget_creators_implab_gen.h"
 #include "./Container_creators_implab_gen.h"
 }

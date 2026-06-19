@@ -1,6 +1,11 @@
 #pragma once
 #include "./App.h"
 #include "./Widget.h"
+#include "./Scrollable.h"
+#include "./Box.h"
+#include "./Fixed.h"
+#include "./AbsoluteBox.h"
+#include "./Popover.h"
 
 namespace ml
 {
@@ -9,56 +14,99 @@ namespace ml
         template<typename C> 
             void append(C& container, std::shared_ptr<ml::Widget> child, bool prepend = false)
             {
-                lg("a");
                 child->unparent();
-                lg("a");
                 ml::app()->checker().set("can-set-window", true);
-                lg("a");
                 if (container.hasWindow())
                 {
-                    lg("a");
                     child->setWindow(container.window());
-                    lg("a");
                 }
-                lg("a");
-                ml::app()->checker().set("can-set-window", false);
-                lg("a");
                 if constexpr (std::is_same_v<C, ml::Fixed>)
                 {
-                    lg("a");
                     container.fixed()->append(child);
-                    lg("a");
                 }
                 else if constexpr (std::is_same_v<C, ml::AbsoluteBox>)
                 {
-                    lg("a");
                     container.absolute_box()->append(child);
-                    lg("a");
                 }
                 else
                 {
-                    lg("a");
                     if (prepend)
                     {
-                        lg("a");
                         container.box()->prepend(child);
-                        lg("a");
                     }
                     else 
                     {
-                        lg("a");
                         container.box()->append(child);
-                        lg("a");
                     }
                 }
-                lg("a");
                 child->setParent(&container);
-                lg("a");
                 container.children().push_back(child);
-                lg("a");
 
-                child->events().emit("appended");
-                lg("a");
+                if (container.hasWindow())
+                {
+                    child->events().emit("appended");
+                    if (child->containerType() == CONTAINER_NONE)
+                    {
+                        ml::app()->checker().set("can-set-window", false);
+                        return;
+                    }
+                    ml::Vec<std::shared_ptr<Widget>> children;
+                    if (auto b = dynamic_cast<ml::Box*>(child.get()))
+                    {
+                        children = b->deepChildren();
+                    }
+                    else if (auto b = dynamic_cast<ml::Fixed*>(child.get()))
+                    {
+                        children = b->deepChildren();
+                    }
+                    else if (auto b = dynamic_cast<ml::AbsoluteBox*>(child.get()))
+                    {
+                        children = b->deepChildren();
+                    }
+                    else if (auto b = dynamic_cast<ml::Scrollable*>(child.get()))
+                    {
+                        children = b->deepChildren();
+                    }
+                    else if (auto b = dynamic_cast<ml::Popover*>(child.get()))
+                    {
+                        children = b->deepChildren();
+                    }
+
+                    for (auto& c : children)
+                    {
+                        c->setWindow(container.window());
+                        c->events().emit("appended");
+                    }
+                }
+
+                ml::app()->checker().set("can-set-window", false);
+            }
+
+        template<typename C> 
+            ml::Vec<std::shared_ptr<Widget>> deepChildren(const C& container)
+            {
+                ml::Vec<std::shared_ptr<Widget>> res; 
+                for (auto&c : container.children())
+                {
+                    res.push_back(c);
+                    if (c->containerType() != CONTAINER_NONE)
+                    {
+                        if (auto b = dynamic_cast<ml::Box*>(c.get()))
+                            res.concat(b->deepChildren());
+                        else if(auto b = dynamic_cast<ml::Fixed*>(c.get()))
+                            res.concat(b->deepChildren());
+                        else if(auto b = dynamic_cast<ml::AbsoluteBox*>(c.get()))
+                            res.concat(b->deepChildren());
+                        else if(auto b = dynamic_cast<ml::Scrollable*>(c.get()))
+                            res.concat(b->deepChildren());
+                        else if (auto b = dynamic_cast<ml::Popover*>(c.get()))
+                            res.concat(b->deepChildren());
+                    }
+                }
+
+                //TODO : Still need to add the _composedChildren;
+
+                return res;
             }
     }
 }

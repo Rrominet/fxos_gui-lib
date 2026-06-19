@@ -74,6 +74,9 @@ namespace ml
 
             std::shared_ptr<ml::LabelValue> labelValue(const std::string& label="", const std::string& value="");
 
+            ml::Vec<std::shared_ptr<Widget>> children() const{return _box.children();}
+            ml::Vec<std::shared_ptr<Widget>> deepChildren() const {return _box.deepChildren();}
+
         protected : 
             ml::Vec<std::function<void(double)>> _onXScroll;
             ml::Vec<std::function<void(double)>> _onYScroll;

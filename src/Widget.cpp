@@ -35,14 +35,20 @@ namespace ml
                         ml::app()->setFocusedWidget(nullptr);
                 }); 
 
+#ifdef EMSCRIPTEN
+        this->addEventListener(DOUBLE_CLICK, [this](EventInfos& e){
+                for (auto& f : _double_click)
+                    f(e);
+        });
+#else
         this->addEventListener(MOUSE_DOWN, [this](EventInfos& e){
-                //FIXME : not implemented for emscripten
             if (e.click_numbers >= 2) 
             {
                 for (auto& f : _double_click)
                     f(e);
             }
         });
+#endif
     }
 
     void Widget::remove()
@@ -63,7 +69,7 @@ namespace ml
 
     void Widget::addEventListener(Event event, const std::function<void (EventInfos&)>& callback)
     {
-        lg("Widget::addEventListener");
+        lg("Widget::addEventListener(" << event << ") - ID : "<< this->id()); ;
         switch(event)
         {
 #include "./Widget_events_impl_gen.h"

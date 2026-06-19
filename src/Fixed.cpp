@@ -7,7 +7,7 @@ namespace ml
 {
     Fixed::Fixed() : Widget()
     {
-
+        _containerType = CONTAINER_FIXED;
     }
     void Fixed::init()
     {
@@ -92,6 +92,11 @@ namespace ml
         _children.clear();
         _composedChildren.clear();
         lg("All children are removed.");
+    }
+
+    ml::Vec<std::shared_ptr<Widget>> Fixed::deepChildren() const
+    {
+        return containers::deepChildren<ml::Fixed>(*this);
     }
 
 #include "./Widget_creators_impl_fixed_gen.h"

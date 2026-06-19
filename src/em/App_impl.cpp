@@ -44,9 +44,14 @@ namespace ml
                 {
                     _grabbed = nullptr;
                     _scaleGrabbed = nullptr;
+                    return false;
+                });
+
+        em::addEventListener(em::body(), ml::Event::MOUSE_DOWN, [this](const emval& dom, const EmscriptenMouseEvent* e)
+                {
                     for (auto& p : _popovers)
                     {
-                        if(p->autoHide())
+                        if(p->autoHide() && !p->hovered())
                             p->hide();
                     }
                     return false;
@@ -63,6 +68,7 @@ namespace ml
                         return res;
                     return false;
                 });
+                
     }
 
     bool App_impl::onWindowMove(const EmscriptenMouseEvent* e)

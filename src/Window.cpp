@@ -67,7 +67,7 @@ namespace ml
         });
 
         //note this is important to know : 
-        //the priority of the keybinds arelike this : 
+        //the priority of the keybinds are like this : 
         // 1 - basic keybinds of the window
         // 2 - the commands of the window
         // 3 - the commands of the app.

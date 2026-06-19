@@ -5,7 +5,7 @@ namespace ml
 {
     Scrollable::Scrollable() : Widget()
     {
-
+        _containerType = CONTAINER_SCROLLABLE;
     }
 
     void Scrollable::init()

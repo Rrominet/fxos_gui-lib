@@ -57,14 +57,11 @@ namespace ml
         {
             if (_onClick)
                 _onClick();  
+            event.stopPropagation();
         };
 
         lg("a");
         _button->addEventListener(Event::MOUSE_UP, f);
-        lg("a");
-        _label->addEventListener(Event::MOUSE_UP, f);
-        lg("a");
-        _keybind->addEventListener(Event::MOUSE_UP, f);
         lg("a");
     }
 

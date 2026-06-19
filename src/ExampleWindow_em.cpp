@@ -67,8 +67,10 @@ namespace ml
 
         this->createCommands();
         this->createBasicsWidgets();
-        //this->createComposedWidgets();
-        //this->createExampleMenu();
+        this->createComposedWidgets();
+        this->createExampleMenu();
+
+        ml::app()->setAbout("This is a Example App to let you know what is possible to accimplish with mlgui.");
     }
 
     void ExampleWindow::createBasicsWidgets()
@@ -207,7 +209,7 @@ namespace ml
         ml::app()->menusFactory().create("tools", "Tools");
         auto windows = ml::app()->menusFactory().create("windows", "Windows");
 
-        //file->addCommand(ml::app()->cmds().command("testlog1").get());
+        file->addCommand(ml::app()->cmds().command("testlog1").get());
         file->addButton("Open", 0, "Ctrl O");
         file->addButton("Save", 0, "Ctrl S");
         file->addButton("Save as", 0, "Ctrl Shift S");
@@ -303,6 +305,9 @@ namespace ml
 
         bx1->setOrient(Orient::HORIZONTAL);
         auto btn = (ComposedButton*)bx1->createComposedWidget<ComposedButton>(bx1.get(), "Composed Button").get();
-        btn->addEventListener(ml::LEFT_UP, [btn](auto& e){btn->toggleLoading();});
+        btn->addEventListener(ml::LEFT_UP, [btn](auto& e){
+                    lg("Composed Button Clicked.");
+                    btn->toggleLoading();
+                });
     }
 }

@@ -6,7 +6,7 @@ namespace ml
 {
     Popover::Popover() : Widget()
     {
-
+        _containerType = CONTAINER_POPOVER;
     }
 
     void Popover::init()
@@ -33,6 +33,16 @@ namespace ml
             auto mpos = this->window()->mousePos();
             this->setPosition(mpos.x(), mpos.y());
         }
+    }
+
+    ml::Vec<std::shared_ptr<Widget>> Popover::children() const
+    {
+        return _content->children();	
+    }
+
+    ml::Vec<std::shared_ptr<Widget>> Popover::deepChildren() const
+    {
+        return _content->deepChildren();	
     }
 
 }

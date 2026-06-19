@@ -121,6 +121,8 @@ namespace ml
 
             std::shared_ptr<ml::LabelValue> labelValue(const std::string& label="", const std::string& value="");
 
+            ml::Vec<std::shared_ptr<Widget>> deepChildren() const;
+
         protected : 
             ml::Vec<std::shared_ptr<ml::Widget>> _children; //bp cg
             ml::Vec<std::shared_ptr<ml::ComposedWidget>> _composedChildren; //bp cg

@@ -12,14 +12,15 @@ namespace em
     // represent a counter for each dom element created.
     long global_id = 0;
 
-    std::unordered_map<std::string, std::function<bool (const emval&, const EmscriptenMouseEvent*)>> mouse_click;
-    std::unordered_map<std::string, std::function<bool (const emval&, const EmscriptenMouseEvent*)>> mouse_up;
-    std::unordered_map<std::string, std::function<bool (const emval&, const EmscriptenMouseEvent*)>> mouse_down;
-    std::unordered_map<std::string, std::function<bool (const emval&, const EmscriptenMouseEvent*)>> mouse_move;
-    std::unordered_map<std::string, std::function<bool (const emval&, const EmscriptenMouseEvent*)>> mouse_enter;
-    std::unordered_map<std::string, std::function<bool (const emval&, const EmscriptenMouseEvent*)>> mouse_leave;
-    std::unordered_map<std::string, std::function<bool (const emval&, const EmscriptenKeyboardEvent*)>> key_down;
-    std::unordered_map<std::string, std::function<bool (const emval&, const EmscriptenKeyboardEvent*)>> key_up;
+    std::unordered_map<ml::Event, //event-type, 
+        std::unordered_map<std::string, //elmt-id
+                ml::Vec<std::function<bool (const emval&, const EmscriptenMouseEvent*)>>
+                >
+            > mouse_events;
+
+    std::unordered_map<ml::Event, 
+        std::unordered_map<std::string, ml::Vec<std::function<bool (const emval&, const EmscriptenKeyboardEvent*)>>>
+            > key_events;
 
     std::unordered_map<std::string, std::function<void(emval)>> cbs;
     unsigned int cb_counter = 0;
@@ -45,98 +46,117 @@ namespace em
     {
         std::string id;
         emval elmt;
+        ml::Event event;
     };
 
-    EM_BOOL default_mouse_click_cb(int type, const EmscriptenMouseEvent* e, void* userData)
+    EM_BOOL default_mouse_cb(int type, const EmscriptenMouseEvent* e, void* userData)
     {
+        lg("Trying to execyte a mouse event callback...");
         auto elmt = (Elmt*)userData;
-        return mouse_click[elmt->id](elmt->elmt, e);
+        lg("Event " << elmt->event << " for elmt " << elmt->id);
+        if (mouse_events.find(elmt->event) == mouse_events.end())
+        {
+            lg("No mouse event found for " << elmt->event);
+            return false;
+        }
+        if (mouse_events[elmt->event].find(elmt->id) == mouse_events[elmt->event].end())
+        {
+            lg("Event type " << elmt->event << " founded but NOT for elmt " << elmt->id);
+            return false;
+        }
+
+        bool _r = false;
+        for (const auto& f : mouse_events[elmt->event][elmt->id])
+        {
+            if (elmt->event == ml::Event::LEFT_UP || elmt->event == ml::Event::LEFT_DOWN)
+            {
+                if (e->button == 0)
+                {
+                    lg("Executing event for left mouse");
+                    _r = f(elmt->elmt, e);
+                }
+            }
+
+            else if (elmt->event == ml::Event::MIDDLE_UP || elmt->event == ml::Event::MIDDLE_DOWN)
+            {
+                if (e->button == 1)
+                {
+                    lg("Executing event for middle mouse");
+                    _r = f(elmt->elmt, e);
+                }
+            }
+
+            else if (elmt->event == ml::Event::RIGHT_UP || elmt->event == ml::Event::RIGHT_DOWN)
+            {
+                if (e->button == 2)
+                {
+                    lg("Executing event for right mouse");
+                    _r = f(elmt->elmt, e);
+                }
+            }
+            else 
+            {
+                _r = f(elmt->elmt, e);
+            }
+        }
+        return _r;
     }
 
-    EM_BOOL default_mouse_down_cb(int type, const EmscriptenMouseEvent* e, void* userData)
+    EM_BOOL default_kb_cb(int type, const EmscriptenKeyboardEvent* e, void* userData)
     {
         auto elmt = (Elmt*)userData;
-        return mouse_down[elmt->id](elmt->elmt, e);
-    }
+        if (key_events.find(elmt->event) == key_events.end())
+            return false;
+        if (key_events[elmt->event].find(elmt->id) == key_events[elmt->event].end())
+            return false;
 
-    EM_BOOL default_mouse_move_cb(int type, const EmscriptenMouseEvent* e, void* userData)
-    {
-        auto elmt = (Elmt*)userData;
-        return mouse_move[elmt->id](elmt->elmt, e);
-    }
-
-    EM_BOOL default_mouse_up_cb(int type, const EmscriptenMouseEvent* e, void* userData)
-    {
-        auto elmt = (Elmt*)userData;
-        return mouse_up[elmt->id](elmt->elmt, e);
-    }
-
-    EM_BOOL default_mouse_enter_cb(int type, const EmscriptenMouseEvent* e, void* userData)
-    {
-        auto elmt = (Elmt*)userData;
-        return mouse_enter[elmt->id](elmt->elmt, e);
-    }
-
-    EM_BOOL default_mouse_leave_cb(int type, const EmscriptenMouseEvent* e, void* userData)
-    {
-        auto elmt = (Elmt*)userData;
-        return mouse_leave[elmt->id](elmt->elmt, e);
-    }
-
-    EM_BOOL default_key_down_cb(int type, const EmscriptenKeyboardEvent* e, void* userData)
-    {
-        auto elmt = (Elmt*)userData;
-        return key_down[elmt->id](elmt->elmt, e);
-    }
-
-    EM_BOOL default_key_up_cb(int type, const EmscriptenKeyboardEvent* e, void* userData)
-    {
-        auto elmt = (Elmt*)userData;
-        return key_up[elmt->id](elmt->elmt, e);
+        bool _r = false;
+        for (const auto& f : key_events[elmt->event][elmt->id])
+            _r = f(elmt->elmt, e);
+        return _r;
     }
 
     void addEventListener(const emval& dom, ml::Event event, const std::function<bool(const emval&, const EmscriptenMouseEvent*)>& callback, bool useCapture)
     {
+        lg("em::addEventListener(" << &dom << ", " << event << ", " << &callback << ", " << useCapture << ")");
         auto id = dom["id"].as<std::string>();
         id = "#" + id;
-        if (event == ml::Event::CLICK || 
-                event == ml::Event::DOUBLE_CLICK || 
-                event == ml::Event::MOUSE_DOWN ||
-                event == ml::Event::MOUSE_UP ||
-                event == ml::Event::MOUSE_MOVE ||
-                event == ml::Event::MOUSE_ENTER ||
-                event == ml::Event::MOUSE_LEAVE)
+        lg("Adding event listener to " << id);
+        mouse_events[event][id].push(callback);
+        if (event == ml::Event::CLICK)
         {
-            if (event == ml::Event::CLICK)
-            {
-                mouse_click[id] = callback;
-                emscripten_set_click_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_click_cb);
-            }
-            else if (event == ml::Event::MOUSE_DOWN)
-            {
-                mouse_down[id] = callback;
-                emscripten_set_mousedown_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_down_cb);
-            }
-            else if (event == ml::Event::MOUSE_UP)
-            {
-                mouse_up[id] = callback;
-                emscripten_set_mouseup_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_up_cb);
-            }
-            else if (event == ml::Event::MOUSE_MOVE)
-            {
-                mouse_move[id] = callback;
-                emscripten_set_mousemove_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_move_cb);
-            }
-            else if (event == ml::Event::MOUSE_ENTER)
-            {
-                mouse_enter[id] = callback;
-                emscripten_set_mouseenter_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_enter_cb);
-            }
-            else if (event == ml::Event::MOUSE_LEAVE)
-            {
-                mouse_leave[id] = callback;
-                emscripten_set_mouseleave_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_mouse_leave_cb);
-            }
+            lg("Adding click listener to " << id);
+            emscripten_set_click_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_mouse_cb);
+        }
+        else if (event == ml::Event::MOUSE_UP || event == ml::Event::LEFT_UP || event == ml::Event::RIGHT_UP || event == ml::Event::MIDDLE_UP)
+        {
+            lg("Adding mouseup listener to " << id);
+            emscripten_set_mouseup_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_mouse_cb);
+        }
+        else if (event == ml::Event::MOUSE_DOWN || event == ml::Event::LEFT_DOWN || event == ml::Event::RIGHT_DOWN || event == ml::Event::MIDDLE_DOWN)
+        {
+            lg("Adding mousedown listener to " << id);
+            emscripten_set_mousedown_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_mouse_cb);
+        }
+        else if (event == ml::Event::DOUBLE_CLICK)
+        {
+            lg("Adding dblclick listener to " << id);
+            emscripten_set_dblclick_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_mouse_cb);
+        }
+        else if (event == ml::Event::MOUSE_MOVE)
+        {
+            lg("Adding mousemove listener to " << id);
+            emscripten_set_mousemove_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_mouse_cb);
+        }
+        else if (event == ml::Event::MOUSE_ENTER)
+        {
+            lg("Adding mouseenter listener to " << id);
+            emscripten_set_mouseenter_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_mouse_cb);
+        }
+        else if (event == ml::Event::MOUSE_LEAVE)
+        {
+            lg("Adding mouseleave listener to " << id);
+            emscripten_set_mouseleave_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_mouse_cb);
         }
     }
 
@@ -144,18 +164,12 @@ namespace em
     {
         auto id = dom["id"].as<std::string>();
         id = "#" + id;
+        key_events[event][id].push(callback);
+        if (event == ml::Event::KEY_DOWN)
+            emscripten_set_keyup_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_kb_cb);
 
-        switch(event)
-        {
-            case ml::Event::KEY_DOWN:
-                key_down[id] = callback;
-                emscripten_set_keydown_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_key_down_cb);
-                break;
-            case ml::Event::KEY_UP:
-                key_up[id] = callback;
-                emscripten_set_keyup_callback(id.c_str(), (void*)(new Elmt{id, dom}), useCapture, default_key_up_cb);
-                break;
-        }
+        else if (event == ml::Event::KEY_UP)
+            emscripten_set_keydown_callback(id.c_str(), (void*)(new Elmt{id, dom, event}), useCapture, default_kb_cb);
     }
 
     void addEventListener(const emval& elmt, 
@@ -320,11 +334,6 @@ namespace em
         auto cls = classes(dom);
         for (auto& c : cls)
             dom["classList"].call<void>("remove", c);
-    }
-
-    void addCss(const emval& dom, const std::string& css)
-    {
-        dom["style"].set("cssText", emval(css));
     }
 
     //set the css dynamicly, equivalent of js dom.style.attr = "value;"

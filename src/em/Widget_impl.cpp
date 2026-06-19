@@ -7,6 +7,8 @@ namespace ml
 {
     Widget_impl::Widget_impl(Widget* abstract) : _abstract(abstract)
     {
+        //FIXME : This doesn't work because if the element is appended in an element that not in the dom yet, it's gonna be true and should be false.
+        //See the popover Menu that goes fucked up because of this.
         _abstract->events().add("appended", [this]{this->_onAppended();});
     }
 
@@ -40,13 +42,16 @@ namespace ml
 
     ml::Ret<> Widget_impl::addCss(const std::string& css)
     {
-        em::addCss(*_dom, css); 
+        auto tmp = str::split(css, ":");
+        if(tmp.size() != 2)
+            return ml::ret::fail("Invalid CSS : " + css);
+        em::setCss(*_dom, tmp[0], tmp[1]);
         return ml::ret::success();
     }
 
     void Widget_impl::addCss(const std::string& attr, const std::string& value)
     {
-        this->addCss(attr + ":" + value);
+        em::setCss(*_dom, attr, value);
     }
 
     void Widget_impl::show()
@@ -86,24 +91,82 @@ namespace ml
         em::remove(*_dom); 
     }
 
+    //FIXME the width "inital" break the css constructed widget like the Switch...
     void Widget_impl::setHAlign(HAlignment align)
     {
-        //TODO (css class)
+        if(align == FILL)
+        {
+            this->addCss("margin-left", "0");
+            this->addCss("margin-right", "0");
+            this->addCss("width", "stretch");
+        }
+
+        else if (align == LEFT)
+        {
+            this->addCss("text-align", "left");
+            this->addCss("margin-left", "0");
+            this->addCss("margin-right", "auto");
+            this->addCss("width", "initial");
+        }
+
+        else if (align == RIGHT)
+        {
+            this->addCss("text-align", "right");
+            this->addCss("margin-left", "auto");
+            this->addCss("margin-right", "0");
+            this->addCss("width", "initial");
+        }
+
+        else if (align == CENTER)
+        {
+            this->addCss("text-align", "center");
+            this->addCss("margin-left", "auto");
+            this->addCss("margin-right", "auto");
+            this->addCss("width", "initial");
+        }
     }
 
     void Widget_impl::setVAlign(VAlignment align)
     {
-        //TODO (css class)
+        if(align == VFILL)
+        {
+            this->addCss("margin-top", "0");
+            this->addCss("margin-bottom", "0");
+            this->addCss("height", "stretch");
+        }
+
+        else if (align == TOP)
+        {
+            this->addCss("margin-top", "0");
+            this->addCss("margin-bottom", "auto");
+            this->addCss("height", "initial");
+        }
+
+        else if (align == BOTTOM)
+        {
+            this->addCss("margin-top", "auto");
+            this->addCss("margin-bottom", "0");
+            this->addCss("height", "initial");
+        }
+
+        else if (align == VCENTER)
+        {
+            this->addCss("margin-top", "auto");
+            this->addCss("margin-bottom", "auto");
+            this->addCss("height", "initial");
+        }
     }
 
     void Widget_impl::setHExpand(bool value)
     {
         //TODO (css class)
+        lg("Widget_impl::setHExpand not implemented in emscripten");
     }
 
     void Widget_impl::setVExpand(bool value)
     {
         //TODO (css class)
+        lg("Widget_impl::setVExpand not implemented in emscripten");
     }
 
     void Widget_impl::setText(const std::string& text)
@@ -246,6 +309,7 @@ namespace ml
 
     void Widget_impl::addEventListener(Event event, const std::function<void(EventInfos&)>& callback)
     {
+        lg("Widget_impl::addEventListener(" << event << ", " << &callback << ") : ID -> " << this->id());
         EventCallback ec;
         ec.event.type = event;
         ec.callback = callback;
@@ -263,35 +327,56 @@ namespace ml
                 event == ml::Event::MOUSE_ENTER ||
                 event == ml::Event::MOUSE_LEAVE || 
                 event == ml::Event::WHEEL)
+        {
+            lg("Event pused as EventCallback in Widget_impl::_onMouseEvent) : ID -> " << this->id());
             _onMouseEvent.push(ec);
+        }
 
         //necessary for the Button_impl override because of how works the button elmt in the dom.
         else if (event == ml::Event::LEFT_UP)
             _addOnLeftUp(callback);
 
         else if (event == ml::Event::KEY_DOWN || event == ml::Event::KEY_UP)
+        {
+            lg("Event pused as EventCallback in Widget_impl::_onKeyEvent : ID -> " << this->id());
             _onKeyEvent.push(ec);
+        }
 
         else if (event == ml::Event::SHOWN)
+        {
+            lg("Event pused as EventCallback in Widget_impl::_onShownEvent : ID -> " << this->id());
             _onShown.push(ec);
+        }
 
         else if (event == ml::Event::HIDDEN)
+        {
+            lg("Event pused as EventCallback in Widget_impl::_onHiddenEvent : ID -> " << this->id());
             _onHidden.push(ec);
+        }
 
         else if (event == ml::Event::RESIZE)
+        {
+            lg("Event pused as EventCallback in Widget_impl::_onResizeEvent : ID -> " << this->id());
             _onResize.push(ec);
+        }
 
         else if (event == ml::Event::FOCUS || 
                 event == ml::Event::UNFOCUS || 
                 event == ml::Event::VALID)
+        {
+            lg("Event pused as EventCallback in Widget_impl::_onGeneralEvent : ID -> " << this->id());
             _onGeneralEvents.push(ec);
+        }
 
         //necessary for the Swicth_impl and ToggleButton_impl override.
         else if (event == ml::Event::CHANGE)
             _addOnChange(callback);
 
         if (_wasOneTimeInDom)
+        {
+            lg("_wasOneTimeInDom == true, so calling _addEventToDOMElement() directly : ID -> " << this->id());
             _addEventToDOMElement();
+        }
     }
 
     void Widget_impl::setWidth(int w)
@@ -447,43 +532,55 @@ namespace ml
 
     void Widget_impl::_onAppended()
     {
+        lg("Widget_impl::_onAppended : ID -> " << this->id());
         if (_wasOneTimeInDom)        
+        {
+            lg("Widget_impl::_onAppended : already in dom");
+            lg("abort appended event.");
             return;
-        _wasOneTimeInDom = true;
-        _addEventToDOMElement();
+        }
+
+        if (em::isInDom(*_dom))
+        {
+            _wasOneTimeInDom = true;
+            _addEventToDOMElement();
+        }
     }
 
     void Widget_impl::_addMouseEvent(bool clear)
     {
+        lg("Widget_impl::_addMouseEvent(" << clear << ") : ID -> " << this->id());
+        lg("Adding " << _onMouseEvent.size() << " mouse events");
         for (auto& cb : _onMouseEvent)
         {
-            auto mouse_cb = [cb](const emval& dom, const EmscriptenMouseEvent* event)
+            auto mouse_cb = [cb](const emval& dom, const EmscriptenMouseEvent* event) mutable
             {
-                EventInfos infos;
-                infos.x = event->clientX;
-                infos.y = event->clientY;
-                infos.type = cb.event.type;
-                cb.callback(infos);
-                return infos.preventDefault;
+                cb.event.x = event->clientX;
+                cb.event.y = event->clientY;
+                cb.callback(cb.event);
+                return cb.event.preventDefault;
             };
 
             em::addEventListener(*_dom, cb.event.type, mouse_cb);
         }
 
-        if (clear) _onMouseEvent.clear();
+        if (clear)
+        {
+            lg("clear == true, clearing _onMouseEvent");
+            _onMouseEvent.clear();
+        }
     }
 
     void Widget_impl::_addKeyEvent(bool clear)
     {
+        lg("Widget_impl::_addKeyEvent(" << clear << ") : ID -> " << this->id());
         for (auto& cb : _onKeyEvent)
         {
-            auto key_cb = [cb](const emval& dom, const EmscriptenKeyboardEvent* event)
+            auto key_cb = [cb](const emval& dom, const EmscriptenKeyboardEvent* event) mutable
             {
-                EventInfos infos;
-                infos.key = event->key;
-                infos.type = cb.event.type;
-                cb.callback(infos);
-                return infos.preventDefault;
+                cb.event.key = event->key;
+                cb.callback(cb.event);
+                return cb.event.preventDefault;
             };
 
             em::addEventListener(*_dom, cb.event.type, key_cb);
@@ -519,13 +616,12 @@ namespace ml
 
     void Widget_impl::_addGeneralEvent(bool clear)
     {
+        lg("Widget_impl::_addGeneralEvent(" << clear << ") : ID -> " << this->id());
         for (auto & ec : _onGeneralEvents)
         {
-            auto f = [ec]()
+            auto f = [ec]() mutable
             {
-                EventInfos infos;
-                infos.type = ec.event.type;
-                ec.callback(infos);
+                ec.callback(ec.event);
                 return false;
             };
             em::addEventListener(*_dom, ec.event.type, f);
@@ -536,25 +632,37 @@ namespace ml
 
     void Widget_impl::_addOnChange(const std::function<void(EventInfos&)>& callback)
     {
+        lg("Widget_impl::addOnChange) : ID -> " << this->id());
         EventCallback ec;
         ec.event.type = ml::Event::CHANGE;
         ec.callback = callback;
+        lg("EventCall back pused in Widget_impl::_onGeneralEvents");
         _onGeneralEvents.push(ec);
     }
 
     void Widget_impl::_addOnLeftUp(const std::function<void(EventInfos&)>& callback)
     {
+        lg("Widget_impl::_addOnLeftUp) : ID -> " << this->id());
         EventCallback ec;
         ec.event.type = ml::Event::LEFT_UP;
         ec.callback = callback;
+
+        lg("EventCall back pused in Widget_impl::_onMouseEvent");
         _onMouseEvent.push(ec);
     }
 
     void Widget_impl::_addEventToDOMElement(bool clear)
     {
+        lg("Widget_impl::_addEventToDOMElement(" << clear << ") : ID -> " << this->id());
         _addMouseEvent(clear);
         _addKeyEvent(clear);
         _addResizeEvent(clear);
         _addGeneralEvent(clear);
+    }
+
+    std::string Widget_impl::id() const
+    {
+        auto& dom = *_dom;
+        return dom["id"].as<std::string>();
     }
 }

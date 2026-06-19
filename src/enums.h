@@ -1,5 +1,4 @@
 #pragma once
-
 namespace ml
 {
     enum Orient 
@@ -110,5 +109,15 @@ namespace ml
     {
         OVERFLOW_VISIBLE,
         OVERFLOW_HIDDEN,
+    };
+
+    enum ContainerType
+    {
+       CONTAINER_NONE,
+       CONTAINER_BOX,
+       CONTAINER_SCROLLABLE,
+       CONTAINER_FIXED,
+       CONTAINER_ABSOLUTE_BOX,
+       CONTAINER_POPOVER,
     };
 }

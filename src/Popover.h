@@ -34,6 +34,9 @@ namespace ml
 
             void showAtMouseCoord();
 
+            ml::Vec<std::shared_ptr<Widget>> children() const;
+            ml::Vec<std::shared_ptr<Widget>> deepChildren() const;
+
         private : 
             std::shared_ptr<ml::Scrollable> _content; //bp cg
 

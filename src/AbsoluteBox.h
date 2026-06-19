@@ -30,7 +30,7 @@ namespace ml
     class AbsoluteBox : public Widget
     {
         public:
-            AbsoluteBox(){}
+            AbsoluteBox(){_containerType = CONTAINER_ABSOLUTE_BOX;}
             virtual ~AbsoluteBox() = default;
 
             std::shared_ptr<ml::AbsoluteBox_impl> absolute_box(){return std::static_pointer_cast<AbsoluteBox_impl>(_impl);}
@@ -77,6 +77,8 @@ namespace ml
             void sendToFront(ml::Widget* c){this->absolute_box()->sendToFront(c);}
             void sendToBack(ml::Widget* c){this->absolute_box()->sendToBack(c);}
             void moveDepth(ml::Widget* c,unsigned int x){this->absolute_box()->moveDepth(c,x);}
+
+            ml::Vec<std::shared_ptr<Widget>> deepChildren() const;
 
         protected : 
             ml::Vec<std::shared_ptr<ml::Widget>> _children; //bp cg
