@@ -58,6 +58,7 @@ namespace ml
         (*_titlebar)["classList"].call<void, std::string>("add", "horizontal");
         _titlelabel = std::make_shared<emval>(em::newNode(*_titlebar, "label", "", "title-label"));
         _closeButton = std::make_shared<emval>(em::newNode(*_titlebar, "button", "", "close-button"));
+        em::setFocusable(*_dom, true);
         _drawn = true;
     }
 

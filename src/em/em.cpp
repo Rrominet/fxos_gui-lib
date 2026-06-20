@@ -51,7 +51,7 @@ namespace em
 
     EM_BOOL default_mouse_cb(int type, const EmscriptenMouseEvent* e, void* userData)
     {
-        lg("Trying to execyte a mouse event callback...");
+        lg("Trying to execute a mouse event callback...");
         auto elmt = (Elmt*)userData;
         lg("Event " << elmt->event << " for elmt " << elmt->id);
         if (mouse_events.find(elmt->event) == mouse_events.end())
@@ -104,11 +104,18 @@ namespace em
 
     EM_BOOL default_kb_cb(int type, const EmscriptenKeyboardEvent* e, void* userData)
     {
+        lg("Trying to execute a key event callback...");
         auto elmt = (Elmt*)userData;
         if (key_events.find(elmt->event) == key_events.end())
+        {
+            lg("No key event found for " << elmt->event);
             return false;
+        }
         if (key_events[elmt->event].find(elmt->id) == key_events[elmt->event].end())
+        {
+            lg("Event type " << elmt->event << " founded but NOT for elmt " << elmt->id);
             return false;
+        }
 
         bool _r = false;
         for (const auto& f : key_events[elmt->event][elmt->id])

@@ -135,8 +135,10 @@ namespace ml
         _content = ml::app()->widgetsFactory().createBox(this);
         _content->setCursor("default");
         _content->addCssClass("content");
+
+        _content->events().emit("appended");
  
-        _head = ml::app()->widgetsFactory().createBox(_content.get());
+        _head = _content->createBox();
         _head->addCssClass("head");
         _head->setOrient(Orient::HORIZONTAL);
 
@@ -190,6 +192,7 @@ namespace ml
 
     void Window::addEventListener(Event event, const std::function<void const(EventInfos&)>& callback)
     {
+        lg("Window::addEventListener(" << event << ", " << &callback << ") - Window name : " << this->title());
         assert(_content);
         if (event == WHEEL)
             this->addWheelEventListener(callback);

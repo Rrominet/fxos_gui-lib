@@ -91,7 +91,6 @@ namespace ml
         em::remove(*_dom); 
     }
 
-    //FIXME the width "inital" break the css constructed widget like the Switch...
     void Widget_impl::setHAlign(HAlignment align)
     {
         if(align == FILL)
@@ -574,6 +573,7 @@ namespace ml
     void Widget_impl::_addKeyEvent(bool clear)
     {
         lg("Widget_impl::_addKeyEvent(" << clear << ") : ID -> " << this->id());
+        lg("Adding " << _onKeyEvent.size() << " key events");
         for (auto& cb : _onKeyEvent)
         {
             auto key_cb = [cb](const emval& dom, const EmscriptenKeyboardEvent* event) mutable
@@ -586,7 +586,8 @@ namespace ml
             em::addEventListener(*_dom, cb.event.type, key_cb);
         }
 
-        if (clear) _onKeyEvent.clear();
+        if (clear)
+            _onKeyEvent.clear();
     }
 
     void Widget_impl::_addResizeEvent(bool clear)

@@ -19,6 +19,9 @@ namespace ml
 
             virtual void setEvents() override;
 
+            virtual void setHAlign(HAlignment align) override;
+            virtual void setVAlign(VAlignment align) override;
+
         private : 
             std::shared_ptr<emval> _switchButton = nullptr;
             ml::Vec<std::function<void(EventInfos&)>> _onChange;

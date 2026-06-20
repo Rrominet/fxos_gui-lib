@@ -59,18 +59,18 @@ namespace ml
         Window::init();
 
         // example of using tabs.
-        _tabs = std::make_unique<Tabs>(_main.get());
-        _basicsWidgets = _tabs->createTab("Basics Widgets")->body();
-        _composedWidgets = _tabs->createTab("Composed Widgets")->body();
-        _commands = _tabs->createTab("Commands")->body();
-        _tabs->show(0);
+//         _tabs = std::make_unique<Tabs>(_main.get());
+//         _basicsWidgets = _tabs->createTab("Basics Widgets")->body();
+//         _composedWidgets = _tabs->createTab("Composed Widgets")->body();
+//         _commands = _tabs->createTab("Commands")->body();
+//         _tabs->show(0);
 
         this->createCommands();
-        this->createBasicsWidgets();
-        this->createComposedWidgets();
-        this->createExampleMenu();
+//         this->createBasicsWidgets();
+//         this->createComposedWidgets();
+//         this->createExampleMenu();
 
-        ml::app()->setAbout("This is a Example App to let you know what is possible to accimplish with mlgui.");
+//        ml::app()->setAbout("This is a Example App to let you know what is possible to accimplish with mlgui.");
     }
 
     void ExampleWindow::createBasicsWidgets()

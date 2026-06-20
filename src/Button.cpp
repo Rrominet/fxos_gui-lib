@@ -6,6 +6,5 @@ namespace ml
     {
         this->addCssClass("button");
         this->setHAlign(ml::CENTER);
-        this->setVAlign(ml::VCENTER);
     }
 }

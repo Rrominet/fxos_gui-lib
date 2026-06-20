@@ -26,12 +26,12 @@ namespace ml
     void Switch_impl::setEvents()
     {
         this->addEventListener(ml::Event::CLICK, [this](EventInfos& e)
-                    {
-                        this->setValue(!this->value());
-                        for(auto& callback : _onChange)
-                            callback(e);
-                        return true;
-                    }
+                {
+                this->setValue(!this->value());
+                for(auto& callback : _onChange)
+                callback(e);
+                return true;
+                }
                 );
     }
 
@@ -52,6 +52,63 @@ namespace ml
     void Switch_impl::_addOnChange(const std::function<void(EventInfos&)>& callback)
     {
         _onChange.push(callback);
+    }
+
+    void Switch_impl::setHAlign(HAlignment align)
+    {
+        if(align == FILL)
+        {
+            this->addCss("margin-left", "0");
+            this->addCss("margin-right", "0");
+        }
+
+        else if (align == LEFT)
+        {
+            this->addCss("text-align", "left");
+            this->addCss("margin-left", "0");
+            this->addCss("margin-right", "auto");
+        }
+
+        else if (align == RIGHT)
+        {
+            this->addCss("text-align", "right");
+            this->addCss("margin-left", "auto");
+            this->addCss("margin-right", "0");
+        }
+
+        else if (align == CENTER)
+        {
+            this->addCss("text-align", "center");
+            this->addCss("margin-left", "auto");
+            this->addCss("margin-right", "auto");
+        }
+    }
+
+    void Switch_impl::setVAlign(VAlignment align)
+    {
+        if(align == VFILL)
+        {
+            this->addCss("margin-top", "0");
+            this->addCss("margin-bottom", "0");
+        }
+
+        else if (align == TOP)
+        {
+            this->addCss("margin-top", "0");
+            this->addCss("margin-bottom", "auto");
+        }
+
+        else if (align == BOTTOM)
+        {
+            this->addCss("margin-top", "auto");
+            this->addCss("margin-bottom", "0");
+        }
+
+        else if (align == VCENTER)
+        {
+            this->addCss("margin-top", "auto");
+            this->addCss("margin-bottom", "auto");
+        }
     }
 
 }
