@@ -51,4 +51,23 @@ namespace ml
     {
         return this->entry()->get_position();
     }
+
+    void Entry_impl::setPlaceholder(const std::string& placeholder)
+    {
+        if (placeholder.empty())
+        {
+            entry()->set_placeholder_text("");
+            return;
+        }
+        if (str::contains(placeholder, "\n"))
+        {
+            auto tmp = str::split(placeholder, "\n");
+            if (tmp.size() > 1)
+                entry()->set_placeholder_text(tmp[0] + "...");
+            else 
+                entry()->set_placeholder_text(tmp[0]);
+        }
+        else 
+            entry()->set_placeholder_text(placeholder);
+    }
 }

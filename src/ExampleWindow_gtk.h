@@ -12,7 +12,12 @@ namespace ml
     {
         public : 
             ExampleWindow(App* app) : Window(app) {}
-            ExampleWindow(App* app, ml::Window* parent) : Window(app, parent) {}
+            ExampleWindow(App* app, ml::Window* parent) : Window(app, parent)
+        {
+                glDeleteVertexArrays(1, &vao);
+                glDeleteBuffers(1, &vbo);
+                glDeleteProgram(shader_program);
+            }
             virtual ~ExampleWindow() = default;
 
             // all the important code go here.

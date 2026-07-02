@@ -599,6 +599,6 @@ namespace ml
 
     std::string Widget_impl::id() const
     {
-        return _gtk->name();            
+        return _gtk->get_name();            
     }
 }

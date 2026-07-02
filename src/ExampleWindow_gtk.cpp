@@ -705,13 +705,15 @@ namespace ml
         };
         gl->addOnRender(onrender);
 
-        auto onunrealize = [this]
-        {
-            glDeleteVertexArrays(1, &vao);
-            glDeleteBuffers(1, &vbo);
-            glDeleteProgram(shader_program);
-        };
-        gl->addOnOpenGLDestroyed(onunrealize);
+        //this actually make the program crash and should be added in the destructor of the app !
+        //because the onOpenGlDestroyed is called AFTER the destructor (for whatever reason)
+//         auto onunrealize = [this]
+//         {
+//             glDeleteVertexArrays(1, &vao);
+//             glDeleteBuffers(1, &vbo);
+//             glDeleteProgram(shader_program);
+//         };
+//         gl->addOnOpenGLDestroyed(onunrealize);
 #endif
     }
 
