@@ -62,9 +62,9 @@ namespace ml
 
             void addEventListener(Event event, const std::function<void (EventInfos&)>& callback);
 
-            virtual void setWidth(int w){_gtk->set_size_request(w, -1);}
-            virtual void setHeight(int h){_gtk->set_size_request(-1, h);}
-            virtual void setSize(int w, int h){_gtk->set_size_request(w, h);}
+            virtual void setWidth(int w);
+            virtual void setHeight(int h);
+            virtual void setSize(int w, int h);
 
             int width() const{return _gtk->get_allocated_width();}
             int height() const{return _gtk->get_allocated_height();}
@@ -115,7 +115,7 @@ namespace ml
             Glib::RefPtr<Gtk::CssProvider> _cssProvider = nullptr;
             
             bool _hovered = false;
-            double _oldWidth = 0, _oldHeight = 0;
+            double _oldWidth = -1, _oldHeight = -1;
 
             double _lastX = 0, _lastY = 0;
 

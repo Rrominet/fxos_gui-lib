@@ -601,4 +601,21 @@ namespace ml
     {
         return _gtk->get_name();            
     }
+
+    void Widget_impl::setWidth(int w)
+    {
+        _gtk->set_size_request(w, _oldHeight);
+        _oldWidth = w;
+    }
+    void Widget_impl::setHeight(int h)
+    {
+        _gtk->set_size_request(_oldWidth, h);
+        _oldHeight = h;
+    }
+    void Widget_impl::setSize(int w, int h)
+    {
+        _gtk->set_size_request(w, h);
+        _oldWidth = w;
+        _oldHeight = h;
+    }
 }
