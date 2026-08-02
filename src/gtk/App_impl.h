@@ -40,7 +40,7 @@ namespace ml
             const std::map<std::string, std::string>& argv()const {return _argv;}
 
             void setClipboardText(const std::string& text);
-            std::string clipboardText() const ;
+            void clipboardText(const std::function<void(const std::string&)>& callback) const;
 
             Gtk::Application& gtkapp(){return *_gtkapp;}
 

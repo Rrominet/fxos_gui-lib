@@ -141,7 +141,8 @@ namespace ml
 
             void setClipboardText(const std::string& text){_impl.setClipboardText(text);}
             void copyToClipboard(const std::string& text){_impl.setClipboardText(text);}
-            std::string clipboardText() const {return _impl.clipboardText();}
+
+            void clipboardText(const std::function<void(const std::string&)>& callback) const{_impl.clipboardText(callback);}
 
             //return nullptr if it does not exists
             Window* windowFromId(const std::string& id) const;

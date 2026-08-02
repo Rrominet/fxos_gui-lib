@@ -169,12 +169,20 @@ namespace ml
         _gtkapp->get_windows()[0]->get_display()->get_clipboard()->set_text(text);
     }
 
-    std::string App_impl::clipboardText() const
+    void App_impl::clipboardText(const std::function<void(const std::string&)>& callback) const
     {
-        std::string text;
-        auto clipboard = _gtkapp->get_windows()[0]->get_display()->get_clipboard();
-        clipboard->read_text_async({});
-        return clipboard->read_text_finish({});
+        auto cb = _gtkapp->get_windows()[0]->get_display()->get_clipboard();
+        cb->read_text_async( 
+                [cb, callback, this](const Glib::RefPtr<Gio::AsyncResult>& result)
+                {
+                    try {
+                        auto text = cb->read_text_finish(result);
+                        callback(text);
+                    }
+                    catch (const Glib::Error& err) {
+                        _app->error("Getting clipboard failed: "  + _S(err.what()));
+                    }
+                });
     }
 
     void App_impl::queue(const std::function<void()>& callback)
